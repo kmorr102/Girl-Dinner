@@ -15,4 +15,20 @@
   width: 250px;
 }
 
+#navbar{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-around;
+  font-size: 20px;
+  margin: 20px;
+}
+
+#main-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Add more styling for other elements if needed */
