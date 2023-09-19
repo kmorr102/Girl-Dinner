@@ -12,6 +12,25 @@ async function getAllReviews() {
     }
 }
 
+
+async function createReview({
+    authorId,
+    title,
+    content,
+}) {
+    try{
+        const { rows: [ review ] }= await db.query(`
+        INSERT INTO reviews ("authorId",title,content)
+        VALUES ($1,$2,$3)
+        RETURNING *;
+        `,[authorId,title,content]);
+    }catch(error){
+        throw error;
+    }
+}
+
+
 module.exports = {
-    getAllReviews
+    getAllReviews,
+    createReview,
 }

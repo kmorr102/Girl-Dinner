@@ -1,6 +1,47 @@
 const db = require('./client');
-const { createUser } = require('./users');
+const { createUser,getAllUsers } = require('./users');
+const { getAllReviews, createReview }=require('./reviews')
 
+
+
+const dropTables = async () => {
+    try {
+        console.log('Dropping All Tables...');
+        
+        // have to make sure to drop in correct order
+
+        await db.query(`
+        DROP TABLE IF EXISTS reviews;
+        DROP TABLE IF EXISTS users;
+        `);
+    }
+    catch(err) {
+        throw err;
+    }
+}
+
+const createTables = async () => {
+    try{
+        console.log('Building All Tables...');
+        await db.query(`
+        CREATE TABLE users(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) DEFAULT 'name',
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL
+        );
+        CREATE TABLE reviews(
+          id SERIAL PRIMARY KEY,
+          "authorId" INTEGER REFERENCES users(id),
+          title VARCHAR(255) UNIQUE NOT NULL,
+          content TEXT NOT NULL 
+        );
+        `);
+    }
+    catch(err) {
+        throw err;
+    }
+}
 const users = [
   {
     name: 'Emily Johnson',
@@ -47,62 +88,10 @@ const users = [
   // Add more user objects as needed
 ];  
 
-const dropTables = async () => {
-    try {
-        console.log('Dropping All Tables...');
-        await db.query(`
-        DROP TABLE IF EXISTS users;
-        DROP TABLE IF EXISTS reviews;
-        `);
-    }
-    catch(err) {
-        throw err;
-    }
-}
-
-const createTables = async () => {
-    try{
-        console.log('Building All Tables...');
-        await db.query(`
-        CREATE TABLE users(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) DEFAULT 'name',
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL
-        );
-        CREATE TABLE reviews(
-          id SERIAL PRIMARY KEY,
-          title VARCHAR(255) UNIQUE NOT NULL,
-          content TEXT NOT NULL 
-        );
-        `);
-    }
-    catch(err) {
-        throw err;
-    }
-}
-
-// create initial data for reviews
-async function createInitialReviews() {
-  try {
-    console.log('Creating Initial Reviews Data...');
-    await db.query(`
-    INSERT INTO reviews (title, content)
-    VALUES
-    ('Best food ever', 'I would recommend to others!'),
-    ('Decent food', 'Reasonable prices and pretty good food'),
-    ('Nice customer service', 'Had a great birthday party here'),
-    ('Would not go here again', 'I have had better')
-    `);
-  } catch (err) {
-    throw err;
-  }
-}
-
-const insertUsers = async () => {
+const createInitialUsers = async () => {
   try {
     for (const user of users) {
-      await createUser({name: user.name, email: user.email, password: user.password});
+      await createUser({id: user.id, name: user.name, email: user.email, password: user.password});
     }
     console.log('Seed data inserted successfully.');
   } catch (error) {
@@ -110,20 +99,93 @@ const insertUsers = async () => {
   }
 };
 
+async function createInitialReviews() {
+  try {
+    for(const user of users) await getAllUsers();
+    console.log('Creating Initial Review Data...');
+    await createReview({
+      authorId: users.id,
+      title: "Best food ever",
+      content: "I would recommend to others!",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Decent food",
+      content: "Reasonable prices and pretty good food",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Nice customer service",
+      content: "Had a great birthday party here",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Would not go here again",
+      content: "I have had better'",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Best cheesecake ever!!!",
+      content: "You have to try their oreo cheesecake its great. Service was also amazing",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Wasn't great:(",
+      content: "I've heard such great things, but I personally won't be going back",
+    });
+    await createReview({
+      authorId: users.id,
+      title: "Look no further!",
+      content: "They have the best ice in town! If you know, you know.",
+    });
+
+    console.log('Initial Review Data created successfully')
+  } catch (err) {
+    console.log('Error creating review data')
+    throw err;
+  }
+}
+
+
+
+
 const seedDatabase = async () => {
     try {
         db.connect();
+        
         await dropTables();
         await createTables();
-        await insertUsers();
+        await createInitialUsers();
         await createInitialReviews();
-    }
-    catch (err) {
+    }catch (err) {
+      console.log("Error during seedDatabase")
         throw err;
     }
-    finally {
-        db.end()
-    }
-}
+  }
 
-seedDatabase()
+    async function testDB() {
+      try {
+        console.log("Starting to test database...");
+    
+        console.log("Calling getAllUsers");
+        const users = await getAllUsers();
+        console.log("Result:", users);
+    
+    
+        console.log("Calling getAllReviews");
+        const reviews = await getAllReviews();
+        console.log("Result:", reviews);
+    
+        console.log("Finished database tests!");
+      } catch (error) {
+        console.log("Error during testDB");
+        throw error;
+      }
+    }
+  
+
+    seedDatabase()
+      .then(testDB)
+      .catch(console.error)
+      .finally(() => db.end());
+
