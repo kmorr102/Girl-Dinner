@@ -5,19 +5,19 @@ const { getAllReviews, createReview }=require('./reviews')
 
 
 const dropTables = async () => {
-    try {
-        console.log('Dropping All Tables...');
-        
-        // have to make sure to drop in correct order
+  try {
+      console.log('Dropping All Tables...');
+      
+      // have to make sure to drop in correct order
 
-        await db.query(`
-        DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS users;
-        `);
-    }
-    catch(err) {
-        throw err;
-    }
+      await db.query(`
+      DROP TABLE IF EXISTS reviews;
+      DROP TABLE IF EXISTS users;
+      `);
+  }
+  catch(err) {
+      throw err;
+  }
 }
 
 const createTables = async () => {
