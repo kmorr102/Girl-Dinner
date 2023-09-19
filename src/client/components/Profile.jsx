@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { fetchAllReviews } from '../API';
 
 export default function Profile() {
 
   const [reviews, setReviews] = useState([]);
+  const [error, setError]=useState([]);
+  const [searchParams,setSearchParams]=useState('');
 
   useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const response = await fetch('/api/reviews');
-        if (!response.ok) {
-          throw new Error('Error with network response');
-        }
-        const data = await response.json();
-        setReviews(data);
-      } catch (error) {
-        console.error('Error fetching reviews:', error);
-      }
+    async function getAllReviews() {
+        const response = await fetchAllReviews();
+        if(response) {
+          setReviews(response);
+          console.log('Response:',response);
+       } else {
+        setError(response);
+        console.log("Error Message:", error);
+       }
     }
-
-    fetchReviews();
+    getAllReviews();
   }, []);
 
     return (
@@ -27,10 +27,10 @@ export default function Profile() {
         <h2>Reviews</h2>
     <ul>
       {reviews.map((review) => (
-        <li key={review.id}>
+        <div key={review.id}>
           <p>Title: {review.title}</p>
           <p>Content: {review.content}</p>
-        </li>
+        </div>
       ))}
     </ul>
       </div>

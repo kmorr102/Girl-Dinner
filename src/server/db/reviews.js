@@ -3,12 +3,32 @@ const db = require('./client');
 // GET - /api/reviews to fetch all reviews
 async function getAllReviews() {
     try {
-        const { rows: reviews } = await db.query(`
-            SELECT * FROM reviews;
+        const { rows: reviewIds } = await db.query(`
+            SELECT FROM reviews;
         `);
+        const reviews= await reviewIds.map(review=>getReviewById(review.id));
+        
         return reviews;
     } catch (error) {
         throw error; 
+    }
+}
+
+async function getReviewById(reviewId) {
+    try {
+        const { rows: [review] }= await db.query(`
+        SELECT * 
+        FROM reviews
+        WHERE id=$1;`,[reviewId]);
+
+        if(!review){
+            throw{
+                name:"ReviewNotFoundError",
+                message: "Could not find a review with that reviewId"
+            };
+        }
+    } catch (error) {
+        throw error;
     }
 }
 
@@ -33,4 +53,5 @@ async function createReview({
 module.exports = {
     getAllReviews,
     createReview,
+    getReviewById,
 }
