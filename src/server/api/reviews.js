@@ -8,11 +8,18 @@ const {
 // GET - /api/reviews - fetch all reviews
 reviewsRouter.get('/', async (req, res, next) => {
     try {
-        const reviews = await getAllReviews();
-        res.setHeader('Content-Type', 'application/json');
-        res.send(reviews);
-    } catch (error) {
-        next(error);
+        const allReviews = await getAllReviews();
+
+       // const reviews=allReviews.filter((review)=>{
+         //   if(req.user && review.author.id===req.user.id){
+             //   return true;
+           // }
+               // return false;
+        //})
+        res.send({allReviews,
+        });
+    } catch ({name,message}) {
+        next({name,message});
     }
 });
 

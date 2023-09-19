@@ -5,19 +5,19 @@ const { getAllReviews, createReview }=require('./reviews')
 
 
 const dropTables = async () => {
-  try {
-      console.log('Dropping All Tables...');
-      
-      // have to make sure to drop in correct order
+    try {
+        console.log('Dropping All Tables...');
 
-      await db.query(`
-      DROP TABLE IF EXISTS reviews;
-      DROP TABLE IF EXISTS users;
-      `);
-  }
-  catch(err) {
-      throw err;
-  }
+        // have to make sure to drop in correct order
+
+        await db.query(`
+        DROP TABLE IF EXISTS reviews;
+        DROP TABLE IF EXISTS users;
+        `);
+    }
+    catch(err) {
+        throw err;
+    }
 }
 
 const createTables = async () => {
@@ -42,51 +42,7 @@ const createTables = async () => {
         throw err;
     }
 }
-const users = [
-  {
-    name: 'Emily Johnson',
-    email: 'emily@example.com',
-    // username: 'emilyjohnson',
-    password: 'securepass',
-  },
-  {
-    name: 'Liu Wei',
-    email: 'liu@example.com',
-    // username: 'liuwei',
-    password: 'strongpass',
-  },
-  {
-    name: 'Isabella García',
-    email: 'bella@example.com',
-    // username: 'bellagracia',
-    password: 'pass1234',
-  },
-  {
-    name: 'Mohammed Ahmed',
-    email: 'mohammed@example.com',
-    // username: 'mohammed101',
-    password: 'mysecretpassword',
-  },
-  {
-    name: 'John Smith',
-    email: 'john@example.com',
-    // username: 'johnnysmith',
-    password: 'password123',
-  },
-  {
-    name: 'Jeff Buckley',
-    email: 'jeffb@example.com',
-    // username: 'jeffb123',
-    password: 'mynameisjeff',
-  },
-  {
-    name: 'Mario Maria',
-    email: 'mariom@example.com',
-    // username: 'mrmario',
-    password: 'maria724',
-  }
-  // Add more user objects as needed
-];  
+
 
 const createInitialUsers = async () => {
   try {
