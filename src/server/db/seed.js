@@ -55,6 +55,34 @@ const createInitialUsers = async () => {
   }
 };
 
+const users = [
+  {
+    name: 'Emily Johnson',
+    email: 'emily@example.com',
+    // username: 'emilyjohnson',
+    password: 'securepass',
+  },
+  {
+    name: 'John Smith',
+    email: 'john@example.com',
+    // username: 'johnnysmith',
+    password: 'password123',
+  },
+  {
+    name: 'Jeff Buckley',
+    email: 'jeffb@example.com',
+    // username: 'jeffb123',
+    password: 'mynameisjeff',
+  },
+  {
+    name: 'Mario Maria',
+    email: 'mariom@example.com',
+    //username: 'mrmario',
+    password: 'maria724',
+  }
+  // Add more user objects as needed
+];  
+
 async function createInitialReviews() {
   try {
     for(const user of users) await getAllUsers();
