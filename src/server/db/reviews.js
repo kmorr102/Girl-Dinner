@@ -3,12 +3,11 @@ const db = require('./client');
 // GET - /api/reviews to fetch all reviews
 async function getAllReviews() {
     try {
-        const { rows: reviewIds } = await db.query(`
-            SELECT FROM reviews;
+        const { rows: reviews } = await db.query(`
+            SELECT * FROM reviews;
         `);
-        const reviews= await reviewIds.map(review=>getReviewById(review.id));
-        
-        return reviews;
+       
+    return reviews;
     } catch (error) {
         throw error; 
     }

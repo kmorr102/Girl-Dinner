@@ -4,7 +4,7 @@ import { fetchAllReviews } from '../API';
 export default function Profile() {
 
   const [reviews, setReviews] = useState([]);
-  const [error, setError]=useState([]);
+  const [error, setError]=useState('');
   const [searchParams,setSearchParams]=useState('');
 
   useEffect(() => {
