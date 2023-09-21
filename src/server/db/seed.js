@@ -7,7 +7,7 @@ const { getAllReviews, createReview }=require('./reviews')
 const dropTables = async () => {
     try {
         console.log('Dropping All Tables...');
-        
+
         // have to make sure to drop in correct order
 
         await db.query(`
@@ -42,30 +42,25 @@ const createTables = async () => {
         throw err;
     }
 }
+
+
+const createInitialUsers = async () => {
+  try {
+    for (const user of users) {
+      await createUser({id: user.id, name: user.name, email: user.email, password: user.password});
+    }
+    console.log('Seed data inserted successfully.');
+  } catch (error) {
+    console.error('Error inserting seed data:', error);
+  }
+};
+
 const users = [
   {
     name: 'Emily Johnson',
     email: 'emily@example.com',
     // username: 'emilyjohnson',
     password: 'securepass',
-  },
-  {
-    name: 'Liu Wei',
-    email: 'liu@example.com',
-    // username: 'liuwei',
-    password: 'strongpass',
-  },
-  {
-    name: 'Isabella García',
-    email: 'bella@example.com',
-    // username: 'bellagracia',
-    password: 'pass1234',
-  },
-  {
-    name: 'Mohammed Ahmed',
-    email: 'mohammed@example.com',
-    // username: 'mohammed101',
-    password: 'mysecretpassword',
   },
   {
     name: 'John Smith',
@@ -82,22 +77,11 @@ const users = [
   {
     name: 'Mario Maria',
     email: 'mariom@example.com',
-    // username: 'mrmario',
+    //username: 'mrmario',
     password: 'maria724',
   }
   // Add more user objects as needed
 ];  
-
-const createInitialUsers = async () => {
-  try {
-    for (const user of users) {
-      await createUser({id: user.id, name: user.name, email: user.email, password: user.password});
-    }
-    console.log('Seed data inserted successfully.');
-  } catch (error) {
-    console.error('Error inserting seed data:', error);
-  }
-};
 
 async function createInitialReviews() {
   try {
