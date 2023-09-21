@@ -5,6 +5,18 @@ const jwt = require('jsonwebtoken');
 const volleyball = require('volleyball')
 apiRouter.use(volleyball)
 
+
+//require user function
+function requireUser(req,res,next) {
+  if(!req.user) {
+    res.status(401);
+    next({
+      name: "MissingUserError",
+      message:"You must be logged in to perform this action"
+    });
+  }
+  next()
+};
 // TO BE COMPLETED - set `req.user` if possible, using token sent in the request header
 apiRouter.use(async (req, res, next) => {
   const auth = req.header('Authorization');
@@ -31,15 +43,22 @@ apiRouter.use(async (req, res, next) => {
     });
   }
 });
+//end point for all users 
 
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
+//end point for all reviews 
 const reviewsRouter= require('./reviews');
 apiRouter.use('/reviews', reviewsRouter);
+
+
 
 apiRouter.use((err, req, res, next) => {
     res.status(500).send(err)
   })
 
-module.exports = apiRouter;
+module.exports = 
+{apiRouter,
+ requireUser,
+}
