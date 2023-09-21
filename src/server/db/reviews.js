@@ -38,7 +38,7 @@ async function createReview({
     content,
 }) {
     try{
-        const { rows: [ review ] }= await db.query(`
+        const { rows: [review]  }= await db.query(`
         INSERT INTO reviews ("authorId",title,content)
         VALUES ($1,$2,$3)
         RETURNING *;
