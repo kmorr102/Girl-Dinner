@@ -38,8 +38,8 @@ async function createReview({
 }) {
     try{
         const { rows: [review]  }= await db.query(`
-        INSERT INTO reviews ("authorId",title,content)
-        VALUES ($1,$2,$3)
+        INSERT INTO reviews (title,content)
+        VALUES ($1,$2)
         RETURNING *;
         `,[title,content]);
     }catch(error){
