@@ -6,17 +6,7 @@ const volleyball = require('volleyball')
 apiRouter.use(volleyball)
 
 
-//require user function
-function requireUser(req,res,next) {
-  if(!req.user) {
-    res.status(401);
-    next({
-      name: "MissingUserError",
-      message:"You must be logged in to perform this action"
-    });
-  }
-  next()
-};
+
 // TO BE COMPLETED - set `req.user` if possible, using token sent in the request header
 apiRouter.use(async (req, res, next) => {
   const auth = req.header('Authorization');
@@ -52,13 +42,14 @@ apiRouter.use('/users', usersRouter);
 const reviewsRouter= require('./reviews');
 apiRouter.use('/reviews', reviewsRouter);
 
+//end point for single review by id
+/*const reviewRouter=require('./reviews');
+apiRouter.use('/reviews/:id', reviewRouter);
+*/
 
 
 apiRouter.use((err, req, res, next) => {
     res.status(500).send(err)
   })
 
-module.exports = 
-{apiRouter,
- requireUser,
-}
+module.exports = apiRouter

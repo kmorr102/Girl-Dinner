@@ -6,7 +6,7 @@ export async function fetchAllReviews() {
       },
     });
         const result= await response.json();
-        console.log('Fetched all reviews:', result);
+        console.log('Fetched all reviews:', result.reviews);
         return result.reviews;
     } catch (error) {
       console.log('Error: Unable to fetch all reviews');
@@ -28,6 +28,7 @@ export async function createReview() {
   const result= await response.json()
   const newReview= result.data //
   return newReview
+}
   
 // Registering a new user
 export async function fetchNewUser(username, password) {

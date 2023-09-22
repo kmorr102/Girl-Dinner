@@ -33,7 +33,6 @@ async function getReviewById(reviewId) {
 
 
 async function createReview({
-    authorId,
     title,
     content,
 }) {
@@ -42,7 +41,7 @@ async function createReview({
         INSERT INTO reviews ("authorId",title,content)
         VALUES ($1,$2,$3)
         RETURNING *;
-        `,[authorId,title,content]);
+        `,[title,content]);
     }catch(error){
         throw error;
     }

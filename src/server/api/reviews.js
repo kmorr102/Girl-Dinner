@@ -6,7 +6,7 @@ const {requireUser} =require("./index")
 const {
    getAllReviews,
    getReviewById,
-   createReview
+   createReview,
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -15,6 +15,7 @@ reviewsRouter.get('/', async (req, res, next) => {
         const reviews = await getAllReviews();
         
         res.send({reviews});
+        console.log('Fetch all reviews:', reviews)
     } catch ({name,message}) {
         next({name,message});
     }
@@ -31,12 +32,12 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
 });
 
 //POST - /api/reviews create new review
-reviewsRouter.post("/", requireUser, async (req,res,next)=>{
-    const { authorId, title, content = ""}= req.body;
+reviewsRouter.post("/", async (req,res,next)=>{
+    const  {title, content = ""}= req.body;
     
     const postData={};
     try {
-        postData.authorId=req.user.id;
+        //postData.authorId=req.user.id;
         postData.title= title;
         postData.content=content;
 
