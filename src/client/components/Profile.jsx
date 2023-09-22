@@ -28,6 +28,7 @@ export default function Profile() {
     <ul>
       {reviews.map((review) => (
         <div key={review.id}>
+          <p>ID: {review.id}</p>
           <p>Title: {review.title}</p>
           <p>Content: {review.content}</p>
         </div>
