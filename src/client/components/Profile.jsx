@@ -20,15 +20,24 @@ export default function Profile() {
     }
     getAllReviews();
   }, []);
-
+const reviewToDisplay= searchParams
+? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
+: reviews;
     return (
       <div className='profile'>
         <h1>Profile</h1>
         <h2>Reviews</h2>
+
+      <div className='search-bar'>
+        <label>
+          Search:{''}
+          <input type='text' placeholder='Search' onChange={(e)=> setSearchParams(e.target.value)}/>
+        </label>
+
+      </div>
     <ul>
-      {reviews.map((review) => (
+      {reviewToDisplay.map((review) => (
         <div key={review.id}>
-          <p>ID: {review.id}</p>
           <p>Title: {review.title}</p>
           <p>Content: {review.content}</p>
         </div>
