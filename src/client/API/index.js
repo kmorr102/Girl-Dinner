@@ -31,16 +31,16 @@ export async function createReview() {
 }
   
 // Registering a new user
-export async function fetchNewUser(username, password) {
+export async function fetchNewUser(email, password) {
   try {
-    const response = await fetch('http://localhost:3000/api/users', {
+    const response = await fetch('http://localhost:3000/api/users/register', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         user: {
-          username: `${username}`,
+          username: `${email}`,
           password: `${password}`,
         },
       }),
@@ -50,5 +50,45 @@ export async function fetchNewUser(username, password) {
     return result;
   } catch (err) {
     console.error(err);
+  }
+}
+// Fetch login, authenticating a user if their username and password mathes the right data
+export async function fetchLogin(email, password) {
+  try {
+    const response = await fetch('http://localhost:3000/api/users/login', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          username: `${email}`,
+          password: `${password}`,
+        },
+      }),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Fetching a token based on if a user is currently logged in
+export async function fetchLoggedIn(token) {
+  try {
+    const response = await fetch('http://localhost:3000/users/me', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
   }
 }
