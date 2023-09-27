@@ -42,9 +42,7 @@ const getUserByEmail = async(email) => {
         FROM users
         WHERE email=$1;`, [ email ]);
 
-        if(!user) {
-            return;
-        }
+    
         return user;
     } catch (err) {
         throw err;

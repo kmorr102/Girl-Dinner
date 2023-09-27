@@ -25,7 +25,9 @@ usersRouter.get('/', async( req, res, next) => {
 usersRouter.post('/login', async(req, res, next) => {
     const { email, password } = req.body;
    
+   
    //request must have both
+ 
     if(!email || !password) {
         next({
             name: 'MissingCredentialsError',
@@ -33,19 +35,23 @@ usersRouter.post('/login', async(req, res, next) => {
         });
     }
     try {
-        const user = await getUser({email, password});
-        if(user) {
-            const token = jwt.sign({
+        const user = await getUser({email,password});
+        if(user && user.password==password) {
+           /* const token = jwt.sign({
                 id: user.id,
-                email: user.email,
-            }, process.env.JWT_SECRET, {
+                email,
+            }, `${process.env.JWT_SECRET}`, {
                 expiresIn: '1w'
-            });
-
+            });*/
+            console.log("This is token:",token)
             res.send({
                 message: 'Login successful!',
                 token
+            
             });
+
+          
+           
         }
         else {
             next({
@@ -61,7 +67,7 @@ usersRouter.post('/login', async(req, res, next) => {
 
 usersRouter.post('/register', async(req, res, next) => {
     const { name, email, password } = req.body;
-
+    console.log("This is token:", `${process.env.JWT_SECRET}`)
     try {
         const _user = await getUserByEmail(email);
 
@@ -81,7 +87,7 @@ usersRouter.post('/register', async(req, res, next) => {
         const token = jwt.sign({
             id: user.id,
             email
-        }, process.env.JWT_SECRET, {
+        }, `${process.env.JWT_SECRET}`, {
             expiresIn: '1w'
         });
 

@@ -24,7 +24,7 @@ apiRouter.use(async (req, res, next) => {
     try {
       const parsedToken = jwt.verify (token, JWT_SECRET);
       // TODO - Call 'jwt.verify()' to see if the token is valid. If it is, use it to get the user's 'id'. Look up the user with their 'id' and set 'req.user'
-
+      const id= parsedToken && parsedToken.id;
       if (id) {
         req.user = await getUserById(id);
         next();
@@ -58,12 +58,15 @@ apiRouter.use('/users', usersRouter);
 
 //end point for all reviews 
 const reviewsRouter= require('./reviews');
+const { parse } = require('dotenv');
 apiRouter.use('/reviews', reviewsRouter);
 
 //end point for single review by id
 /*const reviewRouter=require('./reviews');
 apiRouter.use('/reviews/:id', reviewRouter);
 */
+
+//endpoint for login
 
 
 apiRouter.use((err, req, res, next) => {
