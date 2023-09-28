@@ -57,7 +57,7 @@ const getUserByEmail = async(email) => {
 async function getUserById(userId) {
     try {
       const { rows: [ user ] } = await client.query(`
-        SELECT id, name, email, password
+        SELECT id, name, email, password, isAdmin
         FROM users
         WHERE id=${ userId }
       `);
