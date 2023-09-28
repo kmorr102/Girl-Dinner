@@ -3,9 +3,12 @@ const usersRouter = express.Router();
 
 const { createUser, getUser, getUserByEmail, getAllUsers } = require("../db");
 
+const { requireUser, requireAdminStatus } = require('./utils')
+// console.log(requireAdminStatus)
+
 const jwt = require("jsonwebtoken");
 
-usersRouter.get("/", async (req, res, next) => {
+usersRouter.get("/", requireAdminStatus, async (req, res, next) => {
   try {
     const users = await getAllUsers();
 
@@ -58,7 +61,7 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 usersRouter.post("/register", async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, isAdmin } = req.body;
   console.log("This is token:", `${process.env.JWT_SECRET}`);
   try {
     const _user = await getUserByEmail(email);
@@ -74,6 +77,7 @@ usersRouter.post("/register", async (req, res, next) => {
       name,
       email,
       password,
+      isAdmin
     });
 
     const token = jwt.sign(
