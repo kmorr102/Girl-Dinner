@@ -7,6 +7,7 @@ const {
    getAllReviews,
    getReviewById,
    createReview,
+   getAllComments,
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -33,30 +34,6 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
     }
 });
 
-// ORIGINAL: POST - /api/reviews create new review
-/* reviewsRouter.post("/", async (req,res,next)=>{
-    const  {title, content = ""}= req.body;
-    
-    const postData={};
-    try {
-        //postData.authorId=req.user.id;
-        postData.title= title;
-        postData.content=content;
-
-        const review= await createReview(postData);
-
-        if(review) {
-            res.send(review);
-        }else{
-            next({
-                name: "ReviewCreationError",
-                message: "There was an error creating your review. Please try again "
-            })
-        }
-    } catch ({name, message}) {
-      next({name,message});
-    }
-}); */
 
 reviewsRouter.post("/", async (req, res, next) => {
     try {
@@ -82,6 +59,18 @@ reviewsRouter.post("/", async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+});
+
+reviewsRouter.get("/", async (req,res,next) => {
+    try{
+    const comments= await getAllComments();
+
+    res.send({
+        comments
+    });
+  }catch ({name,message}) {
+   next({name,message});
+  }
 });
 
 module.exports = reviewsRouter;
