@@ -50,7 +50,7 @@ const createTables = async () => {
         
         CREATE TABLE comments (
         id SERIAL PRIMARY KEY,
-        content varchar(255) UNIQUE NOT NULL
+        comment varchar(255) UNIQUE NOT NULL
         );
       
       CREATE TABLE review_comments (
@@ -117,7 +117,7 @@ const createInitialUsers = async () => {
 async function createInitialReviews() {
   try {
     for (const user of users) {
-      console.log('Creating Initial Review Data for User:', user.name);
+      console.log('Creating Initial Review Data...');
       
       // Call createReview with individual arguments
       await createReview(
@@ -165,72 +165,13 @@ async function createInitialReviews() {
       );
       // Add more review entries as needed for this user
       
-      console.log('Initial Review Data created successfully for User:', user.name);
+      console.log('Initial Review Data created successfully');
     }
   } catch (err) {
     console.log('Error creating review data');
     throw err;
   }
 }
-
-
-/*async function createInitialReviews() {
-  
-  try {   
-   for( const user of users) await getAllUsers();
-    console.log('Creating Initial Review Data...');
-    
-    await createReview({
-      authorId: users.id,
-      title: "Best food ever",
-      content: "I would recommend to others!",
-      comments: ["I definitely agree!"]
-    }),
-    await createReview({
-      authorId: 2,
-      title: "Decent food",
-      content: "Reasonable prices and pretty good food",
-      comments:[ "I agree with the review, food is decent but nothing you can't make at home."]
-    }),
-    await createReview({
-      authorId: 3,
-      title: "Nice customer service",
-      content: "Had a great birthday party here",
-      comments: ["I also attended a party here and it was a great space for pictures"]
-    }),
-    await createReview({
-      authorId: 4,
-      title: "Would not go here again",
-      content: "I have had better'",
-      comments: ["A server yelled at me :("]
-    }),
-    await createReview({
-      authorId: 2,
-      title: "Best cheesecake ever!!!",
-      content: "You have to try their oreo cheesecake its great. Service was also amazing",
-      comments:[ "Cheesecake is a 10/10"]
-    }),
-    await createReview({
-      authorId: 1,
-      title: "Wasn't great:(",
-      content: "I've heard such great things, but I personally won't be going back",
-      comments: ["Waste of a datenight."]
-    }),
-    await createReview({
-      authorId: 3,
-      title: "Look no further!",
-      content: "They have the best ice in town! If you know, you know.",
-      comments: ["Ashley our server was great!"]
-    })
-
-   
-    console.log('Initial Review Data created successfully')
-  } catch (err) {
-    console.log('Error creating review data')
-    throw err;
-  }
-};*/
-
 
 
 

@@ -110,9 +110,9 @@ async function createComments(commentList) {
   
     try {
       const query = `
-        INSERT INTO comments (content)
+        INSERT INTO comments (comment)
         VALUES (${placeholders})
-        ON CONFLICT (content) DO NOTHING
+        ON CONFLICT (comment) DO NOTHING
         RETURNING *;
       `;
   
