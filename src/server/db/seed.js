@@ -47,7 +47,7 @@ const createTables = async () => {
 const createInitialUsers = async () => {
   try {
     for (const user of users) {
-      await createUser({id: user.id, name: user.name, email: user.email, password: user.password});
+      await createUser({id: user.id, name: user.name, email: user.email, password: user.password, isAdmin: user.isAdmin});
     }
     console.log('Seed data inserted successfully.');
   } catch (error) {
@@ -61,24 +61,28 @@ const users = [
     email: 'emily@example.com',
     // username: 'emilyjohnson',
     password: 'securepass',
+    isAdmin: false,
   },
   {
     name: 'John Smith',
     email: 'john@example.com',
     // username: 'johnnysmith',
     password: 'password123',
+    isAdmin: false,
   },
   {
     name: 'Jeff Buckley',
     email: 'jeffb@example.com',
     // username: 'jeffb123',
     password: 'mynameisjeff',
+    isAdmin: true,
   },
   {
     name: 'Mario Maria',
     email: 'mariom@example.com',
     //username: 'mrmario',
     password: 'maria724',
+    isAdmin: true,
   }
   // Add more user objects as needed
 ];  
