@@ -3,23 +3,22 @@ const db = require('./client');
 // GET - /api/reviews to fetch all reviews
 async function getAllReviews() {
     try {
-        const { rows: reviews } = await db.query(`
-            SELECT reviews.id,
-            reviews."authorId" AS author_id,
-            reviews.title AS review_title,
-            reviews.content AS review_content,
-            comments.id AS comment_id,
-            comments.comment AS comment_text
-            FROM 
-            reviews
-            LEFT JOIN
-            review_comments AS reviewscomments ON reviews.id = reviewscomments."reviewId"
-            LEFT JOIN
-            comments AS comments ON reviewscomments."commentId" = comments.id;
-            
-            
-           
-        `);
+      const { rows: reviews } = await db.query(`
+      SELECT
+        reviews.id AS id,
+        reviews."authorId" AS author_id,
+        reviews.title AS title,
+        reviews.content AS content,
+        comments.id AS comment_id,
+        comments.comment AS comment_text
+      FROM
+        reviews
+      LEFT JOIN
+        review_comments AS reviewscomments ON reviews.id = reviewscomments."reviewId"
+      LEFT JOIN
+        comments AS comments ON reviewscomments."commentId" = comments.id;
+    `);
+    
        
     return reviews;
     } catch (error) {
@@ -68,31 +67,43 @@ async function getReviewById(reviewId) {
     }
 }
 
-
-async function createReview(authorId, title, content, comments = []) {
-    try {
-      console.log('Author ID:', authorId);
-      console.log('Title:', title);
-      console.log('Content:', content);
-      console.log('Comments:', comments);
-      
-      const { rows: [review] } = await db.query(
-        `
-        INSERT INTO reviews ("authorId", title, content)
-        VALUES ($1, $2, $3)
-        RETURNING *;
-        `,
-        [authorId, title, content]
-      );
+async function createReview(reviewData) {
+  try {
+    const { authorId, title, content, comments=[] } = reviewData;
   
-      const commentList = await createComments(comments);
-  
-      return await addCommentsToReview(review.id, commentList);
-    } catch (error) {
-      throw error;
-    }
+    console.log('Author ID:', authorId);
+    console.log('Title:', title);
+    console.log('Content:', content);
+    console.log('Comments:', comments);
+  // Check if a review with the same authorId, title, and content exists
+  const { rows: [existingReview] } = await db.query(
+    `
+    SELECT * FROM reviews
+    WHERE "authorId" = $1 AND title = $2 AND content = $3;
+    `,
+    [authorId, title, content]
+  );
+  if (existingReview) {
+    // An existing review was found, you can choose to update it here
+    console.log('Review already exists. Updating...');
+    return existingReview;
+  } else {
+    // No existing review found, create a new one
+    const { rows: [review] } = await db.query(
+      `
+      INSERT INTO reviews ("authorId", title, content)
+      VALUES ($1, $2, $3)
+      RETURNING *;
+      `,
+      [authorId, title, content]
+    );
+    const commentList = await createComments(comments);
+    return await addCommentsToReview(review.id, commentList);
+  }
+} catch (error) {
+  throw error;
 }
-
+}
   
 
 async function getReviewByUser(userId) {

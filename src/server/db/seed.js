@@ -113,11 +113,78 @@ const createInitialUsers = async () => {
     console.error('Error creating users!', error);
   }
 };
-
 async function createInitialReviews() {
   try {
+    const users = await getAllUsers(); // Retrieve all users
+
+    /*if (!users || users.length === 0) {
+      console.log('No users found.');
+      return;
+    }*/
+
+    const reviewDataArray = [
+      {
+        authorId: users[0].id,
+        title: "Best food ever",
+        content: "I would recommend to others!",
+        comments: ["I definitely agree!"]
+      },
+      {
+        authorId: users[2].id,
+        title: "Decent food",
+        content: "Reasonable prices and pretty good food",
+        comments: ["I agree with the review, food is decent but nothing you can't make at home."]
+      },
+      {
+        authorId: users[3].id,
+        title: "Nice customer service",
+        content:  "Had a great birthday party here",
+        comments: ["I also attended a party here and it was a great space for pictures"]
+      },
+      {
+        authorId: users[1].id,
+        title: "Would not go here again",
+        content:  "I have had better'",
+        comments:["Rude staff:("]
+      },
+      {
+        authorId: users[0].id,
+        title:  "Best cheesecake ever!!!",
+        content:  "You have to try their oreo cheesecake its great. Service was also amazing",
+        comments:["Cheesecake is 10/10"]
+      },
+      {
+        authorId: users[2].id,
+        title:"Wasn't great:(",
+        content:"I've heard such great things, but I personally won't be going back",
+        comments:["Waste of a datenight."]
+      },
+      {
+        authorId: users[1].id,
+        title:"Look no further!",
+        content:"They have the best ice in town! If you know, you know.",
+        comments:["Ashley our server was great!"]
+      },
+    ];
+    
+    for (const reviewData of reviewDataArray) {
+      console.log('Creating Review Data:', reviewData);
+      await createReview(reviewData); // Create a review using the review data
+    }
+
+    console.log('Initial Review Data created successfully');
+  } catch (err) {
+    console.log('Error creating review data');
+    throw err;
+  }
+}
+
+
+/*async function createInitialReviews() {
+  try {
+    const[emilyjohnson,johnnysmith, jeffb123,mrmario]= await getAllUsers();
+    const users = await getAllUsers();
     for (const user of users) {
-     const[emilyjohnson,johnnysmith, jeffb123,mrmario]= await getAllUsers();
       console.log('Creating Initial Review Data...');
       
       // Call createReview with individual arguments
@@ -164,7 +231,7 @@ async function createInitialReviews() {
         "They have the best ice in town! If you know, you know.",
         ["Ashley our server was great!"]
       );
-      // Add more review entries as needed for this user*/
+      // Add more review entries as needed for this user
       
       console.log('Initial Review Data created successfully');
     }
@@ -172,7 +239,7 @@ async function createInitialReviews() {
     console.log('Error creating review data');
     throw err;
   }
-}
+}*/
 
 
 

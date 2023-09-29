@@ -40,6 +40,7 @@ const reviewToDisplay= searchParams
         <div key={review.id}>
           <p>Title: {review.title}</p>
           <p>Content: {review.content}</p>
+          <p>Comments:{review.comment_text}</p>
         </div>
       ))}
     </ul>
