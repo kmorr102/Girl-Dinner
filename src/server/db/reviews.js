@@ -104,7 +104,83 @@ async function createReview(reviewData) {
   throw error;
 }
 }
+
+
+// DELETE - /api/reviews/:id - delete a review by id
+async function deleteReview(id) {
+  try {
+    // checking if there's an associated review_comments data
+    const { rows: [review] } = await db.query(`
+      SELECT * FROM reviews
+      WHERE id = $1;
+    `, [id]);
+
+    if (!review) {
+      throw {
+        name: "ReviewNotFoundError",
+        message: "Unable to find a review with that id",
+      };
+    }
+
+    // If there is, delete the associated review_comments data
+    await db.query(`
+      DELETE FROM review_comments
+      WHERE "reviewId" = $1;
+    `, [id]);
+
+    // Deleting review 
+    const { rows: [deletedReview] } = await db.query(`
+      DELETE FROM reviews
+      WHERE id = $1
+      RETURNING *;
+    `, [id]);
+
+    return deletedReview;
+  } catch (error) {
+    throw error;
+  }
+}
+
+//EDIT REVIEW 
+
+async function updateReview(reviewId, fields){
+  const {title, content}=fields;
   
+  console.log("title:", title)
+  console.log('Content:', content);
+
+  if( !title && !content) {
+    throw new Error('At least one, title or content must be provided for update')
+  }
+  const updateFields= [];
+
+  if(title) {
+    updateFields.push(`title= '${title}'`);
+  }
+
+  if(content) {
+    updateFields.push(`content= '${content}'`);
+  }
+  try {
+    if(updateFields.length > 0) {
+      const query= (`
+        UPDATE reviews
+        SET ${updateFields.join(',')}
+        WHERE id=$1
+        RETURNING *;
+      `);
+    const values=[reviewId];
+    const { rows }= await db.query(query,values);
+    if (rows.length ===0) {
+      throw new Error('Review with id ${reviewId} not found.');
+    }
+  
+    return rows[0];
+    }
+  } catch (error) {
+  }
+};
+
 
 async function getReviewByUser(userId) {
     try {
@@ -186,49 +262,17 @@ async function getAllComments(){
     }
 }
 
-// DELETE - /api/reviews/:id - delete a review by id
-async function deleteReview(id) {
-  try {
-    // checking if there's an associated review_comments data
-    const { rows: [review] } = await db.query(`
-      SELECT * FROM reviews
-      WHERE id = $1;
-    `, [id]);
-
-    if (!review) {
-      throw {
-        name: "ReviewNotFoundError",
-        message: "Unable to find a review with that id",
-      };
-    }
-
-    // If there is, delete the associated review_comments data
-    await db.query(`
-      DELETE FROM review_comments
-      WHERE "reviewId" = $1;
-    `, [id]);
-
-    // Deleting review 
-    const { rows: [deletedReview] } = await db.query(`
-      DELETE FROM reviews
-      WHERE id = $1
-      RETURNING *;
-    `, [id]);
-
-    return deletedReview;
-  } catch (error) {
-    throw error;
-  }
-}
 
 module.exports = {
     getAllReviews,
     createReview,
+    deleteReview,
+    updateReview,
     getReviewById,
     getReviewByUser,
     getAllComments,
     createComments,
     createReviewComment,
     addCommentsToReview,
-    deleteReview
+    
 }

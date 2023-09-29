@@ -8,7 +8,8 @@ const {
    getReviewById,
    createReview,
    getAllComments,
-   deleteReview
+   deleteReview,
+   updateReview
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -39,7 +40,6 @@ reviewsRouter.post("/", async (req, res, next) => {
     // Destructure the expected properties from the request body
     const { authorId, title, content = "", comments = [] } = req.body;
   
-    // Create an empty reviewData object
     const reviewData = {};
   
     try {
@@ -68,32 +68,46 @@ reviewsRouter.post("/", async (req, res, next) => {
     }
   });
   
+  // DELETE - /api/reviews/:id - delete a review by id
+reviewsRouter.delete('/:id', async (req, res, next) => {
+  try {
+      const review = await deleteReview(req.params.id);
+      res.send(review);
+  } catch (error) {
+      next(error);
+  }
+});
 
-/*reviewsRouter.post("/", async (req, res, next) => {
-    try {
-        const review = await createReview(req.body);
+//EDIT- /api/reviews/:id - edit a review by id
+reviewsRouter.patch('/:reviewId', async (req, res, next) => {
+  const reviewId = req.params.reviewId;
+  const { title, content} = req.body;
 
-        const existingReview = await getReviewById(review.id);
+  const updateFields= {};
 
-        if (existingReview) {
-            res.send(existingReview);
-        } else {
-            const newReview = await createReview(review);
-            if (newReview) {
-                res.send(newReview);
-            } else {
+  if(title) {
+    updateFields.title=title;
+  }
 
-                next({
-                    name: "CreateReviewError",
-                    message: "There was an error creating the review"
-                });
-            }
+  if (content) {
+    updateFields.content=content;
+  }
+
+  try {
+      const originalReview= await getReviewById(reviewId);
+
+      if(originalReview.author.id ===req.user) {
+        const updatedReview= await updateReview(reviewId, updateFields);
+        res.send({ review: updatedReview });
+      }else{
+       next({name: "UnauthorizedUserError",
+             message: "You can not update a review that is not yours",
+     }); 
         }
-
-    } catch (error) {
-        next(error);
-    }
-});*/
+  } catch ({name,message}) {
+      next({name,message});
+  }
+});
 
 reviewsRouter.get("/", async (req,res,next) => {
     try{
@@ -107,15 +121,6 @@ reviewsRouter.get("/", async (req,res,next) => {
   }
 });
 
-// DELETE - /api/reviews/:id - delete a review by id
-reviewsRouter.delete('/:id', async (req, res, next) => {
-  try {
-      const review = await deleteReview(req.params.id);
-      res.send(review);
-  } catch (error) {
-      next(error);
-  }
-});
 
 
 module.exports = reviewsRouter;
