@@ -186,6 +186,41 @@ async function getAllComments(){
     }
 }
 
+// DELETE - /api/reviews/:id - delete a review by id
+async function deleteReview(id) {
+  try {
+    // checking if there's an associated review_comments data
+    const { rows: [review] } = await db.query(`
+      SELECT * FROM reviews
+      WHERE id = $1;
+    `, [id]);
+
+    if (!review) {
+      throw {
+        name: "ReviewNotFoundError",
+        message: "Unable to find a review with that id",
+      };
+    }
+
+    // If there is, delete the associated review_comments data
+    await db.query(`
+      DELETE FROM review_comments
+      WHERE "reviewId" = $1;
+    `, [id]);
+
+    // Deleting review 
+    const { rows: [deletedReview] } = await db.query(`
+      DELETE FROM reviews
+      WHERE id = $1
+      RETURNING *;
+    `, [id]);
+
+    return deletedReview;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
     getAllReviews,
     createReview,
@@ -195,4 +230,5 @@ module.exports = {
     createComments,
     createReviewComment,
     addCommentsToReview,
+    deleteReview
 }

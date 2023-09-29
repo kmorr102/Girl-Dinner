@@ -8,6 +8,7 @@ const {
    getReviewById,
    createReview,
    getAllComments,
+   deleteReview
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -105,5 +106,16 @@ reviewsRouter.get("/", async (req,res,next) => {
    next({name,message});
   }
 });
+
+// DELETE - /api/reviews/:id - delete a review by id
+reviewsRouter.delete('/:id', async (req, res, next) => {
+  try {
+      const review = await deleteReview(req.params.id);
+      res.send(review);
+  } catch (error) {
+      next(error);
+  }
+});
+
 
 module.exports = reviewsRouter;
