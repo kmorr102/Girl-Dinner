@@ -4,8 +4,21 @@ const db = require('./client');
 async function getAllReviews() {
     try {
         const { rows: reviews } = await db.query(`
-            SELECT id,"authorId",title,content
-            FROM reviews;
+            SELECT reviews.id,
+            reviews."authorId" AS author_id,
+            reviews.title AS review_title,
+            reviews.content AS review_content,
+            comments.id AS comment_id,
+            comments.comment AS comment_text
+            FROM 
+            reviews
+            LEFT JOIN
+            review_comments AS reviewscomments ON reviews.id = reviewscomments."reviewId"
+            LEFT JOIN
+            comments AS comments ON reviewscomments."commentId" = comments.id;
+            
+            
+           
         `);
        
     return reviews;

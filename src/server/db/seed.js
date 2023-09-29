@@ -6,7 +6,7 @@ const {
 const { 
   getAllReviews, 
   createReview,
-  getAllComments 
+  getAllComments
 }=require('./reviews')
 
 
@@ -70,7 +70,7 @@ const users = [
     id: 1,
     name: 'Emily Johnson',
     email: 'emily@example.com',
-    // username: 'emilyjohnson',
+    username: 'emilyjohnson',
     password: 'securepass',
     isAdmin: false,
   },
@@ -78,7 +78,7 @@ const users = [
     id: 2,
     name: 'John Smith',
     email: 'john@example.com',
-    // username: 'johnnysmith',
+    username: 'johnnysmith',
     password: 'password123',
     isAdmin: false,
   },
@@ -86,7 +86,7 @@ const users = [
     id: 3,
     name: 'Jeff Buckley',
     email: 'jeffb@example.com',
-    // username: 'jeffb123',
+    username: 'jeffb123',
     password: 'mynameisjeff',
     isAdmin: true,
   },
@@ -94,7 +94,7 @@ const users = [
     id: 4,
     name: 'Mario Maria',
     email: 'mariom@example.com',
-    //username: 'mrmario',
+    username: 'mrmario',
     password: 'maria724',
     isAdmin: true,
   }
@@ -117,53 +117,54 @@ const createInitialUsers = async () => {
 async function createInitialReviews() {
   try {
     for (const user of users) {
+     const[emilyjohnson,johnnysmith, jeffb123,mrmario]= await getAllUsers();
       console.log('Creating Initial Review Data...');
       
       // Call createReview with individual arguments
       await createReview(
-        user.id,
+        emilyjohnson.id,
         "Best food ever",
         "I would recommend to others!",
         ["I definitely agree!"]
       );
 
       await createReview(
-        user.id,
+        johnnysmith.id,
         "Decent food",
         "Reasonable prices and pretty good food",
         ["I agree with the review, food is decent but nothing you can't make at home."]
       );
       await createReview(
-        user.id,
+        jeffb123.id,
         "Nice customer service",
         "Had a great birthday party here",
         ["I also attended a party here and it was a great space for pictures"]
       );
       await createReview(
-        user.id,
+        mrmario.id,
         "Would not go here again",
         "I have had better'",
         ["A server yelled at me :("]
       );
       await createReview(
-        user.id,
+        emilyjohnson.id,
         "Best cheesecake ever!!!",
         "You have to try their oreo cheesecake its great. Service was also amazing",
         [ "Cheesecake is a 10/10"]
       );
       await createReview(
-        user.id,
+        jeffb123.id,
         "Wasn't great:(",
         "I've heard such great things, but I personally won't be going back",
         ["Waste of a datenight."]
       );
       await createReview(
-        user.id,
+        johnnysmith.id,
         "Look no further!",
         "They have the best ice in town! If you know, you know.",
         ["Ashley our server was great!"]
       );
-      // Add more review entries as needed for this user
+      // Add more review entries as needed for this user*/
       
       console.log('Initial Review Data created successfully');
     }
