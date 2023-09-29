@@ -34,8 +34,41 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
     }
 });
 
-
 reviewsRouter.post("/", async (req, res, next) => {
+    // Destructure the expected properties from the request body
+    const { authorId, title, content = "", comments = [] } = req.body;
+  
+    // Create an empty reviewData object
+    const reviewData = {};
+  
+    try {
+      // Populate the reviewData object with the properties from the request body
+      reviewData.authorId = authorId;
+      reviewData.title = title;
+      reviewData.content = content;
+      reviewData.comments = comments;
+  
+      // Call the createReview function with the populated reviewData
+      const review = await createReview(reviewData);
+  
+      if (review) {
+        // If the review is created successfully, send it as the response
+        res.send(review);
+      } else {
+        // If there's an error during review creation, send an error response
+        next({
+          name: "ReviewCreationError",
+          message: "There was an error creating your review. Please try again.",
+        });
+      }
+    } catch ({ name, message }) {
+      // Handle any errors that might occur during the process
+      next({ name, message });
+    }
+  });
+  
+
+/*reviewsRouter.post("/", async (req, res, next) => {
     try {
         const review = await createReview(req.body);
 
@@ -59,7 +92,7 @@ reviewsRouter.post("/", async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-});
+});*/
 
 reviewsRouter.get("/", async (req,res,next) => {
     try{
