@@ -92,19 +92,24 @@ reviewsRouter.patch('/:reviewId', async (req, res, next) => {
   if (content) {
     updateFields.content=content;
   }
-
-  try {
+//CODE FOR AUTH USER//
+  /*try {
       const originalReview= await getReviewById(reviewId);
 
       if(originalReview.author.id ===req.user) {
         const updatedReview= await updateReview(reviewId, updateFields);
+        
+        console.log("User ID:", req.user);
+        console.log("Review Author ID:", originalReview.author.id);
+
+        res.send({ review: updatedReview });*/
+    try {
+        const originalReview= await getReviewById(reviewId);
+    
+        const updatedReview= await updateReview(reviewId, updateFields);
+        
         res.send({ review: updatedReview });
-      }else{
-       next({name: "UnauthorizedUserError",
-             message: "You can not update a review that is not yours",
-     }); 
-        }
-  } catch ({name,message}) {
+    } catch ({name,message}) {
       next({name,message});
   }
 });
