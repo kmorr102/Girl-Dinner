@@ -97,7 +97,7 @@ async function createReview(reviewData) {
       `,
       [authorId, title, content]
     );
-    const commentList = await createComments(comments);
+    const commentList = await createComment(comments);
     return await addCommentsToReview(review.id, commentList);
   }
 } catch (error) {
@@ -200,7 +200,7 @@ async function getReviewByUser(userId) {
     }
 }
 
-async function createComments(commentList) {
+async function createComment(commentList) {
     if (commentList.length === 0) {
       return;
     }
@@ -249,6 +249,8 @@ async function addCommentsToReview(reviewId,commentList) {
       throw error;
     }
 }
+
+
 
 async function getAllComments(){
     try {
@@ -315,7 +317,7 @@ module.exports = {
     getReviewById,
     getReviewByUser,
     getAllComments,
-    createComments,
+    createComment,
     createReviewComment,
     addCommentsToReview,
     getCommentById,

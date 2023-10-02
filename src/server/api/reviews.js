@@ -12,6 +12,7 @@ const {
    updateReview,
    deleteCommentsById,
    getCommentById,
+   createComment,
    //createComments,
    //createReviewComment
 } = require('../db/reviews');
@@ -135,16 +136,15 @@ reviewsRouter.get("/:reviewId/comments", async (req,res,next) => {
 //POST create a new comment api/reviews/reviewId/comments
 reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   const { comment }= req.body;
+  reviewId=req.params.reviewId;
 
-  commentData= {};
+  
   try {
-    commentData.comment=comment
+    const newComment = await createComment({reviewId,comment});
 
-    const create = await createReviewComment(commentData);
-
-  if (create) {
+  if (newComment) {
       // If the comment is created successfully, send it as the response
-      res.send(create);
+      res.send(newComment);
     } else {
       // If there's an error during comment creation, send an error response
       next({
