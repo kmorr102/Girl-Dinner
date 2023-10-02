@@ -263,6 +263,50 @@ async function getAllComments(){
 }
 
 
+
+async function getCommentById(commentId){
+  try {
+    const { rows: [comment] } = await db.query(`
+    SELECT * 
+    
+    FROM 
+    comments
+    
+    WHERE id=$1`,[commentId]);
+
+  if(!comment){
+    throw{
+        name:"CommentNotFoundError",
+        message: "Could not find a review with that id"
+    };
+} 
+  return comment;
+  } catch (error) {
+    console.error('Error with retrieving comment by ID', error);
+    throw error;
+  }
+}
+
+
+//DELETE comments 
+async function deleteCommentsById(commentId){
+  try {
+    await db.query(`
+      DELETE FROM review_comments
+      WHERE "commentId"=$1
+      `, [commentId]
+    );
+    const {rows: [comment] } = await db.query(`
+    DELETE FROM comments
+    WHERE id=$1
+    RETURNING *
+    `, [commentId]
+  );
+  return comment;
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = {
     getAllReviews,
     createReview,
@@ -274,5 +318,7 @@ module.exports = {
     createComments,
     createReviewComment,
     addCommentsToReview,
+    getCommentById,
+    deleteCommentsById
     
 }
