@@ -97,7 +97,7 @@ async function createReview(reviewData) {
       `,
       [authorId, title, content]
     );
-    const commentList = await createComments(comments);
+    const commentList = await createComment(comments);
     return await addCommentsToReview(review.id, commentList);
   }
 } catch (error) {
@@ -200,7 +200,7 @@ async function getReviewByUser(userId) {
     }
 }
 
-async function createComments(commentList) {
+async function createComment(commentList) {
     if (commentList.length === 0) {
       return;
     }
@@ -250,6 +250,8 @@ async function addCommentsToReview(reviewId,commentList) {
     }
 }
 
+
+
 async function getAllComments(){
     try {
         const  {rows} = await db.query(`
@@ -263,6 +265,50 @@ async function getAllComments(){
 }
 
 
+
+async function getCommentById(commentId){
+  try {
+    const { rows: [comment] } = await db.query(`
+    SELECT * 
+    
+    FROM 
+    comments
+    
+    WHERE id=$1`,[commentId]);
+
+  if(!comment){
+    throw{
+        name:"CommentNotFoundError",
+        message: "Could not find a review with that id"
+    };
+} 
+  return comment;
+  } catch (error) {
+    console.error('Error with retrieving comment by ID', error);
+    throw error;
+  }
+}
+
+
+//DELETE comments 
+async function deleteCommentsById(commentId){
+  try {
+    await db.query(`
+      DELETE FROM review_comments
+      WHERE "commentId"=$1
+      `, [commentId]
+    );
+    const {rows: [comment] } = await db.query(`
+    DELETE FROM comments
+    WHERE id=$1
+    RETURNING *
+    `, [commentId]
+  );
+  return comment;
+  } catch (error) {
+    throw error;
+  }
+}
 module.exports = {
     getAllReviews,
     createReview,
@@ -271,8 +317,10 @@ module.exports = {
     getReviewById,
     getReviewByUser,
     getAllComments,
-    createComments,
+    createComment,
     createReviewComment,
     addCommentsToReview,
+    getCommentById,
+    deleteCommentsById
     
 }

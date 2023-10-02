@@ -9,7 +9,12 @@ const {
    createReview,
    getAllComments,
    deleteReview,
-   updateReview
+   updateReview,
+   deleteCommentsById,
+   getCommentById,
+   createComment,
+   //createComments,
+   //createReviewComment
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -69,14 +74,14 @@ reviewsRouter.post("/", async (req, res, next) => {
   });
   
   // DELETE - /api/reviews/:id - delete a review by id
-reviewsRouter.delete('/:id', async (req, res, next) => {
-  try {
-      const review = await deleteReview(req.params.id);
-      res.send(review);
-  } catch (error) {
-      next(error);
-  }
-});
+  reviewsRouter.delete('/:reviewId', async (req, res, next) => {
+    try {
+        const review = await deleteReview(req.params.reviewId);
+        res.send(review);
+    } catch (error) {
+        next(error);
+    }
+  })
 
 //EDIT- /api/reviews/:id - edit a review by id
 reviewsRouter.patch('/:reviewId', async (req, res, next) => {
@@ -104,7 +109,7 @@ reviewsRouter.patch('/:reviewId', async (req, res, next) => {
 
         res.send({ review: updatedReview });*/
     try {
-        const originalReview= await getReviewById(reviewId);
+        //const originalReview= await getReviewById(reviewId);
     
         const updatedReview= await updateReview(reviewId, updateFields);
         
@@ -114,18 +119,66 @@ reviewsRouter.patch('/:reviewId', async (req, res, next) => {
   }
 });
 
-reviewsRouter.get("/", async (req,res,next) => {
-    try{
-    const comments= await getAllComments();
+//GET get all comments api/reviews/reviewId/comments 
+reviewsRouter.get("/:reviewId/comments", async (req,res,next) => {
+  try{
+  const reviewId=req.params.reviewId;
+  const comments= await getAllComments(reviewId);
 
-    res.send({
-        comments
+  res.send({
+      comments
     });
   }catch ({name,message}) {
    next({name,message});
   }
 });
 
+//POST create a new comment api/reviews/reviewId/comments
+reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
+  const { comment }= req.body;
+  reviewId=req.params.reviewId;
 
+  
+  try {
+    const newComment = await createComment({reviewId,comment});
+
+  if (newComment) {
+      // If the comment is created successfully, send it as the response
+      res.send(newComment);
+    } else {
+      // If there's an error during comment creation, send an error response
+      next({
+        name: "CommentCreationError",
+        message: "There was an error creating your comment. Please try again.",
+      });
+    }
+  } catch ({ name, message }) {
+    // Handle any errors that might occur during the process
+    next({ name, message });
+  }
+});  
+
+
+//GET comment by Id  api/reviews/reviewId/comments/commentId
+reviewsRouter.get("/:reviewId/comments/:commentId", async (req,res,next)=>{
+  try {
+    const commentId=req.params.commentId
+    const comment= await getCommentById(commentId);
+    res.send(comment);
+} catch (error) {
+  next(error);
+}
+});
+
+
+// DELETE comment by Id api/reviews/reviewId/comments/commentId
+reviewsRouter.delete("/:reviewId/comments/:commentId", async (req,res, next)=>{
+  try {
+    const comment= await deleteCommentsById(req.params.commentId);
+    res.send(comment)
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = reviewsRouter;
