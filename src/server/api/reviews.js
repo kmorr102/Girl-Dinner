@@ -25,8 +25,6 @@ reviewsRouter.get('/', async (req, res, next) => {
 });
 
 //GET - /api/reviews/:reviewId - fetch single review by Id
-
-// changed reviewId to id
 reviewsRouter.get("/:reviewId", async (req,res, next)=>{
     try {
         const review= await getReviewById(req.params.reviewId);
