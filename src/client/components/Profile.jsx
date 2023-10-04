@@ -81,7 +81,11 @@ const reviewToDisplay= searchParams
         <div key={review.id}>
           <p>Title: {review.title}</p>
           <p>Content: {review.content}</p>
+
           <div>{review.isAuthor ? <button onClick={()=>deleteReview(review._id)}>Delete Review</button> : null}</div>
+
+          <p>Comments:{review.comment_text}</p>
+
         </div>
       ))}
     </ul>

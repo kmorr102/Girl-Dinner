@@ -61,12 +61,6 @@ const reviewsRouter= require('./reviews');
 const { parse } = require('dotenv');
 apiRouter.use('/reviews', reviewsRouter);
 
-//end point for single review by id
-/*const reviewRouter=require('./reviews');
-apiRouter.use('/reviews/:id', reviewRouter);
-*/
-
-//endpoint for login
 
 
 apiRouter.use((err, req, res, next) => {
