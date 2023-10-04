@@ -22,5 +22,23 @@ function requireUser(req,res,next) {
       next();
     }
   };
-
-  module.exports = { requireUser, requireAdminStatus }
+  function checkAuthentication(req, res, next) {
+    
+    const token = req.headers.authorization;
+  
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+  
+    try {
+      // Verify the token with your secret key
+      const user = jwt.verify(token, JWT_SECRET);
+      req.user = user;
+      next();
+    } catch (error) {
+      // If the token is invalid, return an unauthorized response
+      res.status(401).json({ message: "Unauthorized" });
+    }
+  }
+  
+  module.exports = { requireUser, requireAdminStatus,checkAuthentication }

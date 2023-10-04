@@ -13,8 +13,6 @@ const {
    deleteCommentsById,
    getCommentById,
    createComment,
-   //createComments,
-   //createReviewComment
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews

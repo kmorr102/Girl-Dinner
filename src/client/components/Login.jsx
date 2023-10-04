@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 
-const Login = () => {
+const Login = (setToken) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError]=useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -26,14 +29,28 @@ const Login = () => {
             })
         });
         const result = await response.json();
+        console.log('Full API Response:',result);
         setMessage(result.message);
         if(!response.ok) {
           throw(result)
         }
+        if(result.data && result.data.token) {
+          localStorage.setItem('authToken',result.data.token);
+          setToken(result.data.token);
+          setCurrentUser(result.data.user);
+          setMessage(result.message || "Successfully logged in!");
+        
         setEmail('');
         setPassword('');
-    } catch (err) {
-        console.error(`${err.name}: ${err.message}`);
+        setMessage("Successfully logged in!");
+        setTimeout(()=>{
+          Navigate("./profile");
+        }, 2000)
+      }else{
+        setError(result.error.message || 'Unexpected error occurred');
+      }
+    } catch (error) {
+       setError(error.message);
     }
   }
 

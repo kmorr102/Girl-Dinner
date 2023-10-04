@@ -4,9 +4,29 @@ import Home from "./components/Home";
 import Login from './components/Login';
 import Profile from './components/Profile';
 import Register from './components/Register';
+import Authenticate from './components/Authenticate';
 
 function App() {
+const[token,setToken]=useState();
+const[isLoggedIn,setIsLoggedIn]=useState(false);
+const[name,setName]=useState('');
 
+useEffect(()=> {
+  if(token) {
+    Authenticate(token,setName)
+    .then(data => {
+      if(data && data.name) {
+        setIsLoggedIn(true);
+      }else{
+        setIsLoggedIn(false);
+      }
+    }).catch(error =>{
+      setIsLoggedIn(false);
+      console.error("Failed to autenticate user:", error)
+    })
+  }
+
+})
   return (
     <div id="container">
       <div id="navbar">
@@ -20,7 +40,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/Register" element={<Register />} />
+          <Route path="/Register" element={<Register setToken={setToken}/>} />
         </Routes>
       </div>
     </div>

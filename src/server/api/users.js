@@ -3,12 +3,12 @@ const usersRouter = express.Router();
 
 const { createUser, getUser, getUserByEmail, getAllUsers } = require("../db");
 
-const { requireUser, requireAdminStatus } = require('./utils')
+const { requireUser, requireAdminStatus,checkAuthentication } = require('./utils')
 // console.log(requireAdminStatus)
 
 const jwt = require("jsonwebtoken");
 
-usersRouter.get("/", requireAdminStatus, async (req, res, next) => {
+usersRouter.get("/",async (req, res, next) => {
   try {
     const users = await getAllUsers();
 
@@ -19,6 +19,28 @@ usersRouter.get("/", requireAdminStatus, async (req, res, next) => {
     next({ name, message });
   }
 });
+
+
+// Define the "users/me" endpoint
+usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
+  try {
+    // Retrieve the authenticated user's data
+    const authenticatedUser = req.user; 
+    // Create a user object with limited data (excluding password and token)
+    const user = {
+      id: authenticatedUser.id,
+      name: authenticatedUser.name,
+      email: authenticatedUser.email,
+    };
+
+    res.send({
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
