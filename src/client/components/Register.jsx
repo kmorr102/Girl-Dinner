@@ -5,20 +5,21 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 // import { createUser } from "../../server/db/users.js";
 
 
-export default function Register({ inputType, onSetInputType }) {
-  const [name, setName] = useState ("");
+export default function Register({ inputType, onSetInputType,setToken }) {
+  const [fname, setFName] = useState ("");
+  const [lname, setLName] = useState ("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
   const [successfulSignup, setSuccessfulSignup] = useState(null);
   const [error, setError] = useState(null);
 
-  async function handleSubmit(e) {
+  /*async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
     setSuccessfulSignup(null);
     if (verifyPassword === password) {
-      const newUser = await fetchNewUser(email, password);
+      const newUser = await fetch(email, password);
       console.log(newUser.email)
       console.log(newUser.password)
       if (newUser.password === undefined) console.log("help")
@@ -32,8 +33,38 @@ export default function Register({ inputType, onSetInputType }) {
         "Password inputs do not match, please make sure they match before submitting"
       );
     }
-  }
-
+  }*/
+  async function handleSubmit(event){
+    event.preventDefault();
+    //Navigate('/Login')
+    try {
+        const APIResponse= await fetch('http://localhost:3000/api/users/register',
+        {
+            method:'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                user: { 
+                    fname,
+                    lname,
+                    password,
+                }
+            })
+        });
+        const result= await APIResponse.json();
+        console.log("SignUp Result:",result);
+        setToken(result.data.token);
+        setSuccessfulSignup(result.message);
+        setFName('');
+        setLName('');
+        setPassword('');
+        console.log('form submitted')
+        return result;
+    } catch (error) {
+        setError(error.message)
+    }
+}
   return (
     <div className="form-cont">
       <h1>Register Now!</h1>
@@ -43,8 +74,8 @@ export default function Register({ inputType, onSetInputType }) {
             className="name"
             type="text"
             placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={fname}
+            onChange={(e) => setFName(e.target.value)}
             required
           />
           </div>
