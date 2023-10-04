@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllReviews } from '../API';
+//import { getAllReviews } from '../API';
 import { IoApertureSharp } from 'react-icons/io5';
 
 export default function Profile() {
