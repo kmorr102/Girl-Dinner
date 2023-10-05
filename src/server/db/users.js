@@ -3,20 +3,26 @@ const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
 
+async function Secure(){
+    try {
+        const hashedPassword= await bcrypt.hash(user.password,SALT_COUNT);
+        user.password=hashedPassword;
+    } catch (error) {
+}
+};
+
 const createUser = async({ 
-    id,
     name='first last',
-    email,
-    password,
-    isAdmin 
+    email='john@example.com',
+    hashedPassword='hashedpass',
+    isAdmin,
 }) => {
-    const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
     try {
         const { rows: [user ] } = await db.query(`
-        INSERT INTO users(id,name, email, password, isAdmin)
-        VALUES($1, $2, $3, $4, $5)
+        INSERT INTO users(name, email, password, isAdmin)
+        VALUES($1, $2, $3, $4)
         ON CONFLICT (email) DO NOTHING
-        RETURNING *`, [id, name, email, hashedPassword, isAdmin]);
+        RETURNING *`, [name, email, hashedPassword, isAdmin]);
 
         return user;
     } catch (err) {
@@ -57,7 +63,7 @@ const getUserByEmail = async(email) => {
 async function getUserById(userId) {
     try {
       const { rows: [ user ] } = await client.query(`
-        SELECT id, name, email, password, isAdmin
+        SELECT id, name, email, password
         FROM users
         WHERE id=${ userId }
       `);
@@ -79,8 +85,7 @@ async function getUserById(userId) {
 async function getAllUsers() {
     try{
         const {rows}= await db.query(`
-        SELECT id,name,email,password,isAdmin 
-        FROM users`);
+        SELECT id,name,username,email,password,isAdmin FROM users`);
 
         return rows;
     }catch(error){
@@ -94,5 +99,6 @@ module.exports = {
     getUserByEmail,
     getAllUsers,
     getUserById,
+    Secure
     
 };

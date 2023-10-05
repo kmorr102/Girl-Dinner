@@ -1,4 +1,4 @@
-export default async function Authenticate(){
+export default async function Authenticate(token,setName){
     try {
         const APIresponse=await fetch ('http://localhost:3000/api/users/me',{
             method: "GET",

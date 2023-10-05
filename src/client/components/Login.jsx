@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = (setToken) => {
   const [email, setEmail] = useState('');
@@ -6,7 +7,8 @@ const Login = (setToken) => {
   const [message, setMessage] = useState('');
   const [error, setError]=useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-
+  
+  const Navigate= useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -16,7 +18,8 @@ const Login = (setToken) => {
     setPassword(e.target.value);
   };
 
-  const login = async() => {
+  async function handleSubmit(e){
+    event.preventDefault()
     try {
         const response = await fetch('http://localhost:3000/api/users/login', {
             method: 'POST',
@@ -30,12 +33,11 @@ const Login = (setToken) => {
         });
         const result = await response.json();
         console.log('Full API Response:',result);
-        setMessage(result.message);
-        if(!response.ok) {
-          throw(result)
-        }
+        
+        
         if(result.data && result.data.token) {
-          localStorage.setItem('authToken',result.data.token);
+
+          sessionStorage.setItem('authToken',result.data.token);
           setToken(result.data.token);
           setCurrentUser(result.data.user);
           setMessage(result.message || "Successfully logged in!");
@@ -54,10 +56,7 @@ const Login = (setToken) => {
     }
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login();
-  };
+
 
   return (
     <div className='login'>
@@ -85,6 +84,7 @@ const Login = (setToken) => {
         </div>
         <button type='submit'>Login</button>
       </form>
+      <Link to={"/Register"} className='register'> Don't have an Account? Sign up here</Link>
       <p>{message}</p>
     </div>
   );

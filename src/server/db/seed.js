@@ -105,7 +105,7 @@ const createInitialUsers = async () => {
   try {
     console.log("Starting to create users...")
     for (const user of users) {
-      await createUser({id: user.id, name: user.name, email: user.email, password: user.password, isAdmin: user.isAdmin});
+      await createUser({name: user.name, email: user.email, password: user.password, isAdmin: user.isAdmin});
     }
    
     console.log('Finished creating users!');
@@ -117,10 +117,6 @@ async function createInitialReviews() {
   try {
     const users = await getAllUsers(); // Retrieve all users
 
-    /*if (!users || users.length === 0) {
-      console.log('No users found.');
-      return;
-    }*/
 
     const reviewDataArray = [
       {

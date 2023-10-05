@@ -1,5 +1,6 @@
 const express = require("express");
 const usersRouter = express.Router();
+const bcrypt=require('bcrypt');
 
 const { createUser, getUser, getUserByEmail, getAllUsers } = require("../db");
 
@@ -32,7 +33,7 @@ usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
       name: authenticatedUser.name,
       email: authenticatedUser.email,
     };
-
+    console.log("user authenticated")
     res.send({
       user,
     });
@@ -58,7 +59,7 @@ usersRouter.post("/login", async (req, res, next) => {
     if (user) {
       const token = jwt.sign(
         {
-          id: user.id,
+          name,
           email,
         },
         `${process.env.JWT_SECRET}`,
@@ -94,17 +95,18 @@ usersRouter.post("/register", async (req, res, next) => {
         message: "A user with that email already exists",
       });
     }
-
+    const hashedPassword=await bcrypt.hash(password,10);
+    
     const user = await createUser({
       name,
       email,
-      password,
+      password: hashedPassword,
       isAdmin
     });
 
     const token = jwt.sign(
       {
-        id: user.id,
+        name,
         email,
       },
       `${process.env.JWT_SECRET}`,
