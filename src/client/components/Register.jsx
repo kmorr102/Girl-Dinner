@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchNewUser } from "../API/index.js";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 // import { createUser } from "../../server/db/users.js";
@@ -13,30 +13,11 @@ export default function Register({ inputType, onSetInputType,setToken }) {
   const [verifyPassword, setVerifyPassword] = useState("");
   const [successfulSignup, setSuccessfulSignup] = useState(null);
   const [error, setError] = useState(null);
+  const Navigate=useNavigate()
 
-  /*async function handleSubmit(e) {
-    e.preventDefault();
-    setError(null);
-    setSuccessfulSignup(null);
-    if (verifyPassword === password) {
-      const newUser = await fetch(email, password);
-      console.log(newUser.email)
-      console.log(newUser.password)
-      if (newUser.password === undefined) console.log("help")
-      if (newUser.error) setError(newUser.error);
-      if (newUser.success) {
-        setSuccessfulSignup(newUser.data.message);
-      }
-      console.log(newUser);
-    } else {
-      setError(
-        "Password inputs do not match, please make sure they match before submitting"
-      );
-    }
-  }*/
   async function handleSubmit(event){
     event.preventDefault();
-    //Navigate('/Login')
+    Navigate('/Login')
     try {
         const APIResponse= await fetch('http://localhost:3000/api/users/register',
         {
@@ -59,7 +40,6 @@ export default function Register({ inputType, onSetInputType,setToken }) {
         setFName('');
         setLName('');
         setPassword('');
-        console.log('form submitted')
         return result;
     } catch (error) {
         setError(error.message)
@@ -143,7 +123,7 @@ export default function Register({ inputType, onSetInputType,setToken }) {
       {!successfulSignup ? (
         <h4>
           Already have an account?{" "}
-          <Link to="/account/login" className="form-link">
+          <Link to="/Login" className="form-link">
             Log in
           </Link>
         </h4>

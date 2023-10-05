@@ -1,8 +1,10 @@
 export async function fetchAllReviews() {
     try {
+        const auth = sessionStorage.getItem("authToken");
         const response= await fetch('http://localhost:3000/api/reviews', {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+         // "Authorization": `Bearer ${auth}`, breaks code for now if uncommented 
       },
     });
         const result= await response.json();
@@ -75,20 +77,3 @@ export async function fetchLogin(email, password) {
   }
 }
 
-// Fetching a token based on if a user is currently logged in
-export async function fetchLoggedIn(token) {
-  try {
-    const response = await fetch('http://localhost:3000/users/me', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const result = await response.json();
-    console.log(result);
-    return result;
-  } catch (error) {
-    console.error(error);
-  }
-}
