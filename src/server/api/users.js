@@ -1,13 +1,13 @@
 const express = require("express");
 const usersRouter = express.Router();
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 const { createUser, getUser, getUserByEmail, getAllUsers } = require("../db");
 
 const { requireUser, requireAdminStatus,checkAuthentication } = require('./utils')
 // console.log(requireAdminStatus)
 
-const jwt = require("jsonwebtoken");
 
 usersRouter.get("/",async (req, res, next) => {
   try {
@@ -22,8 +22,9 @@ usersRouter.get("/",async (req, res, next) => {
 });
 
 
+
 // Define the "users/me" endpoint
-usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
+/*usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
   try {
     // Retrieve the authenticated user's data
     const authenticatedUser = req.user; 
@@ -40,27 +41,26 @@ usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+});*/
 
 
 usersRouter.post("/login", async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   //request must have both
 
-  if (!email || !password) {
+  if (!username || !password) {
     next({
       name: "MissingCredentialsError",
       message: "Please supply both an email and password",
     });
   }
   try {
-    const user = await getUser({ email, password });
+    const user = await getUser({ username, password });
     if (user) {
       const token = jwt.sign(
         {
-          name,
-          email,
+          username,
         },
         `${process.env.JWT_SECRET}`,
         {
@@ -69,6 +69,7 @@ usersRouter.post("/login", async (req, res, next) => {
       );
       res.send({
         message: "Login successful!",
+        user,
         token,
       });
     } else {
@@ -83,9 +84,11 @@ usersRouter.post("/login", async (req, res, next) => {
   }
 });
 
+
+
 usersRouter.post("/register", async (req, res, next) => {
-  const { name, email, password, isAdmin } = req.body;
-  console.log("This is token:", `${process.env.JWT_SECRET}`);
+  const { name,username, email, password, isAdmin } = req.body;
+  //console.log("This is token:", `${process.env.JWT_SECRET}`);
   try {
     const _user = await getUserByEmail(email);
 
@@ -95,21 +98,27 @@ usersRouter.post("/register", async (req, res, next) => {
         message: "A user with that email already exists",
       });
     }
-    const hashedPassword=await bcrypt.hash(password,10);
+    //console.log("Hashed Password:", password);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    //console.log("Hashed Password:", hashedPassword);
+
     
     const user = await createUser({
       name,
+      username,
       email,
-      password: hashedPassword,
+      hashedPassword,
       isAdmin
     });
 
     const token = jwt.sign(
       {
-        name,
+        username,
         email,
       },
+      //console.log("This is token:", `${process.env.JWT_SECRET}`)
       `${process.env.JWT_SECRET}`,
+      
       {
         expiresIn: "1w",
       }
@@ -117,11 +126,14 @@ usersRouter.post("/register", async (req, res, next) => {
 
     res.send({
       message: "Sign up successful!",
+      user,
       token,
     });
-  } catch ({ name, message }) {
-    next({ name, message });
+  } catch ({error}) {
+    //console.log("error from api reg:", error)
+    next({error });
   }
 });
+
 
 (module.exports = usersRouter), createUser;

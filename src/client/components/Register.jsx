@@ -5,7 +5,9 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 // import { createUser } from "../../server/db/users.js";
 
 
-export default function Register({ inputType, onSetInputType,setToken }) {
+
+export default function Register({ inputType, onSetInputType,setToken,token }) {
+  console.log(token)
   const [fname, setFName] = useState ("");
   const [lname, setLName] = useState ("");
   const [email, setEmail] = useState("");
@@ -23,7 +25,8 @@ export default function Register({ inputType, onSetInputType,setToken }) {
         {
             method:'POST',
             headers: {
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                
             },
             body: JSON.stringify({
                 user: { 
@@ -35,14 +38,15 @@ export default function Register({ inputType, onSetInputType,setToken }) {
         });
         const result= await APIResponse.json();
         console.log("SignUp Result:",result);
-        setToken(result.data.token);
+        setToken(result.token);
+        console.log(result.token)
         setSuccessfulSignup(result.message);
-        setFName('');
+        setFName(result.name);
         setLName('');
         setPassword('');
         return result;
     } catch (error) {
-        setError(error.message)
+      console.log(error);
     }
 }
   return (
@@ -69,7 +73,7 @@ export default function Register({ inputType, onSetInputType,setToken }) {
         />
           </div>
         <div className="password-cont">
-          {/* Your register form should have a place to enter a username, a place to enter a password, and a place to enter password confirmation. */}
+          {/* Your register form should have a place to enter a name, a place to enter a password, and a place to enter password confirmation. */}
           <input
             className="password-input"
             type={inputType}

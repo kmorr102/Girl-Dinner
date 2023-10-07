@@ -3,13 +3,58 @@ const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
 
 
-async function Secure(){
+const createUser = async({ 
+    name='',
+    username='',
+    email='',
+    password='',
+    isAdmin=true||false,
+}) => {
     try {
-        const hashedPassword= await bcrypt.hash(user.password,SALT_COUNT);
-        user.password=hashedPassword;
-    } catch (error) {
+        // Hash the password before inserting it into the database
+        console.log('password data',password)
+        const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+        console.log('error hashed pass',hashedPassword)
+
+        const { rows: [user ] } = await db.query(`
+        INSERT INTO users(name,username, email, password, isAdmin)
+        VALUES($1, $2, $3, $4,$5)
+        ON CONFLICT (email) DO NOTHING
+        RETURNING *`, [name,username, email, hashedPassword, isAdmin]);
+        console.log("user data", user)
+        return user;
+    } catch (err) {
+        console.log( 'error from register db')
+        throw err;
+    }
 }
-};
+
+const getUser = async({username, password}) => {
+    if (!username || !password) {
+        return;
+    }
+    try {
+        const user = await getUserByEmail(email);
+        if (!user) return;
+        const hashedPassword = user.password;
+        const passwordsMatch = await bcrypt.compare(password, hashedPassword);
+        if (!passwordsMatch) return;
+        delete user.password;
+        return user;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+/*
+bcrypt.hash(password, SALT_COUNT, (err, hash) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Hashed Password:', hash);
+    }
+  });
 
 const createUser = async({ 
     name='first last',
@@ -45,7 +90,7 @@ const getUser = async({email, password}) => {
     } catch (err) {
         throw err;
     }
-}
+}*/
 
 const getUserByEmail = async(email) => {
     try {
@@ -63,7 +108,7 @@ const getUserByEmail = async(email) => {
 async function getUserById(userId) {
     try {
       const { rows: [ user ] } = await client.query(`
-        SELECT id, name, email, password
+        SELECT id, name,username, email, password
         FROM users
         WHERE id=${ userId }
       `);
@@ -99,6 +144,6 @@ module.exports = {
     getUserByEmail,
     getAllUsers,
     getUserById,
-    Secure
+    
     
 };

@@ -1,11 +1,13 @@
+import jwtDecode from 'jwt-decode';
+const token = sessionStorage.getItem("authToken");
 export async function fetchAllReviews() {
     try {
-        const auth = sessionStorage.getItem("authToken");
+        
         const response= await fetch('http://localhost:3000/api/reviews', {
-        headers: {
-          "Content-Type": "application/json",
-         // "Authorization": `Bearer ${auth}`, breaks code for now if uncommented 
-      },
+        /*headers: {
+          "Content-Type" : "application/json",
+          "Authorization" : `Bearer ${token}`
+      },*/
     });
         const result= await response.json();
         console.log('Fetched all reviews:', result.reviews);
@@ -42,7 +44,7 @@ export async function fetchNewUser(email, password) {
       },
       body: JSON.stringify({
         user: {
-          username: `${email}`,
+          email: `${email}`,
           password: `${password}`,
         },
       }),
@@ -54,7 +56,7 @@ export async function fetchNewUser(email, password) {
     console.error(err);
   }
 }
-// Fetch login, authenticating a user if their username and password mathes the right data
+// Fetch login, authenticating a user if their name and password mathes the right data
 export async function fetchLogin(email, password) {
   try {
     const response = await fetch('http://localhost:3000/api/users/login', {
@@ -64,7 +66,7 @@ export async function fetchLogin(email, password) {
       },
       body: JSON.stringify({
         user: {
-          username: `${email}`,
+          email: `${email}`,
           password: `${password}`,
         },
       }),
@@ -77,3 +79,26 @@ export async function fetchLogin(email, password) {
   }
 }
 
+
+
+async function authenticateUser(token) {
+  try {
+    if (!token) {
+      throw new Error('Authentication failed: Token missing');
+    }
+
+    // Decode the JWT token to get the user's data
+    const decoded = jwtDecode(token);
+
+    // You can optionally validate the decoded data here, e.g., check for expiration
+
+    // Return the decoded user data 
+    return { name: decoded.name, email: decoded.email };
+
+  } catch (error) {
+    // Handle authentication errors, e.g., invalid token or missing user
+    throw error;
+  }
+}
+
+export default authenticateUser;
