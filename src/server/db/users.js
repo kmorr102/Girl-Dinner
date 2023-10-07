@@ -1,16 +1,17 @@
 const db = require('./client')
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
-
-
-const createUser = async({ 
-    name='',
-    username='',
-    email='',
-    password='',
-    isAdmin=true||false,
-}) => {
+//this function keeps breaking
+async function createUser({
+    name, 
+    username,
+    email, 
+    password='', 
+    isAdmin
+})
+{
     try {
+    
         const emailLowerCase = email.toLowerCase();
         const existingUser = await getUserByEmail(emailLowerCase);
     
@@ -20,7 +21,7 @@ const createUser = async({
         }
         
         // Hash the password before inserting it into the database
-        //console.log('password data',password)
+        console.log('password data',password)
         const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
         console.log('hashed pass from createUser db',hashedPassword)
 
@@ -38,7 +39,7 @@ const createUser = async({
 }
 
 const getUser = async({username, password}) => {
-    //console.log("username and password:", password)
+    console.log("username and password:", password)
     if (!username || !password) {
         return;
     }
@@ -47,10 +48,10 @@ const getUser = async({username, password}) => {
         console.log('obtain user db from get user db:',user)
         if (!user) return;
         const hashedPassword = user.password;
-        //console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
-        //console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
+        console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
+        console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
         const passwordsMatch = await bcrypt.compare(password, hashedPassword);
-        //console.log('Do Passwords Match?', passwordsMatch);
+        console.log('Do Passwords Match?', passwordsMatch);
         //if password stays the same and is not hashed, server will delete password and not send to db
         if (passwordsMatch) return;
         delete password;
@@ -78,7 +79,7 @@ const getUserByUsername = async(username) => {
 }
 
 const getUserByEmail = async(email) => {
-    console.log('email:',email)
+    //console.log('email:',email)
     try {
         const { rows: [ user ] } = await db.query(`
         SELECT * 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-const jwt= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6I…xNjd9.hWXZvo1R_ai2m5_7ZSoALEHFEb__FO0HLW70dhyO9Vo'
+/*const jwt= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6I…xNjd9.hWXZvo1R_ai2m5_7ZSoALEHFEb__FO0HLW70dhyO9Vo'
 const jwtstring=JSON.stringify(jwt);
-sessionStorage.setItem('This is a token:', jwtstring)
+sessionStorage.setItem('This is a token:', jwtstring)*/
 
-const Login = (setToken,token) => {
+const Login = (setToken) => {
   const [username,setUsername]=useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +32,7 @@ const Login = (setToken,token) => {
                 'Content-Type' : 'application/json'
             }, 
             body: JSON.stringify({
-                email,
+                username,
                 password
             })
         });

@@ -2,15 +2,14 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchNewUser } from "../API/index.js";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-// import { createUser } from "../../server/db/users.js";
+import { createUser } from "../../server/db/users.js";
 
 
 
-export default function Register({ inputType, onSetInputType,setToken }) {
+export default function Register({ inputType, onSetInputType,setToken}) {
   const [fname, setFName] = useState ("");
-  //const [lname, setLName] = useState ("");
+  const [email, setEmail] = useState ("");
   const [username, setUsername]=useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
   const [successfulSignup, setSuccessfulSignup] = useState(null);
@@ -30,7 +29,9 @@ export default function Register({ inputType, onSetInputType,setToken }) {
             },
             body: JSON.stringify({
                 user: { 
-                    username,
+                    fname,
+                    username, 
+                    email,
                     password,
                 }
   

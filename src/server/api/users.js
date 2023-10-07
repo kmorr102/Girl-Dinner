@@ -52,8 +52,8 @@ usersRouter.post("/login", async (req, res, next) => {
   //request must have both
 
   if (!username || !password) {
-    //console.log('no username?',username)
-    //console.log('no password?',password)
+    console.log('no username?',!username)
+    console.log('no password?',!password)
 
     next({
       name: "MissingCredentialsError",
@@ -76,7 +76,6 @@ usersRouter.post("/login", async (req, res, next) => {
       console.log('this is a token from /login',`${process.env.JWT_SECRET}`)
       res.send({
         message: "Login successful!",
-        user,
         token,
       });
     } else {
@@ -96,7 +95,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
 usersRouter.post("/register", async (req, res, next) => {
   const { name,username, email, password, isAdmin } = req.body;
-  //console.log("This is token:", `${process.env.JWT_SECRET}`);
+  console.log("This is token:", `${process.env.JWT_SECRET}`);
   try {
     const _user = await getUserByEmail(email);
 
@@ -106,15 +105,15 @@ usersRouter.post("/register", async (req, res, next) => {
         message: "A user with that email already exists",
       });
     }
-    console.log("unHashed Password from /reg:", password);
+    console.log("unHashed Password", password);
     const hashedPassword = await bcrypt.hash(password, 10);
-    ("Hashed Password from /reg:", hashedPassword);
+    //("Hashed Password from /reg:", hashedPassword);
 
     
     const user = await createUser({
-      name: user.name,
-      username: user.name,
-      email: user.name,
+      name,
+      username,
+      email,
       hashedPassword,
       isAdmin
     });
@@ -135,6 +134,7 @@ usersRouter.post("/register", async (req, res, next) => {
 
     res.send({
       message: "Sign up successful!",
+      user,
       token,
 
     });

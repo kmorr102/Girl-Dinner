@@ -1,5 +1,5 @@
-import jwtDecode from 'jwt-decode';
-const token = sessionStorage.getItem("authToken");
+
+
 export async function fetchAllReviews() {
     try {
         
@@ -81,24 +81,4 @@ export async function fetchLogin(email, password) {
 
 
 
-async function authenticateUser(token) {
-  try {
-    if (!token) {
-      throw new Error('Authentication failed: Token missing');
-    }
-
-    // Decode the JWT token to get the user's data
-    const decoded = jwtDecode(token);
-
-    // You can optionally validate the decoded data here, e.g., check for expiration
-
-    // Return the decoded user data 
-    return { name: decoded.name, email: decoded.email };
-
-  } catch (error) {
-    // Handle authentication errors, e.g., invalid token or missing user
-    throw error;
-  }
-}
-
-export default authenticateUser;
+ 
