@@ -6,10 +6,10 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 
 
-export default function Register({ inputType, onSetInputType,setToken,token }) {
-  console.log(token)
+export default function Register({ inputType, onSetInputType,setToken }) {
   const [fname, setFName] = useState ("");
-  const [lname, setLName] = useState ("");
+  //const [lname, setLName] = useState ("");
+  const [username, setUsername]=useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
@@ -19,7 +19,7 @@ export default function Register({ inputType, onSetInputType,setToken,token }) {
 
   async function handleSubmit(event){
     event.preventDefault();
-    Navigate('/Login')
+    //Navigate('/Login')
     try {
         const APIResponse= await fetch('http://localhost:3000/api/users/register',
         {
@@ -30,22 +30,27 @@ export default function Register({ inputType, onSetInputType,setToken,token }) {
             },
             body: JSON.stringify({
                 user: { 
-                    fname,
-                    lname,
+                    username,
                     password,
                 }
+  
             })
+            
         });
+        console.log('name:',fname);
+        console.log('username:',username);
+        console.log('password:', password);
         const result= await APIResponse.json();
         console.log("SignUp Result:",result);
-        setToken(result.token);
-        console.log(result.token)
+        setToken(result);
         setSuccessfulSignup(result.message);
-        setFName(result.name);
-        setLName('');
+        setFName('');
+        setUsername('');
         setPassword('');
+        console.log('form submitted')
         return result;
     } catch (error) {
+      setError(error.message)
       console.log(error);
     }
 }
@@ -62,6 +67,15 @@ export default function Register({ inputType, onSetInputType,setToken,token }) {
             onChange={(e) => setFName(e.target.value)}
             required
           />
+            </div>
+          <div className="username">
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
           </div>
           <div className="email">
         <input

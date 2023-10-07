@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+
 const jwt= 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6I…xNjd9.hWXZvo1R_ai2m5_7ZSoALEHFEb__FO0HLW70dhyO9Vo'
 const jwtstring=JSON.stringify(jwt);
 sessionStorage.setItem('This is a token:', jwtstring)
 
 const Login = (setToken,token) => {
+  const [username,setUsername]=useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -13,8 +15,8 @@ const Login = (setToken,token) => {
   
   const Navigate= useNavigate();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -47,7 +49,6 @@ const Login = (setToken,token) => {
           setCurrentUser(result.user);
           setMessage(result.message || "Successfully logged in!");
         
-        setEmail('');
         setPassword('');
         setMessage("Successfully logged in!");
         setTimeout(()=>{
@@ -68,12 +69,12 @@ const Login = (setToken,token) => {
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor='email'>Email:</label>
+          <label htmlFor='username'>Username:</label>
           <input
-            type='email'
-            id='email'
-            value={email}
-            onChange={handleEmailChange}
+            type='username'
+            id='username'
+            value={username}
+            onChange={handleUsernameChange}
             required
           />
         </div>
