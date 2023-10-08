@@ -14,37 +14,7 @@ const[username,setUsername]=useState('');
 console.log('token:',token)
 
 
-/*async function authenticateUser(token) {
-console.log('authToken:',token)
-  try {
-    if (token) {
-    console.log('username:', username)
-    return { username };
-    
-    }
 
-  } catch (error) {
-    console.log("auth is stupid",error)
-    // Handle authentication errors, e.g., invalid token or missing user
-    throw error;
-  }
-}
-
-useEffect(()=>{
-  if(token){
-    authenticateUser(setUsername)
-    .then(data => {
-      if(data && data.username){/
-      setIsLoggedIn(true);
-      } else{
-        setIsLoggedIn(false);
-      }
-    }).catch(error=>{
-      setIsLoggedIn(false);
-      console.error("failed to auntenticate user:",error);
-});
-  }
-},[token]);*/
  useEffect(()=>{
   if(token){
     setIsLoggedIn(true);
