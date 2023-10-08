@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
 
-export default function Reviews({token,name}){
-    const auth = sessionStorage.getItem("authToken");
-
+export default function Reviews({token}){
+    const tokenString = sessionStorage.getItem("authToken");
+    console.log('token from login(storage):', tokenString)
+    
 
     const [reviews, setReviews]= useState('');
+    const [title, setTitle]= useState('');
+    const [content, setContent]= useState('');
     const [error, setError]= useState(null);
     const [searchParams, setSearchParams]= useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [isAuthor, setIsAuthor]= useState('')
   
   // getallreviews experience of logged in user - will be able to see "edit" and "delete" options for reviews they've written
   
@@ -27,9 +31,52 @@ export default function Reviews({token,name}){
         
     // why is 'isAuthor' not being read?
     
-    const isAuthor = (review) => {
+   /* isAuthor = (review) => {
         return review.authorId === authUserId && !authUserId;
-    };
+    };*/
+  async function handleSubmit(e){
+    e.preventDefault();
+
+    if(!tokenString) {
+      setError("You must have an account to make a post. Login or create an account to add review.")
+      console.log('error message if no token')
+      return;
+    }
+  
+    try {
+      //console.log('at the start of try block')
+      const response= await fetch('http://localhost:3000/api/reviews',
+      {
+        method: 'POST',
+        headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${tokenString}`
+                },
+        body: JSON.stringify({
+              //reviewData:{
+                  title,
+                  content,
+              //}
+
+      })
+    });
+
+      //console.log('authorId', authorId);
+      console.log('title:', title);
+      console.log( 'content:', content);
+
+
+      const result = await response.json();
+      console.log('result:', result)
+      return result;
+    } catch (error) {
+      console.error('error creating post')
+      return{success: false, error: error.message};
+      
+    }
+  }
+   
+    
   
   // delete review by id function 
   // need to update URL/api path 
@@ -53,6 +100,7 @@ export default function Reviews({token,name}){
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
   : reviews;
+  
       return (
         <div className='profile'>
           <h2>Reviews</h2>
@@ -62,7 +110,27 @@ export default function Reviews({token,name}){
             Search:{''}
             <input type='text' placeholder='Search' onChange={(e)=> setSearchParams(e.target.value)}/>
           </label>
-  
+         <div className='createReview'>
+          <form onSubmit={handleSubmit}>
+            <label> Title 
+              <input type="text"
+              value={title}
+              onChange={(e)=>setTitle(e.target.value)}
+              />
+            </label>
+            <br />
+            <label>
+              Review:
+              <textarea
+              value={content}
+              onChange={(e)=>setContent(e.target.value)}
+              />
+            </label>
+            <br />
+            <button>Submit Review</button>
+          </form>
+         </div>
+         
         </div>
       <ul>
         {reviews && reviewToDisplay.map((review) => (

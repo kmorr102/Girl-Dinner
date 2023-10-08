@@ -69,19 +69,19 @@ async function getReviewById(reviewId) {
 
 async function createReview(reviewData) {
   try {
-    const { authorId, title, content, comments=[] } = reviewData;
+    const { title, content} = reviewData;
   
-    console.log('Author ID:', authorId);
+    //console.log('Author ID:', authorId);
     console.log('Title:', title);
     console.log('Content:', content);
-    console.log('Comments:', comments);
+    //console.log('Comments:', comments);
   // Check if a review with the same authorId, title, and content exists
   const { rows: [existingReview] } = await db.query(
     `
     SELECT * FROM reviews
-    WHERE "authorId" = $1 AND title = $2 AND content = $3;
+    WHERE  title = $1 AND content = $2;
     `,
-    [authorId, title, content]
+    [ title, content]
   );
   if (existingReview) {
     // An existing review was found, you can choose to update it here
@@ -91,14 +91,14 @@ async function createReview(reviewData) {
     // No existing review found, create a new one
     const { rows: [review] } = await db.query(
       `
-      INSERT INTO reviews ("authorId", title, content)
-      VALUES ($1, $2, $3)
+      INSERT INTO reviews ( title, content)
+      VALUES ($1, $2)
       RETURNING *;
       `,
-      [authorId, title, content]
+      [ title, content]
     );
-    const commentList = await createComment(comments);
-    return await addCommentsToReview(review.id, commentList);
+    /*const commentList = await createComment(comments);
+    return await addCommentsToReview(review.id, commentList);*/
   }
 } catch (error) {
   throw error;
