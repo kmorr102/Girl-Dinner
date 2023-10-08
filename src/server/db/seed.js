@@ -37,6 +37,7 @@ const createTables = async () => {
             id SERIAL PRIMARY KEY,
             password VARCHAR(255) NOT NULL,
             name VARCHAR(255) UNIQUE NOT NULL,
+            username VARCHAR(255) UNIQUE NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
             isAdmin BOOLEAN DEFAULT false
         );
@@ -105,7 +106,7 @@ const createInitialUsers = async () => {
   try {
     console.log("Starting to create users...")
     for (const user of users) {
-      await createUser({name: user.name, email: user.email, password: user.password, isAdmin: user.isAdmin});
+      await createUser({name: user.name, username: user.username, email: user.email, password: user.password, isAdmin: user.isAdmin});
     }
    
     console.log('Finished creating users!');

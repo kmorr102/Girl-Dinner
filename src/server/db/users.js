@@ -1,46 +1,79 @@
 const db = require('./client')
 const bcrypt = require('bcrypt');
 const SALT_COUNT = 10;
-
-
-async function Secure(){
+//this function keeps breaking
+async function createUser({
+    name, 
+    username,
+    email, 
+    password='', 
+    isAdmin
+})
+{
     try {
-        const hashedPassword= await bcrypt.hash(user.password,SALT_COUNT);
-        user.password=hashedPassword;
-    } catch (error) {
-}
-};
+    
+        const emailLowerCase = email.toLowerCase();
+        const existingUser = await getUserByEmail(emailLowerCase);
+    
+        if (existingUser) {
+          // User with the same email already exists
+        return { message: 'User with this email already exists.' };
+        }
+        
+        // Hash the password before inserting it into the database
+        console.log('password data',password)
+        const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+        console.log('hashed pass from createUser db',hashedPassword)
 
-const createUser = async({ 
-    name='first last',
-    email='john@example.com',
-    hashedPassword='hashedpass',
-    isAdmin,
-}) => {
-    try {
         const { rows: [user ] } = await db.query(`
-        INSERT INTO users(name, email, password, isAdmin)
-        VALUES($1, $2, $3, $4)
+        INSERT INTO users(name,username, email, password, isAdmin)
+        VALUES($1, $2, $3, $4,$5)
         ON CONFLICT (email) DO NOTHING
-        RETURNING *`, [name, email, hashedPassword, isAdmin]);
+        RETURNING *`, [name,username, emailLowerCase, hashedPassword, isAdmin]);
+        console.log("user data from createUser db", user)
+        return user;
+    } catch (err) {
+        console.log( 'error from register/createUser db')
+        throw err;
+    }
+}
 
+const getUser = async({username, password}) => {
+    console.log("username and password:", password)
+    if (!username || !password) {
+        return;
+    }
+    try {
+        const user = await getUserByUsername(username);
+        console.log('obtain user db from get user db:',user)
+        if (!user) return;
+        const hashedPassword = user.password;
+        console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
+        console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
+        const passwordsMatch = await bcrypt.compare(password, hashedPassword);
+        console.log('Do Passwords Match?', passwordsMatch);
+        
+        //if password stays the same and is not hashed, server will delete password and not send to db
+        if (passwordsMatch) return;
+        //another area that keeps breaking
+        delete user.password;
+        console.log('user from getUser:',user)
         return user;
     } catch (err) {
         throw err;
     }
 }
 
-const getUser = async({email, password}) => {
-    if(!email || !password) {
-        return;
-    }
+
+const getUserByUsername = async(username) => {
+    //console.log('Usernameeeee:',username)
     try {
-        const user = await getUserByEmail(email);
-        if(!user) return;
-        const hashedPassword = user.password;
-        const passwordsMatch = await bcrypt.compare(password, hashedPassword);
-        if(!passwordsMatch) return;
-        delete user.password;
+        const { rows: [ user ] } = await db.query(`
+        SELECT * 
+        FROM users
+        WHERE username=$1;`, [ username ]);
+
+    
         return user;
     } catch (err) {
         throw err;
@@ -48,6 +81,7 @@ const getUser = async({email, password}) => {
 }
 
 const getUserByEmail = async(email) => {
+    //console.log('email:',email)
     try {
         const { rows: [ user ] } = await db.query(`
         SELECT * 
@@ -63,7 +97,7 @@ const getUserByEmail = async(email) => {
 async function getUserById(userId) {
     try {
       const { rows: [ user ] } = await client.query(`
-        SELECT id, name, email, password
+        SELECT id, name,username, email, password
         FROM users
         WHERE id=${ userId }
       `);
@@ -99,6 +133,7 @@ module.exports = {
     getUserByEmail,
     getAllUsers,
     getUserById,
-    Secure
+    getUserByUsername
+    
     
 };

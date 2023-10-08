@@ -4,30 +4,56 @@ import Home from "./components/Home";
 import Login from './components/Login';
 import Profile from './components/Profile';
 import Register from './components/Register';
-import Authenticate from './components/Authenticate';
 import Reviews from './components/Reviews';
+
 
 function App() {
 const[token,setToken]=useState(sessionStorage.getItem('authToken'));
 const[isLoggedIn,setIsLoggedIn]=useState(false);
-const[name,setName]=useState('');
+const[username,setUsername]=useState('');
+console.log('token:',token)
 
-useEffect(()=> {
-  if(token) {
-    Authenticate(token,setName)
+
+/*async function authenticateUser(token) {
+console.log('authToken:',token)
+  try {
+    if (token) {
+    console.log('username:', username)
+    return { username };
+    
+    }
+
+  } catch (error) {
+    console.log("auth is stupid",error)
+    // Handle authentication errors, e.g., invalid token or missing user
+    throw error;
+  }
+}
+
+useEffect(()=>{
+  if(token){
+    authenticateUser(setUsername)
     .then(data => {
-      if(data && data.name) {
-        setIsLoggedIn(true);
-      }else{
+      if(data && data.username){/
+      setIsLoggedIn(true);
+      } else{
         setIsLoggedIn(false);
       }
-    }).catch(error =>{
+    }).catch(error=>{
       setIsLoggedIn(false);
-      console.error("Failed to autenticate user:", error)
-    })
+      console.error("failed to auntenticate user:",error);
+});
   }
+},[token]);*/
+ useEffect(()=>{
+  if(token){
+    setIsLoggedIn(true);
+  }else{
+    setIsLoggedIn(false);
+  }
+ })
 
-})
+
   return (
     <div id="container">
       <div id="navbar">
@@ -40,6 +66,7 @@ useEffect(()=> {
        {isLoggedIn ? (
         <button onClick={() => {
             setToken(null);
+            console.log(setToken)
             sessionStorage.removeItem('authToken');
             // added page refresh
             window.location.reload();
@@ -54,13 +81,14 @@ useEffect(()=> {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Register" element={<Register setToken={setToken}/>} />
-          <Route path="/Reviews" element={<Reviews />}/>
+          <Route path="/Login" element={<Login setToken={setToken} token={token}/>} />
+          <Route path="/Register" element={<Register setToken={setToken} token={token} />} />
+          <Route path="/Reviews" element={<Reviews token={token}/>}/>
         </Routes>
       </div>
     </div>
   );
-}
 
+        };
+      
 export default App;
