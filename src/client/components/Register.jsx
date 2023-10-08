@@ -17,22 +17,6 @@ export default function Register({ inputType, onSetInputType,setToken}) {
   const [error, setError] = useState(null);
   const Navigate=useNavigate()
 
-  /*const handlefnameChange = (e) => {
-    setFName(e.target.value);
-  };
-
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };*/
 
   async function handleSubmit(event){
     event.preventDefault();
@@ -40,7 +24,7 @@ export default function Register({ inputType, onSetInputType,setToken}) {
     try {
         const response= await fetch('http://localhost:3000/api/users/register',
         {
-          //username: {
+          
             method:'POST',
             headers: {
                 'Content-Type':'application/json'
@@ -54,13 +38,13 @@ export default function Register({ inputType, onSetInputType,setToken}) {
                     password,
   
           })
-         // }
+         
         });
         console.log('name:',name);
         console.log('username:',username);
         console.log('email:',email)
         console.log('password:', password);
-        //console.log('admin:', isAdmin);
+        
         
         
         if (!response.ok) {
@@ -187,55 +171,7 @@ export default function Register({ inputType, onSetInputType,setToken}) {
         </h4>
       )}
     </div>
-    /*<div className='form-cont'>
-    <h1>Register Now!</h1>
-    <form onSubmit={handleSubmit} className="form">
-      <div className="name">
-        <label htmlFor='name'>Name:</label>
-        <input
-        className="name"
-          type='text'
-          id='name'
-          value={fname}
-          onChange={handlefnameChange}
-          required
-        />
-      </div>
-      <div className="username">
-        <label htmlFor='username'>Username:</label>
-        <input
-          type='username'
-          id='username'
-          value={username}
-          onChange={handleUsernameChange}
-          required
-        />
-      </div>
-      <div className="email">
-        <label htmlFor='email'>Email:</label>
-        <input
-          type='email'
-          id='email'
-          value={email}
-          onChange={handleEmailChange}
-          required
-        />
-      </div>
-      <div className="password-cont">
-        <label htmlFor='email'>Password:</label>
-        <input
-          type='password'
-          id='password'
-          value={password}
-          onChange={handlePasswordChange}
-          required
-        />
-      </div>
-      
-      <button type='submit'>Create Account</button>
-    </form>
    
-  </div>*/
   
   );
 }

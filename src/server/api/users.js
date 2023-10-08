@@ -23,25 +23,6 @@ usersRouter.get("/",async (req, res, next) => {
 
 
 
-// Define the "users/me" endpoint
-/*usersRouter.get("/me", checkAuthentication, async (req, res, next) => {
-  try {
-    // Retrieve the authenticated user's data
-    const authenticatedUser = req.user; 
-    // Create a user object with limited data (excluding password and token)
-    const user = {
-      id: authenticatedUser.id,
-      name: authenticatedUser.name,
-      email: authenticatedUser.email,
-    };
-    console.log("user authenticated")
-    res.send({
-      user,
-    });
-  } catch (error) {
-    next(error);
-  }
-});*/
 
 
 usersRouter.post("/login", async (req, res, next) => {
@@ -141,7 +122,7 @@ usersRouter.post("/register", async (req, res, next) => {
         email,
         hashedPassword
       },
-      //console.log("This is token:", `${process.env.JWT_SECRET}`)
+      
       `${process.env.JWT_SECRET}`,
       
       {

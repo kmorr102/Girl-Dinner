@@ -66,7 +66,7 @@ const getUser = async({username, password}) => {
 
 
 const getUserByUsername = async(username) => {
-    //console.log('Usernameeeee:',username)
+    //console.log('Username:',username)
     try {
         const { rows: [ user ] } = await db.query(`
         SELECT * 
