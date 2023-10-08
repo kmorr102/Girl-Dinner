@@ -66,7 +66,8 @@ const createTables = async () => {
         CREATE TABLE restaurants (
           id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
-          address VARCHAR(255) NOT NULL
+          address VARCHAR(255) NOT NULL,
+          img VARCHAR(255)
           );
           
         `);
@@ -194,31 +195,43 @@ const createInitialRestaurants = async () => {
         id: 1,
         name: 'Seafood Shack',
         address: '123 Front Street',
-        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+        img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
       },
       {
         id: 2,
         name: 'Pizzeria',
         address: '101 Main Street',
-        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+        img: 'https://images.unsplash.com/photo-1600628421066-f6bda6a7b976?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
       },
       {
         id: 3,
         name: 'Ice Cream',
         address: '393 Oak Road',
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+        img: 'https://images.unsplash.com/photo-1620124452520-0d9be56b29ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2824&q=80',
       },
       {
         id: 4,
         name: 'Sub Shop',
         address: '402 Maple Avenue',
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+        img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+      },
+      {
+        id: 5,
+        name: 'Coffee Cafe',
+        address: '271 Pine Lane',
+        img: 'https://images.unsplash.com/photo-1464979681340-bdd28a61699e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+      },
+      {
+        id: 6,
+        name: 'Diner',
+        address: '179 Meadow Drive',
+        img: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
       },
     ];
 
     for (const restaurant of restaurants) {
       console.log('Creating Restaurant Data:', restaurant);
-      await createRestaurant(restaurant.name, restaurant.address);
+      await createRestaurant(restaurant.name, restaurant.address, restaurant.img);
     }
 
     console.log('Initial Restaurant Data created successfully');
