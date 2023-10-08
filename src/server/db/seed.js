@@ -9,7 +9,9 @@ const {
   getAllComments
 }=require('./reviews')
 
-
+const {
+  createRestaurant, getAllRestaurants
+  }=require('./restaurants')
 
 const dropTables = async () => {
     try {
@@ -22,6 +24,7 @@ const dropTables = async () => {
         DROP TABLE IF EXISTS comments;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS users;
+        DROP TABLE IF EXISTS restaurants;
         `);
     }
     catch(err) {
@@ -59,6 +62,13 @@ const createTables = async () => {
         "commentId" INTEGER REFERENCES comments(id),
         UNIQUE ("reviewId", "commentId")
         );
+
+        CREATE TABLE restaurants (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          address VARCHAR(255) NOT NULL
+          );
+          
         `);
     }
     catch(err) {
@@ -176,6 +186,48 @@ async function createInitialReviews() {
   }
 }
 
+// creating initial restaurants
+const createInitialRestaurants = async () => {
+  try {
+    const restaurants = [
+      {
+        id: 1,
+        name: 'Seafood Shack',
+        address: '123 Front Street',
+        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+      },
+      {
+        id: 2,
+        name: 'Pizzeria',
+        address: '101 Main Street',
+        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+      },
+      {
+        id: 3,
+        name: 'Ice Cream',
+        address: '393 Oak Road',
+        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+      },
+      {
+        id: 4,
+        name: 'Sub Shop',
+        address: '402 Maple Avenue',
+        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
+      },
+    ];
+
+    for (const restaurant of restaurants) {
+      console.log('Creating Restaurant Data:', restaurant);
+      await createRestaurant(restaurant.name, restaurant.address);
+    }
+
+    console.log('Initial Restaurant Data created successfully');
+  } catch (err) {
+    console.log('Error creating restaurant data:', err);
+    throw err;
+  }
+};
+
 
 const seedDatabase = async () => {
     try {
@@ -185,6 +237,7 @@ const seedDatabase = async () => {
         await createTables();
         await createInitialUsers();
         await createInitialReviews();
+        await createInitialRestaurants();
     }catch (err) {
       console.log("Error during seedDatabase")
         throw err;
@@ -199,7 +252,6 @@ const seedDatabase = async () => {
         const users = await getAllUsers();
         console.log("Result:", users);
     
-    
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();
         console.log("Result:", reviews);
@@ -207,6 +259,10 @@ const seedDatabase = async () => {
         console.log("Calling getAllComments");
         const allComments= await getAllComments();
         console.log ("Result:", allComments)
+
+        console.log("Calling getAllRestaurants");
+        const restaurants = await getAllRestaurants();
+        console.log("Result:", restaurants);
     
         console.log("Finished database tests!");
       } catch (error) {
