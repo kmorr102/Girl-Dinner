@@ -52,8 +52,8 @@ const Login = (setToken) => {
         
       
           setTimeout(()=>{
-          Navigate("./");
-        }, 2000)
+          Navigate("/");
+        }, 1000)
       }   
     } catch (error) {
       setError(error.message || 'Unexpected error occurred')

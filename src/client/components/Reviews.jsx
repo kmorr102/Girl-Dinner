@@ -53,19 +53,10 @@ export default function Reviews({token}){
                   'Authorization': `Bearer ${tokenString}`
                 },
         body: JSON.stringify({
-              //reviewData:{
                   title,
-                  content,
-              //}
-
+                  content
       })
     });
-
-      //console.log('authorId', authorId);
-      console.log('title:', title);
-      console.log( 'content:', content);
-
-
       const result = await response.json();
       console.log('result:', result)
       return result;

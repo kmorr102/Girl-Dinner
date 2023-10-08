@@ -50,9 +50,9 @@ usersRouter.post("/login", async (req, res, next) => {
     }
 
     if (user) {
-      console.log('error here')
+      console.log('user', user)
       const token = jwt.sign(
-        {
+        { 
           username,
           userId: user.id,
           
@@ -62,7 +62,7 @@ usersRouter.post("/login", async (req, res, next) => {
           expiresIn: "1w",
         }
       );
-      //console.log('this is a token from /login',`${process.env.JWT_SECRET}`)
+      console.log('token:', token)
       res.send({
         message: "Login successful!",
         token,
