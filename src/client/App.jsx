@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import Reviews from './components/Reviews';
+import CreateReviewForm from './components/CreateReviewForm'
+
 
 
 function App() {
@@ -30,7 +32,9 @@ console.log('token:',token)
         <Link to={"/"}>Home</Link>
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Register"}>Register</Link>
-        <Link to={"Reviews"}>Reviews</Link>
+        <Link to={"/Reviews"}>Reviews</Link>
+        <Link to={"/CreateReviewForm"}> Write a Review</Link>
+        
 
        
        {isLoggedIn ? (
@@ -54,6 +58,7 @@ console.log('token:',token)
           <Route path="/Login" element={<Login setToken={setToken} token={token}/>} />
           <Route path="/Register" element={<Register setToken={setToken} token={token} />} />
           <Route path="/Reviews" element={<Reviews token={token}/>}/>
+          <Route path="/CreateReview" element={<CreateReviewForm />} />
         </Routes>
       </div>
     </div>
