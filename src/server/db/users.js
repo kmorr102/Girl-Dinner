@@ -52,10 +52,12 @@ const getUser = async({username, password}) => {
         console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
         const passwordsMatch = await bcrypt.compare(password, hashedPassword);
         console.log('Do Passwords Match?', passwordsMatch);
+        
         //if password stays the same and is not hashed, server will delete password and not send to db
         if (passwordsMatch) return;
-        delete password;
-        //console.log('user from getUser:',user)
+        //another area that keeps breaking
+        delete user.password;
+        console.log('user from getUser:',user)
         return user;
     } catch (err) {
         throw err;
@@ -64,7 +66,7 @@ const getUser = async({username, password}) => {
 
 
 const getUserByUsername = async(username) => {
-    console.log('username:',username)
+    //console.log('Usernameeeee:',username)
     try {
         const { rows: [ user ] } = await db.query(`
         SELECT * 

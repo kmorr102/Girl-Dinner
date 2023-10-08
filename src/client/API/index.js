@@ -35,7 +35,7 @@ export async function createReview() {
 }
   
 // Registering a new user
-export async function fetchNewUser(email, password) {
+export async function fetchNewUser(name, username,email, password) {
   try {
     const response = await fetch('http://localhost:3000/api/users/register', {
       method: "POST",
@@ -43,21 +43,23 @@ export async function fetchNewUser(email, password) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: {
-          email: `${email}`,
-          password: `${password}`,
-        },
+        name,
+        username, 
+        email,
+        password,
+       
+      
       }),
     });
     const result = await response.json();
-    console.log(result);
+    console.log("index result:", result);
     return result;
   } catch (err) {
     console.error(err);
   }
 }
 // Fetch login, authenticating a user if their name and password mathes the right data
-export async function fetchLogin(email, password) {
+export async function fetchLogin(username, password) {
   try {
     const response = await fetch('http://localhost:3000/api/users/login', {
       method: "POST",
@@ -66,7 +68,7 @@ export async function fetchLogin(email, password) {
       },
       body: JSON.stringify({
         user: {
-          email: `${email}`,
+          username: `${username}`,
           password: `${password}`,
         },
       }),

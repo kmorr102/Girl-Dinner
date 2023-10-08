@@ -46,7 +46,7 @@ usersRouter.get("/",async (req, res, next) => {
 
 usersRouter.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
-  console.log('username:',username)
+  console.log('username(login):',username)
   console.log('password:',password)
 
   //request must have both
@@ -94,10 +94,16 @@ usersRouter.post("/login", async (req, res, next) => {
 
 
 usersRouter.post("/register", async (req, res, next) => {
-  const { name,username, email, password, isAdmin } = req.body;
+  const { 
+    name,
+    username, 
+    email, 
+    password, 
+   } = req.body;
   console.log("This is token:", `${process.env.JWT_SECRET}`);
   try {
     const _user = await getUserByEmail(email);
+    console.log('email:', email)
 
     if (_user) {
       next({
@@ -105,9 +111,19 @@ usersRouter.post("/register", async (req, res, next) => {
         message: "A user with that email already exists",
       });
     }
+    const _username = await getUserByUsername(username);
+    console.log('usernamee:', username)
+
+    if (_user) {
+      next({
+        name: "UserExistsError",
+        message: "A user with that username already exists",
+      });
+    }
+    
     console.log("unHashed Password", password);
     const hashedPassword = await bcrypt.hash(password, 10);
-    //("Hashed Password from /reg:", hashedPassword);
+    console.log("Hashed Password:", hashedPassword);
 
     
     const user = await createUser({
@@ -115,11 +131,12 @@ usersRouter.post("/register", async (req, res, next) => {
       username,
       email,
       hashedPassword,
-      isAdmin
+      
     });
 
     const token = jwt.sign(
       { 
+        name,
         username,
         email,
         hashedPassword
@@ -130,14 +147,16 @@ usersRouter.post("/register", async (req, res, next) => {
       {
         expiresIn: "1w",
       }
+    
     );
-
+    
     res.send({
       message: "Sign up successful!",
       user,
       token,
 
     });
+    console.log('token:', token)
   } catch ({error}) {
     console.log("error from api reg:", error)
     next({error });
