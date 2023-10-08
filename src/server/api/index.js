@@ -51,8 +51,8 @@ apiRouter.use((req, res, next) => {
 
   next();
 });
-//end point for all users 
 
+//end point for all users 
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
 
@@ -61,7 +61,9 @@ const reviewsRouter= require('./reviews');
 const { parse } = require('dotenv');
 apiRouter.use('/reviews', reviewsRouter);
 
-
+// endpoint for all restaurants
+const restaurantsRouter = require('./restaurants');
+apiRouter.use('/restaurants', restaurantsRouter);
 
 apiRouter.use((err, req, res, next) => {
     res.status(500).send(err)
