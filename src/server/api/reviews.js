@@ -40,17 +40,17 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
 
 reviewsRouter.post("/", async (req, res, next) => {
     // Destructure the expected properties from the request body
-    const { authorId, title, content = "", comments = [] } = req.body;
+    const { title, content = "" } = req.body;
   
     const reviewData = {};
   
     try {
       // Populate the reviewData object with the properties from the request body
-      reviewData.authorId = authorId;
+      //reviewData.authorId = authorId;
       reviewData.title = title;
       reviewData.content = content;
-      reviewData.comments = comments;
-  
+      //reviewData.comments = comments;
+      console.log('review content:', reviewData.content)
       // Call the createReview function with the populated reviewData
       const review = await createReview(reviewData);
   

@@ -3,7 +3,7 @@ const usersRouter = express.Router();
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 
-const { createUser, getUser, getUserByEmail, getAllUsers, getUserByUsername } = require("../db");
+const { createUser, getUser, getUserByEmail, getAllUsers, getUserByUsername, getUserById, getUserIdByUsername } = require("../db");
 
 const { requireUser, requireAdminStatus,checkAuthentication } = require('./utils')
 // console.log(requireAdminStatus)
@@ -33,8 +33,7 @@ usersRouter.post("/login", async (req, res, next) => {
   //request must have both
 
   if (!username || !password) {
-    console.log('no username?',!username)
-    console.log('no password?',!password)
+  
 
     next({
       name: "MissingCredentialsError",
@@ -44,20 +43,30 @@ usersRouter.post("/login", async (req, res, next) => {
   try {
     const user = await getUser({ username, password });
     console.log('user data from /login:',user)
+   
+    if(username) {
+      const id= await getUserIdByUsername(user.id);
+      console.log('user id:', id)
+    }
+
     if (user) {
+      console.log('error here')
       const token = jwt.sign(
         {
           username,
+          userId: user.id,
+          
         },
         `${process.env.JWT_SECRET}`,
         {
           expiresIn: "1w",
         }
       );
-      console.log('this is a token from /login',`${process.env.JWT_SECRET}`)
+      //console.log('this is a token from /login',`${process.env.JWT_SECRET}`)
       res.send({
         message: "Login successful!",
         token,
+        userId: user.id ,
       });
     } else {
       next({
@@ -66,7 +75,7 @@ usersRouter.post("/login", async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log('this is a token from /login:',`${process.env.JWT_SECRET}`)
+    console.log('this is a token from //login:',`${process.env.JWT_SECRET}`)
     console.log('error from /login api');
     next(err);
   }
@@ -133,8 +142,9 @@ usersRouter.post("/register", async (req, res, next) => {
     
     res.send({
       message: "Sign up successful!",
-      user,
       token,
+      
+    
 
     });
     console.log('token:', token)

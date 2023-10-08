@@ -45,19 +45,19 @@ const getUser = async({username, password}) => {
     }
     try {
         const user = await getUserByUsername(username);
-        console.log('obtain user db from get user db:',user)
+        //console.log('obtain user db from get user db:',user)
         if (!user) return;
         const hashedPassword = user.password;
-        console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
-        console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
+        //console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
+        //console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
         const passwordsMatch = await bcrypt.compare(password, hashedPassword);
-        console.log('Do Passwords Match?', passwordsMatch);
+        //console.log('Do Passwords Match?', passwordsMatch);
         
         //if password stays the same and is not hashed, server will delete password and not send to db
         if (passwordsMatch) return;
         //another area that keeps breaking
         delete user.password;
-        console.log('user from getUser:',user)
+        //console.log('user from getUser:',user)
         return user;
     } catch (err) {
         throw err;
@@ -79,6 +79,29 @@ const getUserByUsername = async(username) => {
         throw err;
     }
 }
+async function getUserIdByUsername(username) {
+    console.log('getuseridbyusername:', username)
+    try {
+      const { rows: [ user ]  } = await db.query(`
+        SELECT id
+        FROM users
+        WHERE username= $1
+        LIMIT 1`, [username]
+      );
+    console.log('before error placement')
+      if (!username) {
+        throw {
+          name: "UserNotFoundError",
+          message: "A user with that username does not exist"
+        }
+      }
+      console.log('result of id:', username)
+      return username;
+    } catch (error) {
+        console.log('error ')
+      throw error;
+    }
+  }
 
 const getUserByEmail = async(email) => {
     //console.log('email:',email)
@@ -133,7 +156,8 @@ module.exports = {
     getUserByEmail,
     getAllUsers,
     getUserById,
-    getUserByUsername
+    getUserByUsername,
+    getUserIdByUsername
     
     
 };

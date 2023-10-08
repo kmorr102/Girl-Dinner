@@ -38,25 +38,24 @@ const Login = (setToken) => {
         console.log('Full API Response:',result);
         
         
-        if(isAuthenticated(result)) {
-
-
-          sessionStorage.setItem('authToken',result.token);
-          console.log('authToken:', result)
-          setToken(result.token);
-          setCurrentUser(result.user);
-          setMessage(result.message || "Successfully logged in!");
         
-        setPassword('');
-        setMessage("Successfully logged in!");
-        setTimeout(()=>{
+        if(!result) {
+          setError('Could not authenticate');
+          console.log('error at authentication', (!result))
+        
+        } else{
+          sessionStorage.setItem('authToken', result.token);
+          console.log('authToken:', result.token)
+          setToken('');
+          setCurrentUser('');
+          setPassword('');
+      
+          setTimeout(()=>{
           Navigate("./profile");
         }, 2000)
-      }else{
-        setError(result.error.message || 'Unexpected error occurred');
-      }
+      }   
     } catch (error) {
-       setError(error.message);
+      setError(error.message || 'Unexpected error occurred')
     }
   }
 
