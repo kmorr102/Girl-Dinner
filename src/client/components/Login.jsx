@@ -46,12 +46,13 @@ const Login = (setToken) => {
         } else{
           sessionStorage.setItem('authToken', result.token);
           console.log('authToken:', result.token)
-          setToken('');
-          setCurrentUser('');
+          setCurrentUser(result);
+          console.log('currentUser:', result)
           setPassword('');
+        
       
           setTimeout(()=>{
-          Navigate("./profile");
+          Navigate("./");
         }, 2000)
       }   
     } catch (error) {

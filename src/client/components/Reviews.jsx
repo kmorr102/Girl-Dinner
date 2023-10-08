@@ -55,7 +55,7 @@ export default function Reviews({token}){
         body: JSON.stringify({
               //reviewData:{
                   title,
-                  content
+                  content,
               //}
 
       })
