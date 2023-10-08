@@ -1,20 +1,24 @@
 const db = require('./client');
 
 
-const createRestaurant = async (name, address) => {
+const createRestaurant = async (name, address, img) => {
     try {
-        const query = `
-INSERT INTO restaurants (name, address)
-VALUES ($1, $2)
-RETURNING *;
-`;
-        const values = [name, address];
-        const result = await db.query(query, values);
-        return result.rows[0];
+      const query = {
+        text: `
+          INSERT INTO restaurants (name, address, img)
+          VALUES ($1, $2, $3)
+          RETURNING *
+        `,
+        values: [name, address, img],
+      };
+  
+      const result = await db.query(query);
+      return result.rows[0];
     } catch (error) {
-        throw error;
+      throw error;
     }
-};
+  };
+  
 async function getAllRestaurants() {
     try {
         const { rows: restaurants } = await db.query(`
