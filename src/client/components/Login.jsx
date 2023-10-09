@@ -138,7 +138,7 @@ const Login = (props) => {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button
+            <Button className='login-button'
               type="submit"
               fullWidth
               variant="contained"

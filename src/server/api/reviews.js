@@ -55,23 +55,10 @@ reviewsRouter.post("/", async (req, res, next) => {
      
       // Call the createReview function with the populated reviewData
       const review = await createReview(reviewData);
-      
-      if(review.author.id ===req.user) {
-        
-        console.log("User ID:", req.user);
-        console.log("Review Author ID:", review.author.id);
-      
-        // If the review is created successfully, send it as the response
+
         res.send(review);
         console.log('review:', review)
-      } else {
-        // If there's an error during review creation, send an error response
-        next({
-          name: "ReviewCreationError",
-          message: "There was an error creating your review. Please try again.",
-        });
-      }
-    } catch ({ name, message }) {
+      }  catch ({ name, message }) {
       // Handle any errors that might occur during the process
       next({ name, message });
     }

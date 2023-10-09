@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { IoApertureSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 
+
+
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple } from '@mui/material/colors';
+
+
 export default function Profile() {
 
   const [reviews, setReviews] = useState([]);
@@ -41,10 +48,14 @@ return(
 <div className="profile">
       <div className="profile-info">
         <img src={user.profilePicture} alt={user.name} />
-        <h2>{user.name}</h2>
-        <p></p>
+        <h2>Welcome {user.name}</h2>
+       
       </div>
-
+      <Stack direction="column" spacing={2}>
+      <Avatar sx={{ bgcolor: deepPurple[500] }}></Avatar>
+      <Avatar></Avatar>
+      <Avatar sx={{ bgcolor: deepOrange[500] }}>Me</Avatar>
+    </Stack>
       <div className="profile-navigation">
         <ul>
           <li>
@@ -57,9 +68,8 @@ return(
         </ul>
       </div>
 
-      {/* Render the appropriate profile section based on the route */}
-      {/* Use React Router to handle route rendering */}
-      {/* For example, /profile/reviews and /profile/edit */}
+
+      
     </div>
   );
 }

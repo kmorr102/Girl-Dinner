@@ -62,34 +62,14 @@ export default function Reviews({token}){
       return (
         <div className='profile'>
           <h2>Reviews</h2>
-  
+        
         <div className='search-bar'>
           <label>
             Search:{''}
             <input type='text' placeholder='Search' onChange={(e)=> setSearchParams(e.target.value)}/>
           </label>
-         <div className='createReview'>
-          <form onSubmit={handleSubmit}>
-            <label> Title 
-              <input type="text"
-              value={title}
-              onChange={(e)=>setTitle(e.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              Review:
-              <textarea
-              value={content}
-              onChange={(e)=>setContent(e.target.value)}
-              />
-            </label>
-            <br />
-            <button>Submit Review</button>
-          </form>
          </div>
-         
-        </div>
+  
       <ul>
         {reviews && reviewToDisplay.map((review) => (
           <div key={review.id}>
