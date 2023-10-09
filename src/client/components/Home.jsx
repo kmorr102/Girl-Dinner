@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams,Link,useNavigate } from "react-router-dom";
 
 // Importing MUI components
 import React, { useEffect, useState } from 'react';
@@ -14,13 +14,15 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info'; 
-
+import { Card, CardMedia } from '@mui/material';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
+
+  const Navigate= useNavigate();
 
   useEffect(() => {
     fetch('/api/restaurants')
@@ -55,7 +57,10 @@ export default function Home() {
         ) : (
           restaurants.map((restaurant) => (
             <ImageListItem key={restaurant.id}>
-              <img
+              <Card>
+              <Link to={"/reviews"}>
+              <CardMedia
+                component="img"
                 src={restaurant.img}
                 alt={restaurant.name}
                 loading="lazy"
@@ -67,9 +72,13 @@ export default function Home() {
                   objectFit: 'cover',
                 }}
               />
-              <ImageListItemBar
-                title={restaurant.name}
-                subtitle={
+              </Link>  
+              </Card> 
+          
+              <ImageListItemBar key={restaurant.id}
+              title={restaurant.name}
+              
+              subtitle={
                   <div>
                     {restaurant.address}
                     <Rating name="read-only" value={4} readOnly style={{ marginLeft: '8px', fontSize: '24px' }} />
@@ -78,7 +87,13 @@ export default function Home() {
                 actionIcon={
                   <div>
                     <IconButton
-                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                      sx={{
+                        maxWidth: '100%',
+                      maxHeight: '100%', 
+                      width: 'auto', 
+                      height: 'auto', 
+                      objectFit: 'cover',
+                      color: 'rgba(255, 255, 255, 0.54)' }}
                       onClick={() => handleDetailsClick(restaurant)}
                     >
                       <InfoIcon /> 
