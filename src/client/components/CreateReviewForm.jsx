@@ -1,7 +1,37 @@
 import { useEffect, useState } from "react";
 
 
-export default function CreateReview(){
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Girl Dinner
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+// TODO remove, this demo shouldn't need to reset the theme.
+
+const defaultTheme = createTheme();
+
+export default function CreateReview(props){
     const tokenString = sessionStorage.getItem("authToken");
     console.log('token from login(storage):', tokenString)
     
@@ -47,31 +77,70 @@ export default function CreateReview(){
         }
       }
       return (
-        <div className='createReview'>
-          <h1>Write Review</h1>
-          <form onSubmit={handleSubmit}>
-            <label>Title
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              Review:
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </label>
-            <br />
-            <button>Submit Review</button>
-          </form>
+            
+      <div className='form-container'>
+          <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Write Review
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="Title"
+              label="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            
+              
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="Content"
+              label="Review"
+              type="Content"
+              id="Content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+             />
+     
           
-          {successMessage && <div>{successMessage}</div>}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Submit Review
+            </Button>
+          
+          </Box>
+          </Box>
+
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
+
+    {successMessage && <div>{successMessage}</div>}
           {error && <div>{error}</div>}
         </div>
+        
       );
     }
     

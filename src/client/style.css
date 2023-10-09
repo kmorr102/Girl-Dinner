@@ -31,4 +31,67 @@
   justify-content: center;
 }
 
+/* CSS (You can place this in a separate .css or .scss file) */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Set the desired height for centering */
+}
+
+.review-form {
+  width: 300px; /* Adjust the width as needed */
+  padding: 20px;
+  border: 2px solid #000; /* Add a border with 2px width */
+  border-radius: 10px; /* Add border radius for rounded corners */
+}
+
+.review-form h1 {
+  text-align: center;
+}
+
+input,
+textarea,
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.login-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+
+.logout-button{
+  text-decoration: underline;
+  background-color: white;
+  color:black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: 'Courier New', Courier, monospace;
+
+}
+
+#navbar,Link{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  font-family: 'Courier New', Courier, monospace;
+  color: black
+  
+
+}
+
 /* Add more styling for other elements if needed */
