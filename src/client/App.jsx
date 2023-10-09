@@ -56,10 +56,9 @@ const navigate=useNavigate();
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Login"}>Login</Link>
        
-
-       
        {isLoggedIn ? (
-        <button onClick={handleLogout} className='logout-button'>Logout</button>
+        //<Link to={"/Logout"} onClick={handleLogout}> </Link>
+       <button onClick={handleLogout} className='logout-button'>Logout</button>
         ) : (
           <Link to="/Login" className="Login">
             Logout
