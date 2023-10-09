@@ -57,10 +57,7 @@ export default function Home() {
         ) : (
           restaurants.map((restaurant) => (
             <ImageListItem key={restaurant.id}>
-              <Card>
-              <Link to={"/reviews"}>
-              <CardMedia
-                component="img"
+             <img
                 src={restaurant.img}
                 alt={restaurant.name}
                 loading="lazy"
@@ -72,12 +69,15 @@ export default function Home() {
                   objectFit: 'cover',
                 }}
               />
-              </Link>  
-              </Card> 
-          
+             
               <ImageListItemBar key={restaurant.id}
-              title={restaurant.name}
               
+              title={
+                // Wrap only the title in a Link component (/reviews/${restaurant.id}) eventually
+                <Link to={"/reviews"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  {restaurant.name}
+                </Link>
+              }
               subtitle={
                   <div>
                     {restaurant.address}
@@ -101,6 +101,8 @@ export default function Home() {
                   </div>
                 }
               />
+      
+          
             </ImageListItem>
           ))
         )}
