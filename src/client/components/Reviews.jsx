@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
+import { Link } from 'react-router-dom';
 
 export default function Reviews({token}){
     const tokenString = sessionStorage.getItem("authToken");
@@ -60,8 +61,14 @@ export default function Reviews({token}){
   : reviews;
   
       return (
-        <div className='profile'>
-          <h2>Reviews</h2>
+        <div className='Reviews'>
+         
+        <div id="navbar">
+      <Link to={"/"}>Home</Link>
+      <Link to={"/CreateReview"}>Write a Review</Link>
+      <Link to={"/Profile"}>Profile</Link>
+      <Link to={"/Logout"}>Logout</Link>
+      </div>
         
         <div className='search-bar'>
           <label>

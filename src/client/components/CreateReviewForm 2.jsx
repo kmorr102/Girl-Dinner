@@ -12,7 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CreateIcon from '@mui/icons-material/Create';
 
 
 function Copyright(props) {
@@ -92,7 +91,7 @@ export default function CreateReview(props){
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <CreateIcon />
+            <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Write Review

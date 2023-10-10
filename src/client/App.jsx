@@ -47,25 +47,7 @@ const navigate=useNavigate();
 };
 
   return (
-    <div id="container">
-      <div id="navbar">
-        <Link to={"/"}>Home</Link>
-        <Link to={"/Register"}>Register</Link>
-        <Link to={"/Reviews"}>Reviews</Link>
-        <Link to={"/CreateReview"}> Write a Review</Link>
-        <Link to={"/Profile"}>Profile</Link>
-        <Link to={"/Login"}>Login</Link>
-       
-       {isLoggedIn ? (
-        //<Link to={"/Logout"} onClick={handleLogout}> </Link>
-       <button onClick={handleLogout} className='logout-button'>Logout</button>
-        ) : (
-          <Link to="/Login" className="Login">
-            Logout
-          </Link>
-        )}
-      
-      </div>
+    
       
       <div id="main-section">
         <Routes>
@@ -78,7 +60,7 @@ const navigate=useNavigate();
           <Route path="/Logout" element={<Logout />} />
         </Routes>
       </div>
-    </div>
+    
   );
 
         };
