@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
 import { Link } from 'react-router-dom';
 
+
+
 export default function Reviews({token}){
     const tokenString = sessionStorage.getItem("authToken");
     console.log('token from login(storage):', tokenString)
@@ -61,9 +63,11 @@ export default function Reviews({token}){
   : reviews;
   
       return (
-        <div className='Reviews'>
-         
-        <div id="navbar">
+
+
+      <div className='Reviews'>
+       <div id="navbar">
+
       <Link to={"/"}>Home</Link>
       <Link to={"/CreateReview"}>Write a Review</Link>
       <Link to={"/Profile"}>Profile</Link>
@@ -77,19 +81,27 @@ export default function Reviews({token}){
           </label>
          </div>
   
-      <ul>
+      
         {reviews && reviewToDisplay.map((review) => (
-          <div key={review.id}>
+          <div key={review.id} className='displayedReviews'>
             <p>Title: {review.title}</p>
             <p>Content: {review.content}</p>
-  
-            <div>{review.isAuthor ? <button onClick={()=>deleteReview(review._id)}>Delete Review</button> : null}</div>
-  
             <p>Comments:{review.comment_text}</p>
-  
-          </div>
+            <button   onClick={() => handleDelete(review._id, review.author.username)}>
+                  Delete
+            </button>
+            <button>
+                  Comment
+            </button>{" "}
+            <button>
+                  Place Holder Button
+            </button>
+           </div>
         ))}
-      </ul>
+     
+    
+      
+      
         </div>
       );
     }
