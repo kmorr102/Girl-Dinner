@@ -28,8 +28,9 @@ const dropTables = async () => {
         DROP TABLE IF EXISTS comments;
         DROP TABLE IF EXISTS restaurant_reviews;
         DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS users;
         DROP TABLE IF EXISTS restaurants;
+        DROP TABLE IF EXISTS users;
+       
         `);
     }
     catch(err) {
@@ -309,45 +310,48 @@ async function createInitialReviews() {
   }
 }
 
+
+
 async function createInitialComments() {
   try {
 const reviews = await getAllReviews();
 
-const commentsData = [
+const commentList = [
   {
-    id: 1,
+    id: reviews[1],
     content: "I definitely agree!"
   },
   {
-    id: 2,
+    id: reviews[1],
     content: "I agree with the review, food is decent but nothing you can't make at home."
   },
   {
-    id: 3,
+    id: reviews[1],
     content: "I also attended a party here and it was a great space for pictures"
   },
   {
-    id: 4,
+    id:reviews[1],
     content:"Rude staff:("
   },
   {
-    id: 5,
+    id: reviews[1],
     content:"Cheesecake is 10/10"
   },
   {
-    id: 6,
+    id: reviews[1],
     content:"Waste of a datenight."
   },
   {
-    id: 7,
+    id: reviews[1],
     content:"Ashley our server was great!"
   },
 ];
 
-const commentContent = commentsData.map((comment) => comment.content);
+
+const commentContent = commentList.map((comment) => comment.content);
 
     console.log('Creating Comments:', commentContent);
-    await createComment(commentsData);
+    await createComment(commentList);
 
     console.log('Comments created successfully');
   } catch (err) {
@@ -365,9 +369,11 @@ const seedDatabase = async () => {
         await dropTables();
         await createTables();
         await createInitialUsers();
+        await createInitialRestaurants();
         await createInitialReviews();
         await createInitialComments();
-        await createInitialRestaurants();
+       // await createInitialComments();
+     
         
     }catch (err) {
       console.log("Error during seedDatabase")

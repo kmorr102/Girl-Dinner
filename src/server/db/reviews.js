@@ -2,24 +2,22 @@ const db = require('./client');
 
 // GET - /api/reviews to fetch all reviews
 async function getAllReviews() {
-    try {
-      const { rows: reviews } = await db.query(`
-      SELECT
-        reviews.id AS id,
-        reviews."authorId" AS authorId,
-        reviews.restaurant_id AS restaurantId,
-        reviews.title AS title,
-        reviews.content AS content,
-        comments.id AS comment_id,
-        comments.comment AS comment_text
-      FROM
-        reviews
-      LEFT JOIN
-        review_comments AS reviewscomments ON reviews.id = reviewscomments."reviewId"
-      LEFT JOIN
-        comments AS comments ON reviewscomments."commentId" = comments.id;
-    `);
-    
+  try {
+    const { rows: reviews } = await db.query(`
+    SELECT
+      reviews.id AS id,
+      reviews."authorId" AS author_id,
+      reviews.title AS title,
+      reviews.content AS content,
+      comments.id AS comment_id,
+      comments.comment AS comment_text
+    FROM
+      reviews
+    LEFT JOIN
+      review_comments AS reviewscomments ON reviews.id = reviewscomments."reviewId"
+    LEFT JOIN
+      comments AS comments ON reviewscomments."commentId" = comments.id;
+  `);
        
     return reviews;
     } catch (error) {
@@ -98,7 +96,7 @@ async function createReview(reviewData) {
       `,
       [ authorId, title, content]
     );
-   // const commentList = await createComment(comments);
+   //const commentList = await createComment(comments);
     //return await addCommentsToReview(review.id, commentList);
   }
 } catch (error) {
@@ -201,47 +199,28 @@ async function getReviewByUser(userId) {
     }
 }
 
-async function createComment(commentList) {
-  // Filter out invalid comments (null or empty)
-  const validComments = commentList.filter(comment => comment.comment && comment.comment.trim() !== '');
 
-  if (validComments.length === 0) {
-    // No valid comments to insert
-    return;
-  }
-
-  try {
-    const placeholders = validComments.map((comment, index) => `($${index + 1})`).join(',');
-    const values = validComments.map(comment => comment.comment);
-
-    const query = `
-      INSERT INTO comments (comment)
-      VALUES ${placeholders}
-      ON CONFLICT (comment) DO NOTHING
-      RETURNING *;
-    `;
-
-    const { rows } = await db.query(query, values);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-}
-
-
-/*const createComment = async (commentList) => {
+const createComment = async (commentList) => {
   if (commentList.length === 0) {
     return;
   }
 
+  // Filter out null or undefined comments
+  const validComments = commentList.filter(comment => comment && comment.comment !== null && comment.comment !== undefined);
+
+  // Check if there are any valid comments
+  if (validComments.length === 0) {
+    return;
+  }
+
   // Create an array of parameterized query placeholders
-  const placeholders = commentList.map((comment, index) => `($${index + 1})`).join(',');
-  const values = commentList.map(comment => comment.comment);
+  const placeholders = validComments.map((comment, index) => `($${index + 1})`).join(',');
+  const values = validComments.map(comment => comment.comment);
 
   try {
     const query = `
       INSERT INTO comments (comment)
-      VALUES (${placeholders})
+      VALUES ${placeholders}
       ON CONFLICT (comment) DO NOTHING
       RETURNING *;
     `;
@@ -254,40 +233,7 @@ async function createComment(commentList) {
 };
 
 
-
-/*async function createComment(commentList) {
-  if (commentList.length === 0) {
-    return;
-  }
-
-  try {
-    const placeholders = commentList.map((comment, index) => `($${index + 1})`).join(',');
-    const values = commentList.map(comment => comment.comment);
-
-    if (values.length === 0) {
-      // No valid comments to insert
-      return;
-    }
-
-    const query = `
-      INSERT INTO comments (comment)
-      VALUES ${placeholders}
-      ON CONFLICT (comment) DO NOTHING
-      RETURNING *;
-    `;
-
-    const { rows } = await db.query(query, values);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-}
-
-    */
   
-  
-  
-
 async function createReviewComment(reviewId, commentId) {
     try {
         await db.query(`
@@ -300,19 +246,23 @@ async function createReviewComment(reviewId, commentId) {
     }
 }
 
-async function addCommentsToReview(reviewId,commentList) {
-    try {
-        const createReviewCommentPromise= commentList.map(
-            comment => createReviewComment(reviewId,comment.id)
-        );
 
-        await Promise.all(createReviewCommentPromise);
+async function addCommentsToReview(reviewId, commentList) {
+  try {
+    const createReviewCommentPromise = commentList.map(
+      comment => createReviewComment(reviewId, comment.content) // Assuming content is the comment text
+    );
 
-        return await getReviewById(reviewId);
-    } catch (error) {
-      throw error;
-    }
+    await Promise.all(createReviewCommentPromise);
+
+    return await getReviewById(reviewId);
+  } catch (error) {
+    throw error;
+  }
 }
+
+
+
 
 
 
