@@ -37,7 +37,7 @@ console.log('token:',token)
 
   return (
     
-   
+
       
       <div id="main-section">
         <Routes>
@@ -49,8 +49,7 @@ console.log('token:',token)
           <Route path="/CreateReview" element={<CreateReviewForm />} />
           <Route path="/Logout" element={<Logout />} />
         </Routes>
-      </div>
-   
+      </div> 
   );
 
         };

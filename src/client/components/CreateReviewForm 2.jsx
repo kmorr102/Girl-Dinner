@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
 
 
 import Avatar from '@mui/material/Avatar';
@@ -13,7 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CreateIcon from '@mui/icons-material/Create';
 
 
 function Copyright(props) {
@@ -46,8 +44,6 @@ export default function CreateReview(props){
     const [successMessage, setSuccessMessage] = useState('');
     const [isAuthor, setIsAuthor]= useState('')
 
-    const Navigate= useNavigate();
-    
     async function handleSubmit(e){
         e.preventDefault();
     
@@ -95,7 +91,7 @@ export default function CreateReview(props){
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <CreateIcon />
+            <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Write Review
@@ -125,7 +121,7 @@ export default function CreateReview(props){
              />
      
           
-            <Button onClick={() => Navigate("/Reviews")}
+            <Button
               type="submit"
               fullWidth
               variant="contained"
