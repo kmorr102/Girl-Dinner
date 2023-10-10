@@ -6,12 +6,16 @@ const {
 const { 
   getAllReviews, 
   createReview,
-  getAllComments
-}=require('./reviews')
+  getAllComments,
+  createComment
+} = require('./reviews');
 
 const {
   createRestaurant, getAllRestaurants
-  }=require('./restaurants')
+} = require('./restaurants');
+
+// Rest of your code...
+
 
 const dropTables = async () => {
     try {
@@ -22,6 +26,7 @@ const dropTables = async () => {
         await db.query(`
         DROP TABLE IF EXISTS review_comments;
         DROP TABLE IF EXISTS comments;
+        DROP TABLE IF EXISTS restaurant_reviews;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS users;
         DROP TABLE IF EXISTS restaurants;
@@ -36,50 +41,56 @@ const createTables = async () => {
     try{
         console.log('Building All Tables...');
         await db.query(`
-        CREATE TABLE users (
-            id SERIAL PRIMARY KEY,
-            password VARCHAR(255) NOT NULL,
-            name VARCHAR(255) UNIQUE NOT NULL,
-            username VARCHAR(255) UNIQUE NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            isAdmin BOOLEAN DEFAULT false
-        );
-        
-        CREATE TABLE reviews (
-          id SERIAL PRIMARY KEY,
-          "authorId" INTEGER REFERENCES users(id),
-          title varchar(255) NOT NULL,
-          content TEXT NOT NULL 
-        );        
-        
-        CREATE TABLE comments (
-        id SERIAL PRIMARY KEY,
-        comment varchar(255) UNIQUE NOT NULL
-        );
-      
-      CREATE TABLE review_comments (
-        "reviewId" INTEGER REFERENCES reviews(id),
-        "commentId" INTEGER REFERENCES comments(id),
-        UNIQUE ("reviewId", "commentId")
-        );
+  CREATE TABLE restaurants (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  img VARCHAR(255),
+  number VARCHAR(255) NOT NULL,
+  content VARCHAR(255) NOT NULL
+);
 
-        CREATE TABLE restaurants (
-          id SERIAL PRIMARY KEY,
-          name VARCHAR(255) NOT NULL,
-          address VARCHAR(255) NOT NULL,
-          img VARCHAR(255),
-          number VARCHAR(255) NOT NULL,
-          content VARCHAR(255) NOT NULL
-          );
-          
-        `);
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  isAdmin BOOLEAN DEFAULT false
+);
+
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  "authorId" INTEGER REFERENCES users(id),
+  restaurant_id INTEGER REFERENCES restaurants(id),
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL 
+);
+
+CREATE TABLE comments (
+  id SERIAL PRIMARY KEY,
+  comment VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE review_comments (
+  "reviewId" INTEGER REFERENCES reviews(id),
+  "commentId" INTEGER REFERENCES comments(id),
+  UNIQUE ("reviewId", "commentId")
+);
+
+CREATE TABLE restaurant_reviews (
+  "restaurantId" INTEGER REFERENCES restaurants(id),
+  "reviewId" INTEGER REFERENCES reviews(id),
+  UNIQUE ("restaurantId", "reviewId")
+);
+`)
     }
     catch(err) {
         throw err;
     }
 }
 
-const users = [
+const userData = [
   {
     id: 1,
     name: 'Emily Johnson',
@@ -118,7 +129,7 @@ const users = [
 const createInitialUsers = async () => {
   try {
     console.log("Starting to create users...")
-    for (const user of users) {
+    for (const user of userData) {
       await createUser({name: user.name, username: user.username, email: user.email, password: user.password, isAdmin: user.isAdmin});
     }
    
@@ -127,6 +138,57 @@ const createInitialUsers = async () => {
     console.error('Error creating users!', error);
   }
 };
+
+
+async function createInitialComments() {
+  try {
+const reviews = await getAllReviews();
+
+const commentsData = [
+  {
+    id: reviews[1].id,
+    content: "I definitely agree!"
+  },
+  {
+    id: reviews[2].id,
+    content: "I agree with the review, food is decent but nothing you can't make at home."
+  },
+  {
+    id: reviews[3].id,
+    content: "I also attended a party here and it was a great space for pictures"
+  },
+  {
+    id: reviews[5].id,
+    content:"Rude staff:("
+  },
+  {
+    id: reviews[4].id,
+    content:"Cheesecake is 10/10"
+  },
+  {
+    id: reviews[3].id,
+    content:"Waste of a datenight."
+  },
+  {
+    id: reviews[6].id,
+    content:"Ashley our server was great!"
+  },
+];
+
+
+
+const commentContent = commentsData.map((comment) => comment.content);
+
+    console.log('Creating Comments:', commentContent);
+    await createComment(commentsData);
+
+    console.log('Comments created successfully');
+  } catch (err) {
+    console.log('Error creating comments');
+    throw err;
+  }
+}
+
 async function createInitialReviews() {
   try {
     const users = await getAllUsers(); // Retrieve all users
@@ -137,43 +199,43 @@ async function createInitialReviews() {
         authorId: users[0].id,
         title: "Best food ever",
         content: "I would recommend to others!",
-        comments: ["I definitely agree!"]
+        //comments: ["I definitely agree!"]
       },
       {
         authorId: users[2].id,
         title: "Decent food",
         content: "Reasonable prices and pretty good food",
-        comments: ["I agree with the review, food is decent but nothing you can't make at home."]
+        //comments: ["I agree with the review, food is decent but nothing you can't make at home."]
       },
       {
         authorId: users[3].id,
         title: "Nice customer service",
         content:  "Had a great birthday party here",
-        comments: ["I also attended a party here and it was a great space for pictures"]
+        //comments: ["I also attended a party here and it was a great space for pictures"]
       },
       {
         authorId: users[1].id,
         title: "Would not go here again",
         content:  "I have had better'",
-        comments:["Rude staff:("]
+        //comments:["Rude staff:("]
       },
       {
         authorId: users[0].id,
         title:  "Best cheesecake ever!!!",
         content:  "You have to try their oreo cheesecake its great. Service was also amazing",
-        comments:["Cheesecake is 10/10"]
+        //comments:["Cheesecake is 10/10"]
       },
       {
         authorId: users[2].id,
         title:"Wasn't great:(",
         content:"I've heard such great things, but I personally won't be going back",
-        comments:["Waste of a datenight."]
+        //comments:["Waste of a datenight."]
       },
       {
         authorId: users[1].id,
         title:"Look no further!",
         content:"They have the best ice in town! If you know, you know.",
-        comments:["Ashley our server was great!"]
+        //comments:["Ashley our server was great!"]
       },
     ];
     
@@ -288,7 +350,9 @@ const seedDatabase = async () => {
         await createTables();
         await createInitialUsers();
         await createInitialReviews();
+        await createInitialComments();
         await createInitialRestaurants();
+        
     }catch (err) {
       console.log("Error during seedDatabase")
         throw err;
@@ -300,8 +364,8 @@ const seedDatabase = async () => {
         console.log("Starting to test database...");
     
         console.log("Calling getAllUsers");
-        const users = await getAllUsers();
-        console.log("Result:", users);
+        const _users = await getAllUsers();
+        console.log("Result:", _users);
     
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();

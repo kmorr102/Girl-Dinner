@@ -200,13 +200,14 @@ async function getReviewByUser(userId) {
     }
 }
 
-async function createComment(commentList) {
+/*async function createComment(commentList) {
     if (commentList.length === 0) {
       return;
     }
-  
-    // Create an array of parameterized query placeholders
-    const placeholders = commentList.map((_, index) => `$${index + 1}`).join(',');
+
+
+  // Create an array of parameterized query placeholders
+  const placeholders = commentContents.map((_, index) => `$${index + 1}`).join(',');
   
     try {
       const query = `
@@ -221,7 +222,41 @@ async function createComment(commentList) {
     } catch (error) {
       throw error;
     }
+  }*/
+
+  async function createComment(commentList) {
+    if (commentList.length === 0) {
+      return;
+    }
+  
+    try {
+      const query = `
+        INSERT INTO comments (id, comment)
+        VALUES ${commentList.map((comment, index) => `($${index * 2 + 1}, $${index * 2 + 2})`).join(',')}
+        ON CONFLICT (id) DO NOTHING
+        RETURNING *;
+      `;
+  
+      const values = [];
+      for (const comment of commentList) {
+        if (comment.comment !== null && comment.comment !== undefined) {
+          values.push(comment.id, comment.comment);
+        }
+      }
+  
+      if (values.length === 0) {
+        // No valid comments to insert
+        return;
+      }
+  
+      const { rows } = await db.query(query, values);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
   }
+  
+  
   
 
 async function createReviewComment(reviewId, commentId) {
