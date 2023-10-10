@@ -18,7 +18,7 @@ const[isLoggedIn,setIsLoggedIn]=useState(false);
 const[username,setUsername]=useState('');
 console.log('token:',token)
 
-const navigate=useNavigate();
+
 
 
 
@@ -31,41 +31,13 @@ const navigate=useNavigate();
   }
  })
 
- const handleLogout = () => {
-  // Log out logic here (e.g., clear tokens, user data, etc.)
-  // You can replace the following lines with your actual logout implementation
-  setIsLoggedIn(false);
-  sessionStorage.removeItem('authToken');
+ 
 
-  // Navigate to the logout component
-  navigate('/Logout');
 
-  // Add a timeout to navigate back to the home component after a delay
-  setTimeout(() => {
-    navigate('/');
-  }, 1000); // Adjust the timeout duration as needed
-};
 
   return (
-    <div id="container">
-      <div id="navbar">
-        <Link to={"/"}>Home</Link>
-        <Link to={"/Reviews"}>Reviews</Link>
-        <Link to={"/CreateReview"}> Write a Review</Link>
-        <Link to={"/Profile"}>Profile</Link>
-        <Link to={"/Login"}>Login</Link>
-        <Link to={"/Register"}>Register</Link>
-       
-       {isLoggedIn ? (
-        //<Link to={"/Logout"} onClick={handleLogout}> </Link>
-       <button onClick={handleLogout} className='logout-button'>Logout</button>
-        ) : (
-          <Link to="/Login" className="Login">
-            Logout
-          </Link>
-        )}
-      
-      </div>
+    
+   
       
       <div id="main-section">
         <Routes>
@@ -78,7 +50,7 @@ const navigate=useNavigate();
           <Route path="/Logout" element={<Logout />} />
         </Routes>
       </div>
-    </div>
+   
   );
 
         };

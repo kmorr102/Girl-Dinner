@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info'; 
 import { Card, CardMedia } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
@@ -46,6 +47,22 @@ export default function Home() {
 
   return (
     <div className='home'>
+        <div id="navbar">
+      <Link to={"/"}>Home</Link>
+      <Link to={"/Reviews"}>Reviews</Link>
+      <Link to={"/CreateReview"}>Write a Review</Link>
+      <Link to={"/Profile"}>Profile</Link>
+      <Link to={"/Logout"}>Logout</Link>
+      
+      {/* Add the search button */}
+      <IconButton>
+          <SearchIcon />
+        </IconButton>
+        <Button onClick={() => Navigate("/Register")}variant="outlined" size="small" >
+          Sign up
+        </Button>
+    </div>
+
       <ImageList sx={{ width: '100%', height: '100vh' }} rowHeight={290}>
         <ImageListItem key="Subheader" cols={3}>
           <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>

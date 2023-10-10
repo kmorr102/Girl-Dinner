@@ -46,11 +46,17 @@ async function deleteReview (reviewId) {
 
 return(
 <div className="profile">
-      <div className="profile-info">
+  <div id="navbar">
+      <Link to={"/"}>Home</Link>
+      <Link to={"/CreateReview"}>Write a Review</Link>
+      <Link to={"/Reviews"}>Reviews</Link>
+      <Link to={"/Logout"}>Logout</Link>
+  </div>
+  <div className="profile-info">
         <img src={user.profilePicture} alt={user.name} />
         <h2>Welcome {user.name}</h2>
        
-      </div>
+  </div>
       <Stack direction="column" spacing={2}>
       <Avatar sx={{ bgcolor: deepPurple[500] }}></Avatar>
       <Avatar></Avatar>

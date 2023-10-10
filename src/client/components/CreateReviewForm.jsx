@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 
 
 import Avatar from '@mui/material/Avatar';
@@ -44,6 +45,8 @@ export default function CreateReview(props){
     const [successMessage, setSuccessMessage] = useState('');
     const [isAuthor, setIsAuthor]= useState('')
 
+    const Navigate= useNavigate();
+    
     async function handleSubmit(e){
         e.preventDefault();
     
@@ -121,7 +124,7 @@ export default function CreateReview(props){
              />
      
           
-            <Button
+            <Button onClick={() => Navigate("/Reviews")}
               type="submit"
               fullWidth
               variant="contained"
