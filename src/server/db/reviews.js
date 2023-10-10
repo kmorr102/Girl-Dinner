@@ -6,7 +6,8 @@ async function getAllReviews() {
       const { rows: reviews } = await db.query(`
       SELECT
         reviews.id AS id,
-        reviews."authorId" AS author_id,
+        reviews."authorId" AS authorId,
+        reviews.restaurant_id AS restaurantId,
         reviews.title AS title,
         reviews.content AS content,
         comments.id AS comment_id,
@@ -69,7 +70,7 @@ async function getReviewById(reviewId) {
 
 async function createReview(reviewData) {
   try {
-    const { title, content} = reviewData;
+    const {authorId, title, content} = reviewData;
   
     //console.log('Author ID:', authorId);
     console.log('Title:', title);
@@ -79,9 +80,9 @@ async function createReview(reviewData) {
   const { rows: [existingReview] } = await db.query(
     `
     SELECT * FROM reviews
-    WHERE  title = $1 AND content = $2;
+    WHERE "authorId"=$1 AND title = $2 AND content = $3;
     `,
-    [ title, content]
+    [ authorId, title, content]
   );
   if (existingReview) {
     // An existing review was found, you can choose to update it here
@@ -91,14 +92,14 @@ async function createReview(reviewData) {
     // No existing review found, create a new one
     const { rows: [review] } = await db.query(
       `
-      INSERT INTO reviews ( title, content)
-      VALUES ($1, $2)
+      INSERT INTO reviews ("authorId",title, content)
+      VALUES ($1, $2, $3)
       RETURNING *;
       `,
-      [ title, content]
+      [ authorId, title, content]
     );
-    /*const commentList = await createComment(comments);
-    return await addCommentsToReview(review.id, commentList);*/
+   // const commentList = await createComment(comments);
+    //return await addCommentsToReview(review.id, commentList);
   }
 } catch (error) {
   throw error;
@@ -200,61 +201,89 @@ async function getReviewByUser(userId) {
     }
 }
 
-/*async function createComment(commentList) {
-    if (commentList.length === 0) {
-      return;
-    }
+async function createComment(commentList) {
+  // Filter out invalid comments (null or empty)
+  const validComments = commentList.filter(comment => comment.comment && comment.comment.trim() !== '');
 
+  if (validComments.length === 0) {
+    // No valid comments to insert
+    return;
+  }
+
+  try {
+    const placeholders = validComments.map((comment, index) => `($${index + 1})`).join(',');
+    const values = validComments.map(comment => comment.comment);
+
+    const query = `
+      INSERT INTO comments (comment)
+      VALUES ${placeholders}
+      ON CONFLICT (comment) DO NOTHING
+      RETURNING *;
+    `;
+
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+/*const createComment = async (commentList) => {
+  if (commentList.length === 0) {
+    return;
+  }
 
   // Create an array of parameterized query placeholders
-  const placeholders = commentContents.map((_, index) => `$${index + 1}`).join(',');
-  
-    try {
-      const query = `
-        INSERT INTO comments (comment)
-        VALUES (${placeholders})
-        ON CONFLICT (comment) DO NOTHING
-        RETURNING *;
-      `;
-  
-      const { rows } = await db.query(query, commentList);
-      return rows;
-    } catch (error) {
-      throw error;
-    }
-  }*/
+  const placeholders = commentList.map((comment, index) => `($${index + 1})`).join(',');
+  const values = commentList.map(comment => comment.comment);
 
-  async function createComment(commentList) {
-    if (commentList.length === 0) {
+  try {
+    const query = `
+      INSERT INTO comments (comment)
+      VALUES (${placeholders})
+      ON CONFLICT (comment) DO NOTHING
+      RETURNING *;
+    `;
+
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+/*async function createComment(commentList) {
+  if (commentList.length === 0) {
+    return;
+  }
+
+  try {
+    const placeholders = commentList.map((comment, index) => `($${index + 1})`).join(',');
+    const values = commentList.map(comment => comment.comment);
+
+    if (values.length === 0) {
+      // No valid comments to insert
       return;
     }
-  
-    try {
-      const query = `
-        INSERT INTO comments (id, comment)
-        VALUES ${commentList.map((comment, index) => `($${index * 2 + 1}, $${index * 2 + 2})`).join(',')}
-        ON CONFLICT (id) DO NOTHING
-        RETURNING *;
-      `;
-  
-      const values = [];
-      for (const comment of commentList) {
-        if (comment.comment !== null && comment.comment !== undefined) {
-          values.push(comment.id, comment.comment);
-        }
-      }
-  
-      if (values.length === 0) {
-        // No valid comments to insert
-        return;
-      }
-  
-      const { rows } = await db.query(query, values);
-      return rows;
-    } catch (error) {
-      throw error;
-    }
+
+    const query = `
+      INSERT INTO comments (comment)
+      VALUES ${placeholders}
+      ON CONFLICT (comment) DO NOTHING
+      RETURNING *;
+    `;
+
+    const { rows } = await db.query(query, values);
+    return rows;
+  } catch (error) {
+    throw error;
   }
+}
+
+    */
   
   
   

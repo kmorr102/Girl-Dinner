@@ -29,7 +29,7 @@ SELECT
     restaurants.img AS img,
     restaurants.number AS number,
     restaurants.content AS content,
-    reviews.id AS reviewId, -- Added a comma here
+    reviews.id AS reviewId,
     reviews.content AS review_text
 FROM
     restaurants
@@ -37,6 +37,7 @@ LEFT JOIN
     restaurant_reviews AS restaurantsreviews ON restaurants.id = restaurantsreviews."restaurantId"
 LEFT JOIN
     reviews AS reviews ON restaurantsreviews."reviewId" = reviews.id;
+
 
 
 `);
