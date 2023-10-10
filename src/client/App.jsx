@@ -15,8 +15,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 function App() {
 const[token,setToken]=useState(sessionStorage.getItem('authToken'));
 const[isLoggedIn,setIsLoggedIn]=useState(false);
-const[username,setUsername]=useState('');
-console.log('token:',token)
+//const[username,setUsername]=useState('');
+//console.log('token:',token)
 
 
 
