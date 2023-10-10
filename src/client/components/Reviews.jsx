@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export default function Reviews({token}){
     const tokenString = sessionStorage.getItem("authToken");
-    console.log('token from login(storage):', tokenString)
+    //console.log('token from login(storage):', tokenString)
     
 
     const [reviews, setReviews]= useState('');
@@ -84,8 +84,8 @@ export default function Reviews({token}){
       
         {reviews && reviewToDisplay.map((review) => (
           <div key={review.id} className='displayedReviews'>
-            <p>Title: {review.title}</p>
-            <p>Content: {review.content}</p>
+            <h3 style={{textDecoration:"underline"}}>{review.title}</h3>
+            <h4>{review.content}</h4>
             <p>Comments:{review.comment_text}</p>
             <button   onClick={() => handleDelete(review._id, review.author.username)}>
                   Delete

@@ -35,7 +35,7 @@ const defaultTheme = createTheme();
 
 export default function CreateReview(props){
     const tokenString = sessionStorage.getItem("authToken");
-    console.log('token from login(storage):', tokenString)
+    //console.log('token from login(storage):', tokenString)
     
 
     const [reviews, setReviews]= useState('');
@@ -50,7 +50,7 @@ export default function CreateReview(props){
     
     async function handleSubmit(e){
         e.preventDefault();
-    
+        Navigate("/Reviews")
         /*if(!tokenString) {
           setError("You must have an account to make a post. Login or create an account to add review.")
           console.log('error message if no token')
@@ -125,7 +125,7 @@ export default function CreateReview(props){
              />
      
           
-            <Button onClick={() => Navigate("/Reviews")}
+            <Button 
               type="submit"
               fullWidth
               variant="contained"

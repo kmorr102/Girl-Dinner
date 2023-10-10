@@ -6,12 +6,16 @@ const {
 const { 
   getAllReviews, 
   createReview,
-  getAllComments
-}=require('./reviews')
+  getAllComments,
+  createComment
+} = require('./reviews');
 
 const {
   createRestaurant, getAllRestaurants
-  }=require('./restaurants')
+} = require('./restaurants');
+
+// Rest of your code...
+
 
 const dropTables = async () => {
     try {
@@ -22,9 +26,11 @@ const dropTables = async () => {
         await db.query(`
         DROP TABLE IF EXISTS review_comments;
         DROP TABLE IF EXISTS comments;
+        DROP TABLE IF EXISTS restaurant_reviews;
         DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS users;
         DROP TABLE IF EXISTS restaurants;
+        DROP TABLE IF EXISTS users;
+       
         `);
     }
     catch(err) {
@@ -36,52 +42,62 @@ const createTables = async () => {
     try{
         console.log('Building All Tables...');
         await db.query(`
-        CREATE TABLE users (
-            id SERIAL PRIMARY KEY,
-            password VARCHAR(255) NOT NULL,
-            name VARCHAR(255) UNIQUE NOT NULL,
-            username VARCHAR(255) UNIQUE NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            isAdmin BOOLEAN DEFAULT false
-        );
-        
-        CREATE TABLE reviews (
-          id SERIAL PRIMARY KEY,
-          "authorId" INTEGER REFERENCES users(id),
-          title varchar(255) NOT NULL,
-          content TEXT NOT NULL 
-        );        
-        
-        CREATE TABLE comments (
-        id SERIAL PRIMARY KEY,
-        comment varchar(255) UNIQUE NOT NULL
-        );
-      
-      CREATE TABLE review_comments (
-        "reviewId" INTEGER REFERENCES reviews(id),
-        "commentId" INTEGER REFERENCES comments(id),
-        UNIQUE ("reviewId", "commentId")
-        );
+  
+  CREATE TABLE restaurants (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  img VARCHAR(255),
+  number VARCHAR(255) NOT NULL,
+  content VARCHAR(255) NOT NULL
+);
 
-        CREATE TABLE restaurants (
-          id SERIAL PRIMARY KEY,
-          name VARCHAR(255) NOT NULL,
-          address VARCHAR(255) NOT NULL,
-          img VARCHAR(255),
-          number VARCHAR(255) NOT NULL,
-          content VARCHAR(255) NOT NULL
-          );
-          
-        `);
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  isAdmin BOOLEAN DEFAULT false
+);
+
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  "authorId" INTEGER REFERENCES users(id),
+  restaurant_id INTEGER REFERENCES restaurants(id),
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL 
+);
+CREATE TABLE restaurant_reviews (
+  "restaurantId" INTEGER REFERENCES restaurants(id),
+  "reviewId" INTEGER REFERENCES reviews(id),
+  UNIQUE ("restaurantId", "reviewId")
+);
+
+CREATE TABLE comments (
+  id SERIAL PRIMARY KEY,
+  comment VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE review_comments (
+  "reviewId" INTEGER REFERENCES reviews(id),
+  "commentId" INTEGER REFERENCES comments(id),
+  UNIQUE ("reviewId", "commentId")
+);
+
+
+`)
     }
     catch(err) {
         throw err;
     }
 }
 
-const users = [
+
+const userData = [
   {
     id: 1,
+    authorId: 1,
     name: 'Emily Johnson',
     email: 'emily@example.com',
     username: 'emilyjohnson',
@@ -90,6 +106,7 @@ const users = [
   },
   {
     id: 2,
+    authorId: 2,
     name: 'John Smith',
     email: 'john@example.com',
     username: 'johnnysmith',
@@ -98,6 +115,7 @@ const users = [
   },
   {
     id: 3,
+    authorId: 3,
     name: 'Jeff Buckley',
     email: 'jeffb@example.com',
     username: 'jeffb123',
@@ -106,6 +124,7 @@ const users = [
   },
   {
     id: 4,
+    authorId: 4,
     name: 'Mario Maria',
     email: 'mariom@example.com',
     username: 'mrmario',
@@ -118,7 +137,7 @@ const users = [
 const createInitialUsers = async () => {
   try {
     console.log("Starting to create users...")
-    for (const user of users) {
+    for (const user of userData) {
       await createUser({name: user.name, username: user.username, email: user.email, password: user.password, isAdmin: user.isAdmin});
     }
    
@@ -127,67 +146,7 @@ const createInitialUsers = async () => {
     console.error('Error creating users!', error);
   }
 };
-async function createInitialReviews() {
-  try {
-    const users = await getAllUsers(); // Retrieve all users
 
-
-    const reviewDataArray = [
-      {
-        authorId: users[0].id,
-        title: "Best food ever",
-        content: "I would recommend to others!",
-        comments: ["I definitely agree!"]
-      },
-      {
-        authorId: users[2].id,
-        title: "Decent food",
-        content: "Reasonable prices and pretty good food",
-        comments: ["I agree with the review, food is decent but nothing you can't make at home."]
-      },
-      {
-        authorId: users[3].id,
-        title: "Nice customer service",
-        content:  "Had a great birthday party here",
-        comments: ["I also attended a party here and it was a great space for pictures"]
-      },
-      {
-        authorId: users[1].id,
-        title: "Would not go here again",
-        content:  "I have had better'",
-        comments:["Rude staff:("]
-      },
-      {
-        authorId: users[0].id,
-        title:  "Best cheesecake ever!!!",
-        content:  "You have to try their oreo cheesecake its great. Service was also amazing",
-        comments:["Cheesecake is 10/10"]
-      },
-      {
-        authorId: users[2].id,
-        title:"Wasn't great:(",
-        content:"I've heard such great things, but I personally won't be going back",
-        comments:["Waste of a datenight."]
-      },
-      {
-        authorId: users[1].id,
-        title:"Look no further!",
-        content:"They have the best ice in town! If you know, you know.",
-        comments:["Ashley our server was great!"]
-      },
-    ];
-    
-    for (const reviewData of reviewDataArray) {
-      console.log('Creating Review Data:', reviewData);
-      await createReview(reviewData); // Create a review using the review data
-    }
-
-    console.log('Initial Review Data created successfully');
-  } catch (err) {
-    console.log('Error creating review data');
-    throw err;
-  }
-}
 
 // creating initial restaurants
 const createInitialRestaurants = async () => {
@@ -280,6 +239,129 @@ const createInitialRestaurants = async () => {
 };
 
 
+
+async function createInitialReviews() {
+  try {
+    const users = await getAllUsers(); // Retrieve all users
+    const restaurants= await getAllRestaurants();
+    
+
+    const reviewDataArray = [
+      {
+        authorId: users[0].id,
+        restaurantId: 1,
+        title: "Best food ever",
+        content: "I would recommend to others!",
+        comments: ["I definitely agree!"]
+      },
+      {
+        authorId: users[2].id,
+        restaurantId: 3,
+        title: "Decent food",
+        content: "Reasonable prices and pretty good food",
+        comments: ["I agree with the review, food is decent but nothing you can't make at home."]
+      },
+      {
+        authorId: users[3].id,
+        restaurantId: 2,
+        title: "Nice customer service",
+        content:  "Had a great birthday party here",
+        comments: ["I also attended a party here and it was a great space for pictures"]
+      },
+      {
+        authorId: users[1].id,
+        restaurantId: 5,
+        title: "Would not go here again",
+        content:  "I have had better'",
+        comments:["Rude staff:("]
+      },
+      {
+        authorId: users[0].id,
+        restaurantId: 1,
+        title:  "Best cheesecake ever!!!",
+        content:  "You have to try their oreo cheesecake its great. Service was also amazing",
+        comments:["Cheesecake is 10/10"]
+      },
+      {
+        authorId: users[2].id,
+        restaurantId: 3,
+        title:"Wasn't great:(",
+        content:"I've heard such great things, but I personally won't be going back",
+        comments:["Waste of a datenight."]
+      },
+      {
+        authorId: users[1].id,
+        restaurantId: 8,
+        title:"Look no further!",
+        content:"They have the best ice in town! If you know, you know.",
+        comments:["Ashley our server was great!"]
+      },
+    ];
+    
+    for (const reviewData of reviewDataArray) {
+      console.log('Creating Review Data:', reviewData);
+      await createReview(reviewData); // Create a review using the review data
+    }
+
+    console.log('Initial Review Data created successfully');
+  } catch (err) {
+    console.log('Error creating review data');
+    throw err;
+  }
+}
+
+
+
+/*async function createInitialComments() {
+  try {
+const reviews = await getAllReviews();
+
+const commentList = [
+  {
+    id: reviews[1],
+    content: "I definitely agree!"
+  },
+  {
+    id: reviews[1],
+    content: "I agree with the review, food is decent but nothing you can't make at home."
+  },
+  {
+    id: reviews[1],
+    content: "I also attended a party here and it was a great space for pictures"
+  },
+  {
+    id:reviews[1],
+    content:"Rude staff:("
+  },
+  {
+    id: reviews[1],
+    content:"Cheesecake is 10/10"
+  },
+  {
+    id: reviews[1],
+    content:"Waste of a datenight."
+  },
+  {
+    id: reviews[1],
+    content:"Ashley our server was great!"
+  },
+];
+
+
+const commentContent = commentList.map((comment) => comment.content);
+
+    console.log('Creating Comments:', commentContent);
+    await createComment(commentList);
+
+    console.log('Comments created successfully');
+  } catch (err) {
+    console.log('Error creating comments');
+    throw err;
+  }
+}
+*/
+
+
 const seedDatabase = async () => {
     try {
         db.connect();
@@ -287,8 +369,12 @@ const seedDatabase = async () => {
         await dropTables();
         await createTables();
         await createInitialUsers();
-        await createInitialReviews();
         await createInitialRestaurants();
+        await createInitialReviews();
+     
+       // await createInitialComments();
+     
+        
     }catch (err) {
       console.log("Error during seedDatabase")
         throw err;
@@ -300,8 +386,8 @@ const seedDatabase = async () => {
         console.log("Starting to test database...");
     
         console.log("Calling getAllUsers");
-        const users = await getAllUsers();
-        console.log("Result:", users);
+        const _users = await getAllUsers();
+        console.log("Result:", _users);
     
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();
