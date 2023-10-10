@@ -50,11 +50,11 @@ const navigate=useNavigate();
     <div id="container">
       <div id="navbar">
         <Link to={"/"}>Home</Link>
-        <Link to={"/Register"}>Register</Link>
         <Link to={"/Reviews"}>Reviews</Link>
         <Link to={"/CreateReview"}> Write a Review</Link>
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Login"}>Login</Link>
+        <Link to={"/Register"}>Register</Link>
        
        {isLoggedIn ? (
         //<Link to={"/Logout"} onClick={handleLogout}> </Link>

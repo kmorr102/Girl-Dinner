@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <div className='home'>
-      <ImageList sx={{ width: '100%', height: '120vh' }} rowHeight={290}>
+      <ImageList sx={{ width: '100%', height: '100vh' }} rowHeight={290}>
         <ImageListItem key="Subheader" cols={3}>
           <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
             Girl Dinner
@@ -112,8 +112,9 @@ export default function Home() {
           <>
             <DialogTitle>{selectedRestaurant.name}</DialogTitle>
             <DialogContent>
-              <Typography>{selectedRestaurant.address}</Typography>
-              {/* can add more restaurant details here */}
+            <Typography>{selectedRestaurant.content}</Typography>
+              <Typography>Address: {selectedRestaurant.address}</Typography>
+              <Typography>Phone: {selectedRestaurant.number}</Typography>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseDialog} color="primary">

@@ -67,7 +67,9 @@ const createTables = async () => {
           id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
           address VARCHAR(255) NOT NULL,
-          img VARCHAR(255)
+          img VARCHAR(255),
+          number VARCHAR(255) NOT NULL,
+          content VARCHAR(255) NOT NULL
           );
           
         `);
@@ -196,42 +198,78 @@ const createInitialRestaurants = async () => {
         name: 'Seafood Shack',
         address: '123 Front Street',
         img: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 123-4567',
+        content: 'A coastal gem serving the freshest catch of the day. Dive into a seafood paradise with dishes that make waves.'
       },
       {
         id: 2,
         name: 'Pizzeria',
         address: '101 Main Street',
         img: 'https://images.unsplash.com/photo-1600628421066-f6bda6a7b976?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 987-6543',
+        content: 'The home of mouthwatering pizzas made with love. From classic margheritas to gourmet creations, we got your pizza cravings covered.'
       },
       {
         id: 3,
         name: 'Ice Cream',
         address: '393 Oak Road',
         img: 'https://images.unsplash.com/photo-1620124452520-0d9be56b29ee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2824&q=80',
+        number: '(555) 456-7890',
+        content: 'Chill out with our creamy, dreamy ice cream. Satisfy your sweet tooth with a variety of flavors and toppings.'
       },
       {
         id: 4,
         name: 'Sub Shop',
-        address: '402 Maple Avenue',
+        address: '402 Maple Boulevard',
         img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 789-1234',
+        content: 'Crafted for sandwich enthusiasts, we pile on fresh ingredients between layers of bread to create the ultimate subs and hoagies.'
       },
       {
         id: 5,
-        name: 'Coffee Cafe',
+        name: 'Cozy Coffee Cafe',
         address: '271 Pine Lane',
         img: 'https://images.unsplash.com/photo-1464979681340-bdd28a61699e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 234-5678',
+        content: 'Perk up your day with aromatic coffee and artisanal brews. Pair your favorite cup of joe with delectable pastries and light bites.'
       },
       {
         id: 6,
-        name: 'Diner',
+        name: 'Sunrise Diner',
         address: '179 Meadow Drive',
         img: 'https://images.unsplash.com/photo-1495214783159-3503fd1b572d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 876-5432',
+        content: 'Step into a classic American diner experience. Our comfort food classics and friendly service will transport you back in time.'
+      },
+      {
+        id: 7,
+        name: 'Thai Spice',
+        address: '5th Lakeview Drive',
+        img: 'https://images.unsplash.com/photo-1580212206172-dbea2d1b64dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 312-5321',
+        content: 'Thai Spice offers a tantalizing journey to Thailand with dishes bursting with authentic flavors and spices.'
+      },
+      {
+        id: 8,
+        name: 'Taqueria',
+        address: '120 College Road',
+        img: 'https://images.unsplash.com/photo-1606168152642-aae9b879f3bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 964-1894',
+        content: 'Taqueria brings the vibrant and savory taste of Mexico to your plate, serving up delicious tacos, burritos, and more.'
+      },
+      {
+        id: 9,
+        name: 'Tokyo Kitchen',
+        address: '109 Elm Street',
+        img: 'https://images.unsplash.com/photo-1562436356-11574662e477?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2970&q=80',
+        number: '(555) 720-8024',
+        content: 'Tokyo Kitchen invites you to savor the art of Japanese cuisine through expertly crafted sushi rolls and delectable dishes.'
       },
     ];
 
     for (const restaurant of restaurants) {
       console.log('Creating Restaurant Data:', restaurant);
-      await createRestaurant(restaurant.name, restaurant.address, restaurant.img);
+      await createRestaurant(restaurant.name, restaurant.address, restaurant.img, restaurant.number, restaurant.content);
     }
 
     console.log('Initial Restaurant Data created successfully');
