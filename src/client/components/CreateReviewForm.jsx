@@ -49,7 +49,7 @@ export default function CreateReview(props){
     const Navigate= useNavigate();
     
     async function handleSubmit(e){
-        //e.preventDefault();
+        e.preventDefault();
         Navigate("/Reviews")
         /*if(!tokenString) {
           setError("You must have an account to make a post. Login or create an account to add review.")

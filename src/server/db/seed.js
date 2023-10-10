@@ -312,7 +312,7 @@ async function createInitialReviews() {
 
 
 
-async function createInitialComments() {
+/*async function createInitialComments() {
   try {
 const reviews = await getAllReviews();
 
@@ -359,7 +359,7 @@ const commentContent = commentList.map((comment) => comment.content);
     throw err;
   }
 }
-
+*/
 
 
 const seedDatabase = async () => {
@@ -371,7 +371,7 @@ const seedDatabase = async () => {
         await createInitialUsers();
         await createInitialRestaurants();
         await createInitialReviews();
-        await createInitialComments();
+     
        // await createInitialComments();
      
         
