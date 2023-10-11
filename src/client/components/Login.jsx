@@ -33,7 +33,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 
-const Login = (props) => {
+export default function Login(props) {
   const [username,setUsername]=useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -160,4 +160,4 @@ const Login = (props) => {
     </ThemeProvider>
   );
 }
-export default Login;
+
