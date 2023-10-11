@@ -18,21 +18,8 @@ export default function Restaurant() {
   const [searchParams, setSearchParams] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
-      
-/* useEffect(() => {
-    fetch('/api/restaurants')
-      .then((response) => response.json())
-      .then((data) => {
-        setRestaurants(data.restaurants);
-        console.log('restaurant:',  data.restaurants)
-        
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, [])
-*/
-  useEffect(()=>{
-    
-  })
+
+ 
 
   const { restaurantid }= useParams();
 
@@ -69,6 +56,34 @@ getRestaurantById();
   }, []);
 
 
+  /*const { reviewId }= useParams();
+
+  useEffect(() => {
+    async function getReviewById() {
+      try {
+        const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
+        console.log('API Response:', response); // Log the full response
+  
+        //if (!response.ok) {
+          //throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
+        //}
+  
+        const data = await response.json();
+        console.log('Review data:', data);
+        setReview(data);
+      } catch (error) {
+        console.error('Error occurred:', error);
+        setError(error.message);
+      }
+    }
+  
+    getReviewById();
+  }, []);*/
+
+  
+  
+
+
   return (
     <div className="Restaurant">
       
@@ -90,6 +105,7 @@ getRestaurantById();
           <div key={review.id}>
           <p>Top Reviews: {review.title}</p>
           <p>{review.content}</p>
+          <p>Comments:{review.comment_text}</p>
           </div>
         ))}
       </div>
