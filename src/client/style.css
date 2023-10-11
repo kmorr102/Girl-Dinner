@@ -18,7 +18,7 @@
 #navbar{
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-around;
   font-size: 20px;
   margin: 20px;
@@ -99,5 +99,16 @@ input[type=radio]{
   display: none;
 }
 
+.navbar-button {
+  display: inline-block;
+  padding: 8px 16px; 
+  background-color: #7851A9;
+  color: #fff; 
+  text-decoration: none; 
+  border-radius: 4px; 
+  margin-right: 10px; 
+}
 
-/* Add more styling for other elements if needed */
+.navbar-button:hover {
+  background-color: #9677be; /* Change background color on hover */
+}

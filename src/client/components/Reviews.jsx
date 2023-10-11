@@ -66,14 +66,8 @@ export default function Reviews({token}){
 
 
       <div className='Reviews'>
-       <div id="navbar">
-
-      <Link to={"/"}>Home</Link>
-      <Link to={"/CreateReview"}>Write a Review</Link>
-      <Link to={"/Profile"}>Profile</Link>
-      <Link to={"/Logout"}>Logout</Link>
-      </div>
-        
+    
+      
         <div className='search-bar'>
           <label>
             Search:{''}
