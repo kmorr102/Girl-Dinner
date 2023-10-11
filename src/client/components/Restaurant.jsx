@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchAllRestaurants } from "../API";
 import { fetchAllReviews } from "../API";
+//import { getRestaurantById } from "../../server/db/restaurants";
 
 const tokenString = sessionStorage.getItem("authToken");
 
 export default function Restaurant() {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurant, setRestaurant] = useState([]);
   const [review, setReview]=useState([]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -18,8 +19,7 @@ export default function Restaurant() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
       
-
-  useEffect(() => {
+/* useEffect(() => {
     fetch('/api/restaurants')
       .then((response) => response.json())
       .then((data) => {
@@ -29,10 +29,31 @@ export default function Restaurant() {
       })
       .catch((error) => console.error('Error fetching data:', error));
   }, [])
-
+*/
   useEffect(()=>{
     
   })
+
+  const { restaurantid }= useParams();
+
+  useEffect(()=>{
+  async function getRestaurantById(){
+    const response= await fetch(`http://localhost:3000/api/restaurants/${restaurantid}`);
+    if(response){
+      const data= await response.json();
+      console.log('id:',data.id)
+      setRestaurant(data)
+      console.log( 'data:', data)
+    }else{
+      setError(response)
+      console.log('error:', error)
+    }
+  }
+
+getRestaurantById();
+}, [restaurantid])
+
+
 
   useEffect (() => {
     async function getAllReviews() {
@@ -59,7 +80,7 @@ export default function Restaurant() {
          
       <div>
     
-        {restaurants.map((restaurant) => (
+        {restaurant.map((restaurant) => (
           <div key={restaurant.id} className="displayedRestaurant">
             <h1> {restaurant.name}</h1>
             <img src= {restaurant.img} alt="restaurant picture"  style={{
@@ -73,7 +94,7 @@ export default function Restaurant() {
             <p>{restaurant.address}</p>
             <p>{restaurant.number}</p>
         {review.map((review)=>(
-          <div>
+          <div key={review.id}>
           <p>Top Reviews: {review.title}</p>
           <p>{review.content}</p>
           </div>
