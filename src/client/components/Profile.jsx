@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 //import { getAllReviews } from '../API';
 import { IoApertureSharp } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 
 
@@ -10,19 +10,23 @@ import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 
 
-export default function Profile() {
+export default function Profile({token}) {
+  const tokenString = sessionStorage.getItem("authToken");
+  console.log('token from login(storage):', tokenString)
 
   const [reviews, setReviews] = useState([]);
   /* const [error, setError] = useState(''); */
   const [searchParams,setSearchParams]= useState('');
-  const [user, setUser]=useState('')
+  const [currentUser, setCurrentUser]=useState('')
   const auth = sessionStorage.getItem('authToken');
+  const [isOpen, setIsOpen] = useState(false);
 
  // why is 'isAuthor' not being read?
   
  const isAuthor = (review) => {
     return review.authorId === authUserId && !authUserId;
 };
+
 
 // delete review by id function 
 async function deleteReview (reviewId) {
@@ -32,7 +36,7 @@ async function deleteReview (reviewId) {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
-        'Authorixation': `Bearer ${tokenString}`
+        'Authorization': `Bearer ${tokenString}`
       }
   });
   const resultDelete = await response.json();
@@ -43,6 +47,42 @@ async function deleteReview (reviewId) {
 }}; 
 
 //editReview
+
+async function editReview (reviewId) {
+  
+  try {
+    const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tokenString}`
+      }
+  });
+  const resultPatch = await response.json();
+  if (resultPatch) {window.location.reload()}
+  alert("Review successfully edited");
+} catch (error) {
+  console.error(error);
+}}; 
+
+//show and hide the user's reviews
+
+async function toggle(authorId) {
+  setIsOpen((isOpen) => !isOpen);
+  try {
+    const response = await fetch (`http://localhost:3000/api/reviews/${authorId}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': `Bearer ${tokenString}`
+      }
+    });
+    const result = await response.json();
+    console.log(result)
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 return(
 <div className="profile">
@@ -57,19 +97,18 @@ return(
   </div>
   <div className="profile-info">
 
-        <img src={user.profilePicture} alt={user.name} />
-        <h2>Welcome {user.name}</h2>
+        <img src={currentUser.profilePicture} alt={currentUser.name} />
+        <h2>Welcome {currentUser.name}</h2>
        
   </div>
       <Stack direction="column" spacing={2}>
       <Avatar sx={{ bgcolor: deepPurple[500] }}></Avatar>
-      <Avatar></Avatar>
       <Avatar sx={{ bgcolor: deepOrange[500] }}>Me</Avatar>
     </Stack>
       <div className="profile-navigation">
         <ul>
           <li>
-            <Link to="/profile/reviews">View Reviews</Link>
+            <button onClick={toggle}>View Reviews</button>
           </li>
           <li>
             <Link to="/profile/edit">Edit Profile</Link>
