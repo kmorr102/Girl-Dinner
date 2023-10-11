@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchAllRestaurants } from "../API";
 import { fetchAllReviews } from "../API";
+//import { getRestaurantById } from "../../server/db/restaurants";
 
 const tokenString = sessionStorage.getItem("authToken");
 
 export default function Restaurant() {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurant, setRestaurant] = useState([]);
   const [review, setReview]=useState([]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -17,6 +18,42 @@ export default function Restaurant() {
   const [searchParams, setSearchParams] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
+      
+/* useEffect(() => {
+    fetch('/api/restaurants')
+      .then((response) => response.json())
+      .then((data) => {
+        setRestaurants(data.restaurants);
+        console.log('restaurant:',  data.restaurants)
+        
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, [])
+*/
+  useEffect(()=>{
+    
+  })
+
+  const { restaurantid }= useParams();
+
+  useEffect(()=>{
+  async function getRestaurantById(){
+    const response= await fetch(`http://localhost:3000/api/restaurants/${restaurantid}`);
+    if(response){
+      const data= await response.json();
+      console.log('id:',data.id)
+      setRestaurant(data)
+      console.log( 'data:', data)
+    }else{
+      setError(response)
+      console.log('error:', error)
+    }
+  }
+
+getRestaurantById();
+}, [restaurantid])
+
+
 
   useEffect (() => {
     async function getAllReviews() {
@@ -30,22 +67,6 @@ export default function Restaurant() {
     }
     getAllReviews();
   }, []);
-      
-
-  useEffect(() => {
-    fetch('/api/restaurants')
-      .then((response) => response.json())
-      .then((data) => {
-        setRestaurants(data.restaurants);
-        console.log('restaurant:',  data.restaurants)
-        
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, [])
-
-  useEffect(()=>{
-    
-  })
 
 
   return (
@@ -56,13 +77,13 @@ export default function Restaurant() {
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Logout"}>Logout</Link>
       </div>
-         
-      <div>
-    
-        {restaurants.map((restaurant) => (
-          <div key={restaurant.id} className="displayedRestaurant">
-            <h1> {restaurant.name}</h1>
-            <img src= {restaurant.img} alt="restaurant picture"  style={{
+      
+      <div className="Restaurant">
+    {/* Check if the restaurant data is available before displaying */}
+    {restaurant && (
+      <div key={restaurant.id} className="displayedRestaurant">
+        <h1>{restaurant.name}</h1>
+        <img src= {restaurant.img} alt="restaurant picture"  style={{
                   maxWidth: '100%',
                   maxHeight: '100%', 
                   width: 'auto', 
@@ -72,10 +93,18 @@ export default function Restaurant() {
             <h3>{restaurant.content}</h3>
             <p>{restaurant.address}</p>
             <p>{restaurant.number}</p>
-      </div>
+        {review.map((review)=>(
+          <div key={review.id}>
+          <p>Top Reviews: {review.title}</p>
+          <p>{review.content}</p>
+          </div>
         ))}
-    
       </div>
+    )}
+  </div>
+     
+    
+    
     </div>
   );
 }   
