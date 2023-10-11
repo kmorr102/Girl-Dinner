@@ -7,15 +7,12 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info'; 
 import { Card, CardMedia } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
@@ -40,44 +37,65 @@ export default function Home() {
     setDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-    setSelectedRestaurant(null);
-  };
-
- 
 
   return (
 
-
    <div className='home'>
 
-        <div id="navbar">
-      <Link to={"/"}>Home</Link>
-      <Link to={"/Reviews"}>Reviews</Link>
-      <Link to={"/CreateReview"}>Write a Review</Link>
-      <Link to={"/Profile"}>Profile</Link>
-
-      <Link to={"/Login"}>Login</Link>
-
-      
-      {/* Add the search button */}
-      <IconButton>
+<Box
+    sx={{
+      width: '100%',
+      height: '40vh', // Set the height to 100vh for viewport height
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative'
+    }}
+  >
+    <img
+      src="https://images.unsplash.com/photo-1567496295302-b8dbcd2913b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3087&q=80"
+      alt="Header Image"
+      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+    />
+    <Typography variant="h3" component="div" sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: 'white',
+    }}>
+      Girl Dinner
+    </Typography>
+    <TextField
+    variant="outlined"
+    color="secondary"
+    sx={{
+      position: 'absolute',
+      top: '70%', 
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: '400px', 
+      borderRadius: '10px',
+      backgroundColor: 'white',
+    }}
+    onChange={(e) => setSearchParams(e.target.value)}
+    placeholder="Search Restaurants"
+    InputProps={{
+      startAdornment: (
+        <InputAdornment position="start">
           <SearchIcon />
-      </IconButton>
-      <Button onClick={() => Navigate("/Register")}variant="outlined" size="small" >
-        Sign up
-     </Button>
-    </div>
-
-
-   
-   
+        </InputAdornment>
+      ),
+    }}
+  />
+  </Box>
 
       <ImageList sx={{ width: '100%', height: '100vh' }} rowHeight={290}>
         <ImageListItem key="Subheader" cols={3}>
           <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
-            Girl Dinner
+            Restaurants
           </Typography>
         </ImageListItem>
         {loading ? (
@@ -99,13 +117,7 @@ export default function Home() {
               />
              
               <ImageListItemBar key={restaurant.id}
-              
-              title={
-                // Wrap only the title in a Link component (/reviews/${restaurant.id}) eventually
-                <Link to={`/restaurants/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {restaurant.name}
-                </Link>
-              }
+              title={restaurant.name}
               subtitle={
                   <div>
                     {restaurant.address}
@@ -114,44 +126,31 @@ export default function Home() {
                 }
                 actionIcon={
                   <div>
-                    <IconButton
+                    <Button
                       sx={{
                         maxWidth: '100%',
-                      maxHeight: '100%', 
-                      width: 'auto', 
-                      height: 'auto', 
-                      objectFit: 'cover',
-                      color: 'rgba(255, 255, 255, 0.54)' }}
-                      onClick={() => handleDetailsClick(restaurant)}
+                        maxHeight: '100%',
+                        width: 'auto',
+                        height: 'auto',
+                        objectFit: 'cover',
+                        color: 'white',
+                        border: '1.5px solid #fff',
+                        borderRadius: '4px'
+                      }}
+                      variant = "text"
+                      component={Link}
+                      to={`/restaurants/${restaurant.id}`}
                     >
-                      <InfoIcon /> 
-                    </IconButton>
+                      Details
+                    </Button>
                   </div>
                 }
               />
       
-          
             </ImageListItem>
           ))
         )}
       </ImageList>
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        {selectedRestaurant && (
-          <>
-            <DialogTitle>{selectedRestaurant.name}</DialogTitle>
-            <DialogContent>
-            <Typography>{selectedRestaurant.content}</Typography>
-              <Typography>Address: {selectedRestaurant.address}</Typography>
-              <Typography>Phone: {selectedRestaurant.number}</Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
     </div>
   );
 }

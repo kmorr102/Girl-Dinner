@@ -71,21 +71,14 @@ getRestaurantById();
 
   return (
     <div className="Restaurant">
-      <div id="navbar">
-        <Link to={"/"}>Home</Link>
-        <Link to={"/CreateReview"}>Write a Review</Link>
-        <Link to={"/Profile"}>Profile</Link>
-        <Link to={"/Logout"}>Logout</Link>
-      </div>
       
-      <div className="Restaurant">
     {/* Check if the restaurant data is available before displaying */}
     {restaurant && (
       <div key={restaurant.id} className="displayedRestaurant">
         <h1>{restaurant.name}</h1>
         <img src= {restaurant.img} alt="restaurant picture"  style={{
                   maxWidth: '100%',
-                  maxHeight: '100%', 
+                  maxHeight: '100vh', 
                   width: 'auto', 
                   height: 'auto', 
                   objectFit: 'cover',
@@ -102,9 +95,6 @@ getRestaurantById();
       </div>
     )}
   </div>
-     
-    
-    
-    </div>
+   
   );
 }   

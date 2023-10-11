@@ -87,14 +87,6 @@ async function toggle(authorId) {
 return(
 <div className="profile">
 
-
-  <div id="navbar">
-
-      <Link to={"/"}>Home</Link>
-      <Link to={"/CreateReview"}>Write a Review</Link>
-      <Link to={"/Reviews"}>Reviews</Link>
-      <Link to={"/Logout"}>Logout</Link>
-  </div>
   <div className="profile-info">
 
         <img src={currentUser.profilePicture} alt={currentUser.name} />
