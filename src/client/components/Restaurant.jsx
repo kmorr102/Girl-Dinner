@@ -17,19 +17,6 @@ export default function Restaurant() {
   const [searchParams, setSearchParams] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
-
-  useEffect (() => {
-    async function getAllReviews() {
-        const response = await fetchAllReviews('http://localhost:3000/api/reviews'); 
-        if(response) {
-          console.log("response:",response)
-          setReview(response);
-        }else{
-          setError(response);
-        }
-    }
-    getAllReviews();
-  }, []);
       
 
   useEffect(() => {
@@ -46,6 +33,19 @@ export default function Restaurant() {
   useEffect(()=>{
     
   })
+
+  useEffect (() => {
+    async function getAllReviews() {
+        const response = await fetchAllReviews('http://localhost:3000/api/reviews'); 
+        if(response) {
+          console.log("response:",response)
+          setReview(response);
+        }else{
+          setError(response);
+        }
+    }
+    getAllReviews();
+  }, []);
 
 
   return (
@@ -72,10 +72,19 @@ export default function Restaurant() {
             <h3>{restaurant.content}</h3>
             <p>{restaurant.address}</p>
             <p>{restaurant.number}</p>
+        {review.map(()=>(
+          <div>
+          <p>Top Reviews: {review.title}</p>
+          <p>{review.content}</p>
+          </div>
+        ))}
+         
       </div>
+    
         ))}
     
-      </div>
+        </div>
+    
     </div>
   );
 }   
