@@ -77,13 +77,13 @@ getRestaurantById();
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Logout"}>Logout</Link>
       </div>
-         
-      <div>
-    
-        {restaurant.map((restaurant) => (
-          <div key={restaurant.id} className="displayedRestaurant">
-            <h1> {restaurant.name}</h1>
-            <img src= {restaurant.img} alt="restaurant picture"  style={{
+      
+      <div className="Restaurant">
+    {/* Check if the restaurant data is available before displaying */}
+    {restaurant && (
+      <div key={restaurant.id} className="displayedRestaurant">
+        <h1>{restaurant.name}</h1>
+        <img src= {restaurant.img} alt="restaurant picture"  style={{
                   maxWidth: '100%',
                   maxHeight: '100%', 
                   width: 'auto', 
@@ -99,12 +99,11 @@ getRestaurantById();
           <p>{review.content}</p>
           </div>
         ))}
-         
       </div>
+    )}
+  </div>
+     
     
-        ))}
-    
-        </div>
     
     </div>
   );
