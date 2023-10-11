@@ -72,7 +72,7 @@ export default function Restaurant() {
             <h3>{restaurant.content}</h3>
             <p>{restaurant.address}</p>
             <p>{restaurant.number}</p>
-        {review.map(()=>(
+        {review.map((review)=>(
           <div>
           <p>Top Reviews: {review.title}</p>
           <p>{review.content}</p>
