@@ -16,8 +16,7 @@ export default function Restaurant() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
 
-  
-  
+
 
   useEffect(() => {
     fetch('/api/restaurants')
@@ -29,9 +28,6 @@ export default function Restaurant() {
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
 
-  const restaurantsToDisplay= searchParams
-  ? restaurants.filter(restaurants=>restaurants.name.toLowerCase().includes(searchParams.toLowerCase()))
-  : restaurants;
 
   return (
     <div className="Restaurant">
@@ -41,25 +37,16 @@ export default function Restaurant() {
         <Link to={"/Profile"}>Profile</Link>
         <Link to={"/Logout"}>Logout</Link>
       </div>
-     
-      <div className='search-bar'>
-          <label>
-            Search:{''}
-            <input type='text' placeholder='Search' onChange={(e)=> setSearchParams(e.target.value)}/>
-          </label>
-      </div>
-
          
-        <div>
+      <div>
     
         {restaurants.map((restaurant) => (
           <div key={restaurant.id} className="displayedRestaurant">
             <h1>Name: {restaurant.name}</h1>
-            <Link to={`/restaurants/${restaurant.id}`}>View Details</Link>
-          </div>
+      </div>
         ))}
     
       </div>
     </div>
   );
-}
+}   

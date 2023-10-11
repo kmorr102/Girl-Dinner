@@ -52,8 +52,7 @@ const[isLoggedIn,setIsLoggedIn]=useState(false);
           <Route path="/Reviews" element={<Reviews token={token}/>}/>
           <Route path="/CreateReview" element={<CreateReviewForm />} />
           <Route path="/Logout" element={<Logout />} />
-          <Route path="/Restaurant" element={<Restaurant token={token}/>}/>
-          <Route path="/Restaurants/:restaurantid" element={<RestaurantDetails />} />
+          <Route path="/Restaurants/:restaurantid" element={<Restaurant />} />
         </Routes>
       </div> 
   );
