@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchAllRestaurants } from "../API";
+import { fetchAllReviews } from "../API";
 
 const tokenString = sessionStorage.getItem("authToken");
 
 export default function Restaurant() {
   const [restaurants, setRestaurants] = useState([]);
+  const [review, setReview]=useState([]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [img, setImg] = useState(null);
@@ -16,17 +18,34 @@ export default function Restaurant() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isAuthor, setIsAuthor] = useState("");
 
-
+  useEffect (() => {
+    async function getAllReviews() {
+        const response = await fetchAllReviews('http://localhost:3000/api/reviews'); 
+        if(response) {
+          console.log("response:",response)
+          setReview(response);
+        }else{
+          setError(response);
+        }
+    }
+    getAllReviews();
+  }, []);
+      
 
   useEffect(() => {
     fetch('/api/restaurants')
       .then((response) => response.json())
       .then((data) => {
         setRestaurants(data.restaurants);
+        console.log('restaurant:',  data.restaurants)
         
       })
       .catch((error) => console.error('Error fetching data:', error));
-  }, []);
+  }, [])
+
+  useEffect(()=>{
+    
+  })
 
 
   return (
@@ -42,7 +61,17 @@ export default function Restaurant() {
     
         {restaurants.map((restaurant) => (
           <div key={restaurant.id} className="displayedRestaurant">
-            <h1>Name: {restaurant.name}</h1>
+            <h1> {restaurant.name}</h1>
+            <img src= {restaurant.img} alt="restaurant picture"  style={{
+                  maxWidth: '100%',
+                  maxHeight: '100%', 
+                  width: 'auto', 
+                  height: 'auto', 
+                  objectFit: 'cover',
+                }} />
+            <h3>{restaurant.content}</h3>
+            <p>{restaurant.address}</p>
+            <p>{restaurant.number}</p>
       </div>
         ))}
     
