@@ -7,9 +7,13 @@ import Register from './components/Register';
 import Reviews from './components/Reviews';
 import CreateReviewForm from './components/CreateReviewForm'
 import Logout from './components/Logout';
+import Restaurant from './components/Restaurant';
+import RestaurantDetails from './components/restaurantDetails';
+import RestaurantById from './components/Restaurant';
 
 import Avatar from '@mui/material/Avatar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
 
 
 function App() {
@@ -48,6 +52,7 @@ const[isLoggedIn,setIsLoggedIn]=useState(false);
           <Route path="/Reviews" element={<Reviews token={token}/>}/>
           <Route path="/CreateReview" element={<CreateReviewForm />} />
           <Route path="/Logout" element={<Logout />} />
+          <Route path="/Restaurants/:restaurantid" element={<Restaurant />} />
         </Routes>
       </div> 
   );

@@ -17,6 +17,23 @@ export async function fetchAllReviews() {
     }
 }
 
+export async function fetchAllRestaurants() {
+  try {
+      
+      const response= await fetch('http://localhost:3000/api/restaurants', {
+      headers: {
+        "Content-Type" : "application/json",
+      //  "Authorization" : `Bearer ${token}`
+    },
+  });
+      const result= await response.json();
+      console.log('Fetched all restaurants:', result.restaurants);
+      return result.restaurants;
+  } catch (error) {
+    console.log('Error: Unable to fetch all restaurants');
+  }
+}
+
 export async function createReview() {
   const response= await fetch ('http://localhost:3000/api/reviews',
   {
