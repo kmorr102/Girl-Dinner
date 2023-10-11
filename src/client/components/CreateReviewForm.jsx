@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom'
+import { FaStar } from 'react-icons/fa' 
 
 
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CreateIcon from '@mui/icons-material/Create';
+import { NineKPlusOutlined } from "@mui/icons-material";
 
 
 function Copyright(props) {
@@ -45,6 +47,8 @@ export default function CreateReview(props){
     const [searchParams, setSearchParams]= useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [isAuthor, setIsAuthor]= useState('')
+    const [rating, setRating] = useState(null);
+    const [hover, setHover] = useState(null);
 
     const Navigate= useNavigate();
     
@@ -123,7 +127,33 @@ export default function CreateReview(props){
               value={content}
               onChange={(e) => setContent(e.target.value)}
              />
-     
+           
+
+          
+
+            <div className = "Star">
+            <p> Rating: {rating} </p>
+              {[...Array(5)].map((star, index) => {
+                const currentRating = index + 1;
+                return(
+                  <label>
+                    <input 
+                    type="radio" 
+                    name="rating" 
+                    value={currentRating}
+                    onClick={()=> setRating(currentRating)}
+                    />
+                    <FaStar 
+                    size={50}
+                    color={currentRating <= (hover || rating) ? "#f0d32e" : "#e4e5e9"}
+                    onMouseEnter={() => setHover(currentRating)}
+                    onMouseLeave={() => setHover(null)}
+                    />
+                  </label>
+                )
+              })}
+            </div>
+
           
             <Button 
               type="submit"
