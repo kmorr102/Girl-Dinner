@@ -102,7 +102,7 @@ export default function Home() {
               
               title={
                 // Wrap only the title in a Link component (/reviews/${restaurant.id}) eventually
-                <Link to={"/reviews"} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/restaurants/${restaurant.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   {restaurant.name}
                 </Link>
               }
