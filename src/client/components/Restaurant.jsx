@@ -56,8 +56,10 @@ getRestaurantById();
   }, []);
 
 
-  /*const { reviewId }= useParams();
 
+  let reviewId= window.location.href.split("/").pop()
+  //console.log('id:', window.location.href.split("/").pop())
+  
   useEffect(() => {
     async function getReviewById() {
       try {
@@ -78,7 +80,7 @@ getRestaurantById();
     }
   
     getReviewById();
-  }, []);*/
+  }, [])
 
   
   
@@ -101,13 +103,18 @@ getRestaurantById();
             <h3>{restaurant.content}</h3>
             <p>{restaurant.address}</p>
             <p>{restaurant.number}</p>
-        {review.map((review)=>(
+        {/* {review?.map((review)=>(
           <div key={review.id}>
           <p>Top Reviews: {review.title}</p>
           <p>{review.content}</p>
           <p>Comments:{review.comment_text}</p>
           </div>
-        ))}
+        ))} */}
+        {<div key={review.id}>
+          <p>{review.title}</p>
+          <p>{review.content}</p>
+          
+          </div>}
       </div>
     )}
   </div>
