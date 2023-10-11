@@ -40,6 +40,7 @@ const Login = (props) => {
   const [message, setMessage] = useState('');
   const [error, setError]=useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn,setIsLoggedIn]=useState(false);
   
   const Navigate= useNavigate();
 
@@ -53,6 +54,7 @@ const Login = (props) => {
 
   async function handleSubmit(e){
     e.preventDefault()
+   
     try {
         const response = await fetch('http://localhost:3000/api/users/login', {
             method: 'POST',
@@ -67,23 +69,23 @@ const Login = (props) => {
         const result = await response.json();
         console.log('Full API Response:',result);
         
+        if (response.status === 200 && result.token) {
+          sessionStorage.setItem('authToken', result.token);
+          console.log('authToken:', result.token);
+          setIsLoggedIn(true);
+          setCurrentUser(result);
+          setPassword('');
+          // Navigate only if login is successful
+          Navigate('/');
         
-        
-        if(!result) {
-          setError('Could not authenticate');
-          console.log('error at authentication', (!result))
+     
         
         } else{
-          sessionStorage.setItem('authToken', result.token);
-          console.log('authToken:', result.token)
-          setCurrentUser(result);
-          console.log('currentUser:', result)
-          setPassword('');
+        setError('Could not authenticate');
+        setIsLoggedIn(false);
+      console.log('error at authentication'); 
         
-      
-          setTimeout(()=>{
-          Navigate("/");
-        }, 1000)
+    
       }   
     } catch (error) {
       setError(error.message || 'Unexpected error occurred')
