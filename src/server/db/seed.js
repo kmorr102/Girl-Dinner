@@ -249,49 +249,49 @@ async function createInitialReviews() {
     const reviewDataArray = [
       {
         authorId: users[0].id,
-        restaurantId: 1,
+        restaurantId: 8,
         title: "Best food ever",
         content: "I would recommend to others!",
         comments: ["I definitely agree!"]
       },
       {
         authorId: users[2].id,
-        restaurantId: 3,
+        restaurantId: 6,
         title: "Decent food",
         content: "Reasonable prices and pretty good food",
         comments: ["I agree with the review, food is decent but nothing you can't make at home."]
       },
       {
         authorId: users[3].id,
-        restaurantId: 2,
+        restaurantId: 9,
         title: "Nice customer service",
         content:  "Had a great birthday party here",
         comments: ["I also attended a party here and it was a great space for pictures"]
       },
       {
         authorId: users[1].id,
-        restaurantId: 5,
+        restaurantId: 7,
         title: "Would not go here again",
         content:  "I have had better'",
         comments:["Rude staff:("]
       },
       {
         authorId: users[0].id,
-        restaurantId: 1,
+        restaurantId: 6,
         title:  "Best cheesecake ever!!!",
         content:  "You have to try their oreo cheesecake its great. Service was also amazing",
         comments:["Cheesecake is 10/10"]
       },
       {
         authorId: users[2].id,
-        restaurantId: 3,
+        restaurantId: 4,
         title:"Wasn't great:(",
         content:"I've heard such great things, but I personally won't be going back",
         comments:["Waste of a datenight."]
       },
       {
         authorId: users[1].id,
-        restaurantId: 8,
+        restaurantId: 3,
         title:"Look no further!",
         content:"They have the best ice in town! If you know, you know.",
         comments:["Ashley our server was great!"]
