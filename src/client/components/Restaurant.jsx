@@ -114,7 +114,7 @@
     
       getAllUsers();
     }, []);
-
+    // console.log("UserId:", users)
     useEffect(() => {
       if (users.length > 0) {
         const ids = users.map((user) => user.id);
@@ -320,10 +320,10 @@
     })
     .map((review) => {
       if (Array.isArray(users) && users.length > 0) {
-        const userIndex = userIds.indexOf(review.author_id);
-
-        if (userIndex !== -1) {
-          const user = users[userIndex];
+        const user = users.find((user) => user.id === review.author_id);
+        console.log("UserId:", user)
+        if (user) {
+      
           return (
 
   <List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
