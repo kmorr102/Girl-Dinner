@@ -87,9 +87,6 @@ async function toggle(authorId) {
 }
 console.log(currentUser, "here")
 
-const reviewToDisplay= searchParams
-? reviews.filter(review=>review.title.toLowerCase().includes(searchParams.toLowerCase()))
-: reviews;
 
 return(
 <div className="profile">
