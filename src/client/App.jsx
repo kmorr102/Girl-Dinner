@@ -18,6 +18,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 function App() {
 const[token,setToken]=useState(sessionStorage.getItem('authToken'));
 const[isLoggedIn,setIsLoggedIn]=useState(false);
+const [currentUser, setCurrentUser] = useState(null);
 //const[username,setUsername]=useState('');
 //console.log('token:',token)
 
@@ -30,7 +31,7 @@ const location = useLocation();
     setIsLoggedIn(false);
   }
  })
-
+console.log(currentUser)
 
   return (
     
@@ -54,8 +55,8 @@ const location = useLocation();
       <div id="main-section">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Login" element={<Login setToken={setToken} token={token}/>} />
+          <Route path="/Profile" element={<Profile currentUser={currentUser} setCurrentUser={setCurrentUser}/>} />
+          <Route path="/Login" element={<Login currentUser={currentUser} setCurrentUser={setCurrentUser} setToken={setToken} token={token}/>} />
           <Route path="/Register" element={<Register setToken={setToken} token={token} />} />
           <Route path="/Reviews" element={<Reviews token={token}/>}/>
           <Route path="/CreateReview" element={<CreateReviewForm />} />

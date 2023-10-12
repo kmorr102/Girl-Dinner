@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
 import { Link } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa' 
 
 
 
@@ -41,23 +42,26 @@ export default function Reviews({token}){
    
   
   // delete review by id function 
-  async function deleteReview (reviewId) {
+  async function deleteReview (reviewId, isAdmin) {
   
     try {
+      if ( isAdmin === 'true'){
       const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
-          'Authorixation': `Bearer ${tokenString}`
+          'Authorization': `Bearer ${tokenString}`
         }
-    });
+       });
     const resultDelete = await response.json();
     if (resultDelete) {window.location.reload()}
     alert("Review successfully deleted.");
-  } catch (error) {
+      } else {
+    alert("Permission denied. You are not authorized to delete this review."); 
+   }} catch (error) {
     console.error(error);
-  }}; 
-  
+  }} 
+
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
   : reviews;
@@ -81,6 +85,28 @@ export default function Reviews({token}){
             <h3 style={{textDecoration:"underline"}}>{review.title}</h3>
             <h4>{review.content}</h4>
             <p>Comments:{review.comment_text}</p>
+
+            <div className = "Star">
+            {/* <p> Rating: {rating} </p> */}
+              {[...Array(5)].map((star, index) => {
+                const currentRating = index + 1;
+                return(
+                  <label>
+                    <input 
+                    type="radio" 
+                    name="rating" 
+                    value={review?.currentRating}
+                    />
+                    <FaStar 
+                    size={50}
+                    color={ "#f0d32e"}
+                    />
+                  </label>
+                )
+              })}
+            </div>
+
+
             <button   onClick={() => handleDelete(review._id, review.author.username)}>
                   Delete
             </button>
