@@ -16,6 +16,9 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 
 import Typography from '@mui/material/Typography';
 
@@ -246,13 +249,16 @@ useEffect(() => {
   <IosShareIcon sx={{marginRight: "3px"}}></IosShareIcon>
      Share
 </Button>
-
-
+{/* end of button Nav Bar */}
+<CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
+<Grid container spacing={2}></Grid>
+  <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}>About The Business</Typography>
+  <Typography sx={{color:'#fff' ,fontSize: "18px"}}>{restaurant.content}</Typography>
+</CardContent>
 
 
 {restaurant && (
   <div key={restaurant.id} className="displayedRestaurant">
-    <h3>{restaurant.content}</h3>
     <p>{restaurant.address}</p>
     <p>{restaurant.number}</p>
   
