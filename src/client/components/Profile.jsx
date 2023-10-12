@@ -10,16 +10,16 @@ import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 
 
-export default function Profile({token}) {
+export default function Profile({token, currentUser, setCurrentUser}) {
   const tokenString = sessionStorage.getItem("authToken");
   console.log('token from login(storage):', tokenString)
 
   const [reviews, setReviews] = useState([]);
   /* const [error, setError] = useState(''); */
   const [searchParams,setSearchParams]= useState('');
-  const [currentUser, setCurrentUser]=useState('')
   const auth = sessionStorage.getItem('authToken');
   const [isOpen, setIsOpen] = useState(false);
+
 
  // why is 'isAuthor' not being read?
   
@@ -69,6 +69,7 @@ async function editReview (reviewId) {
 
 async function toggle(authorId) {
   setIsOpen((isOpen) => !isOpen);
+  console.log(authorId)
   try {
     const response = await fetch (`http://localhost:3000/api/reviews/${authorId}`, {
       method: "GET",
@@ -83,14 +84,15 @@ async function toggle(authorId) {
     console.error(error);
   }
 }
+console.log(currentUser, "here")
 
 return(
 <div className="profile">
 
   <div className="profile-info">
 
-        <img src={currentUser.profilePicture} alt={currentUser.name} />
-        <h2>Welcome {currentUser.name}</h2>
+        <img src={currentUser?.profilePicture} alt={currentUser?.name} />
+        <h2>Welcome {currentUser?.name}</h2>
        
   </div>
       <Stack direction="column" spacing={2}>
@@ -100,7 +102,8 @@ return(
       <div className="profile-navigation">
         <ul>
           <li>
-            <button onClick={toggle}>View Reviews</button>
+            <button onClick={() => toggle(currentUser)}>View Reviews</button>
+            <Link to="/Reviews"></Link>
           </li>
           <li>
             <Link to="/profile/edit">Edit Profile</Link>

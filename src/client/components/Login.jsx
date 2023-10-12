@@ -39,7 +39,6 @@ export default function Login(props) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError]=useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn,setIsLoggedIn]=useState(false);
   
   const Navigate= useNavigate();
@@ -73,7 +72,8 @@ export default function Login(props) {
           sessionStorage.setItem('authToken', result.token);
           console.log('authToken:', result.token);
           setIsLoggedIn(true);
-          setCurrentUser(result);
+          console.log(result)
+          props.setCurrentUser(result.userId);
           setPassword('');
           // Navigate only if login is successful
           Navigate('/');

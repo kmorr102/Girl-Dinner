@@ -144,7 +144,7 @@ export default function CreateReview(props){
                     onClick={()=> setRating(currentRating)}
                     />
                     <FaStar 
-                    size={50}
+                    size={77}
                     color={currentRating <= (hover || rating) ? "#f0d32e" : "#e4e5e9"}
                     onMouseEnter={() => setHover(currentRating)}
                     onMouseLeave={() => setHover(null)}
