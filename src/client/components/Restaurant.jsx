@@ -273,24 +273,33 @@ useEffect(() => {
 
   <ListItem alignItems="flex-start">
   <ListItemAvatar>
-       <Avatar alt={faker.name.findName()} src={faker.image.avatar()} /> 
+       {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
       {/* <Avatar src="/broken-image.jpg" /> */}
+      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
   </ListItemAvatar>
-            <ListItemText key={review.id}
+            <ListItemText key={review.id} sx={{
+              background: 'rgba(120,81,169,.15)',
+              borderRadius:'10px',
+              padding: '20px', 
+              width: '100%' }}
+              
               primary={review.title}
-              sx={{fontWeight:'bolder',background: 'rgba(120,81,169,.15)',borderRadius:'10px', padding: '20px', width: '100%' }}
+
               secondary={
               <Typography sx={{ display: 'block' }}
               component="span"
               variant="body2"
-              color="text.primary">{review.content}</Typography> 
+              color="text.primary"> 
+              {review.content}
+              <br />
+              <Divider component="li" sx={{borderWidth: '1px', borderColor:'black'}} />
+              <ListItemAvatar>
+                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" /> {review.comment_text}
+              </ListItemAvatar>
+              
+            </Typography>
               }
             />
-            <Divider variant="middle" />
-            <Typography sx={{ display:"block" }}
-              component="span"
-              variant="body2"
-              color="text.primary">{review.comment_text}</Typography>
             
     </ListItem>        
   </List>
