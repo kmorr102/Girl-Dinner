@@ -67,6 +67,7 @@ usersRouter.post("/login", async (req, res, next) => {
           username,
           userId: user.id,
           
+          
         },
         `${process.env.JWT_SECRET}`,
         {
@@ -78,6 +79,7 @@ usersRouter.post("/login", async (req, res, next) => {
         message: "Login successful!",
         token,
         userId: user.id ,
+        name: user.name,
       });
     } else {
       next({
