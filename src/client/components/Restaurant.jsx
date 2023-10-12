@@ -4,12 +4,25 @@ import { fetchAllRestaurants } from "../API";
 import { fetchAllReviews } from "../API";
 //import { getRestaurantById } from "../../server/db/restaurants";
 
-
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import PropTypes from 'prop-types';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';  
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+
+import Typography from '@mui/material/Typography';
+
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import InputAdornment from '@mui/material/InputAdornment';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 
@@ -19,7 +32,7 @@ const tokenString = sessionStorage.getItem("authToken");
 
 export default function Restaurant() {
   const [restaurant, setRestaurant] = useState([]);
-  const [review, setReview]=useState([]);
+  //const [review, setReview]=useState([]);
   const [reviews, setReviews] = useState([]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -40,9 +53,9 @@ export default function Restaurant() {
     const response= await fetch(`http://localhost:3000/api/restaurants/${restaurantid}`);
     if(response){
       const data= await response.json();
-      console.log('id:',data.id)
+      console.log('restaurant id:',data.id)
       setRestaurant(data)
-      console.log( 'data:', data)
+      console.log( 'Restaurant:', data)
     }else{
       setError(response)
       console.log('error:', error)
@@ -53,8 +66,8 @@ getRestaurantById();
 }, [restaurantid])
 
 useEffect(() => {
-  // Fetch reviews for the restaurant by its ID
-  fetch(`/api/reviews?restaurantId=${restaurant.id}`)
+  // Fetch reviews for the restaurant by its restaurant_id
+  fetch(`/api/reviews?restaurant_id=${reviews.restaurant_id}`)
     .then((response) => response.json())
     .then((data) => {
       setReviews(data);
@@ -62,12 +75,13 @@ useEffect(() => {
     .catch((error) => console.error('Error fetching reviews:', error));
 }, [restaurant]);
 
+
   useEffect (() => {
     async function getAllReviews() {
         const response = await fetchAllReviews('http://localhost:3000/api/reviews'); 
         if(response) {
-          console.log("response:",response)
-          setReview(response);
+          //console.log("All reviews:",response)
+          setReviews(response);
         }else{
           setError(response);
         }
@@ -77,40 +91,54 @@ useEffect(() => {
 
 
 
-  let reviewId= window.location.href.split("/").pop()
+  //  let reviewId= window.location.href.split("/").pop()
   
   
-  useEffect(() => {
-    async function getReviewById() {
-      try {
-        const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
-        console.log('API Response:', response); // Log the full response
+  //  useEffect(() => {
+  //    async function getReviewById() {
+  //      try {
+  //        const response = await fetch(`http://localhost:3000/api/reviews/${restaurantId}`);
+       
   
-        if (!response.ok) {
-          //throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
-      }
+  //        if (!response.ok) {
+  //          throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
+  //      }
   
-        const data = await response.json();
-        console.log('Review data:', data);
-        setReview(data);
-      } catch (error) {
-        console.error('Error occurred:', error);
-        setError(error.message);
-      }
-    }
+  //        const data = await response.json();
+  //       console.log('ReviewbyId:', data);
+  //       setReview(data);
+  //      } catch (error) {
+  //        console.error('Error occurred:', error);
+  //        setError(error.message);
+  //      }
+  //    }
   
-    getReviewById();
-  }, [])
+  //    getReviewById();
+  //  }, [])
 
-
-  function MainFeaturedRestaurant(props) {
-    const { restaurant } = props;
   
-
+  
+  
+ function SimpleContainer() {
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <Container maxWidth="sm">
+          <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+        </Container>
+      </React.Fragment>
+    );
   }
+  
+
+
+ 
+  
   return (
 <div className="restaurant">
-    <Paper
+<CssBaseline />
+{/* {Restaurnt Image Header Start} */}
+<Paper
     sx={{
       position: 'relative',
       backgroundColor: 'grey.800',
@@ -121,11 +149,20 @@ useEffect(() => {
       backgroundPosition: 'center',
       backgroundImage: `url(${restaurant.img})`,
     }}
-    >
-
-    {/* Increase the priority of the hero background image */}
-    {<img style={{ display: 'none' }} src={restaurant.img} alt={restaurant.name} />} 
-  <Box
+    />
+<Paper
+    sx={{
+      position: 'relative',
+      backgroundColor: 'grey.800',
+      color: 'white',
+      mb: 4,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundImage: `url(${restaurant.img})`,
+    }}
+  >
+<Box
   sx={{
     width: '100%', 
     height: '100%',
@@ -137,63 +174,104 @@ useEffect(() => {
     left: 0,
     backgroundColor: 'rgba(0,0,0,.5)',
   }}
-/>
-  
+  />
 <Grid container>
-  <Grid item md={6}>
-    <Box
+  <Box
       sx={{
         position: 'relative',
         p: { xs: 3, md: 6},
         pr: { md: 0 },
       }}
     >
-      <Typography component="h1" variant="h3" color="inherit" gutterBottom>
+  <Typography component="h1" variant="h3" color="inherit" gutterBottom>
         {restaurant.name}
-      </Typography>
+  </Typography>
       <Rating name="read-only" value={4} readOnly style={{ marginLeft: '8px', fontSize: '24px' }} />
-
-    </Box>
-  </Grid>
-</Grid>
+  </Box>
+</Grid> 
+</Paper>
+{/* {Restaurnt Image Header End} */}
+{/* Button Nav Bar */}
 <Button
      sx={{
      maxWidth: '100%',
      maxHeight: '100%',
+     marginRight: '14px',
      width: 'auto',
      height: 'auto',
      objectFit: 'cover',
-     color: 'white',
-     background:'red',
-     border: '1.5px solid dark red',
+     color: '#7851A9',
+     background:' #fff',
+     border: '1.5px solid #7851A9',
      borderRadius: '4px'
       }}
      variant = "text"
      component={Link} to={'/CreateReview'}>
-      Write a Review
+  <RateReviewIcon sx={{marginRight: "4px"}}></RateReviewIcon>
+     Write a Review
 </Button>
-</Paper>
+<Button
+     sx={{
+     maxWidth: '100%',
+     maxHeight: '100%',
+     marginRight: '14px',
+     width: 'auto',
+     height: 'auto',
+     objectFit: 'cover',
+     color: '#7851A9',
+     background:' #fff',
+     border: '1.5px solid #7851A9',
+     borderRadius: '4px'
+      }}
+     variant = "text"
+     component={Link} to={'/CreateReview'}>
+  <PhotoCameraIcon sx={{marginRight: "3px"}}></PhotoCameraIcon>
+      Add Photo
+</Button>
+<Button
+     sx={{
+     maxWidth: '100%',
+     maxHeight: '100%',
+     marginRight: '14px',
+     width: 'auto',
+     height: 'auto',
+     objectFit: 'cover',
+     color: '#7851A9',
+     background:' #fff',
+     border: '1.5px solid #7851A9',
+     borderRadius: '4px'
+      }}
+     variant = "text"
+     component={Link} to={'/CreateReview'}>
+  <IosShareIcon sx={{marginRight: "3px"}}></IosShareIcon>
+     Share
+</Button>
 
- {restaurant && (
-       <div key={restaurant.id} className="displayedRestaurant">
-               <h3>{restaurant.content}</h3>
-               <p>{restaurant.address}</p>
-               <p>{restaurant.number}</p>
-            {/* {review ?.map((review)=>(
-          <div key={review.restaurantid}>
-         <p>Top Reviews: {review.title}</p>
-           <p>{review.content}</p>
-           <p>Comments:{review.comment_text}</p>
-           </div>
-         ))}   */}
+
+
+
+{restaurant && (
+  <div key={restaurant.id} className="displayedRestaurant">
+    <h3>{restaurant.content}</h3>
+    <p>{restaurant.address}</p>
+    <p>{restaurant.number}</p>
+  
+    {Array.isArray(reviews.reviews) &&
+      reviews.reviews
+        .filter((review) => review.restaurant_id === restaurant.id)
+        .map((review) => (
           <div key={review.id}>
-         <p>{review.title}</p>
-         <p>{review.content}</p>
-          
-           </div>
-    </div>  
-     )}
+            <p> {review.title}</p>
+            <p>{review.content}</p>
+            <p>Comments: {review.comment_text}</p>
+          </div>
+        ))}
+        
+  </div>
+)}
 
-  </div>   
+
+  
+</div>   
    ) };
   

@@ -350,6 +350,7 @@ async function getAllReviews() {
       SELECT
         reviews.id AS id,
         reviews."authorId" AS author_id,
+        reviews."restaurantId" AS restaurant_id,
         reviews.title AS title,
         reviews.content AS content,
         comments.id AS comment_id,

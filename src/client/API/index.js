@@ -10,7 +10,7 @@ export async function fetchAllReviews() {
       },*/
     });
         const result= await response.json();
-        console.log('Fetched all reviews:', result.reviews);
+       // console.log('Fetched all reviews:', result.reviews);
         return result.reviews;
     } catch (error) {
       console.log('Error: Unable to fetch all reviews');
