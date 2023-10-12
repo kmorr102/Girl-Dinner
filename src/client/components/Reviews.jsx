@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa' 
 
 import { Link , useParams} from 'react-router-dom';

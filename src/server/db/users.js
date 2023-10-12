@@ -54,7 +54,7 @@ const getUser = async({username, password}) => {
         //console.log('Do Passwords Match?', passwordsMatch);
         
         //if password stays the same and is not hashed, server will delete password and not send to db
-        if (passwordsMatch) return;
+        if (passwordsMatch) return user;
         //another area that keeps breaking
         delete user.password;
         //console.log('user from getUser:',user)
