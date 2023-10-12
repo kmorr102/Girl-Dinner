@@ -64,7 +64,7 @@ CREATE TABLE users (
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
   "authorId" INTEGER REFERENCES users(id),
-  restaurant_id INTEGER REFERENCES restaurants(id),
+  "restaurantId" INTEGER REFERENCES restaurants(id),
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL 
 );

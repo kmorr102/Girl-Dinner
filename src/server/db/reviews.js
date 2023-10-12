@@ -412,7 +412,7 @@ async function getReviewById(reviewId) {
 
 async function createReview(reviewData) {
   try {
-    const { authorId, title, content, comments=[] } = reviewData;
+    const { authorId, restaurantId, title, content, comments=[] } = reviewData;
   
     console.log('Author ID:', authorId);
     console.log('Title:', title);
@@ -422,9 +422,9 @@ async function createReview(reviewData) {
   const { rows: [existingReview] } = await db.query(
     `
     SELECT * FROM reviews
-    WHERE "authorId" = $1 AND title = $2 AND content = $3;
+    WHERE "authorId" = $1 AND title = $2 AND content = $3 AND "restaurantId"= $4;
     `,
-    [authorId, title, content]
+    [authorId,title, content, restaurantId]
   );
   if (existingReview) {
     // An existing review was found, you can choose to update it here
@@ -434,11 +434,11 @@ async function createReview(reviewData) {
     // No existing review found, create a new one
     const { rows: [review] } = await db.query(
       `
-      INSERT INTO reviews ("authorId", title, content)
-      VALUES ($1, $2, $3)
+      INSERT INTO reviews ("authorId", title, content, "restaurantId")
+      VALUES ($1, $2, $3, $4)
       RETURNING *;
       `,
-      [authorId, title, content]
+      [authorId, title, content, restaurantId]
     );
     const commentList = await createComments(comments);
     return await addCommentsToReview(review.id, commentList);

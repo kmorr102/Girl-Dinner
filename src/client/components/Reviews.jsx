@@ -3,6 +3,9 @@ import { fetchAllReviews } from '../API';
 import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa' 
 
+import { Link , useParams} from 'react-router-dom';
+
+
 
 
 export default function Reviews({token}){
@@ -33,6 +36,29 @@ export default function Reviews({token}){
       getAllReviews();
     }, []);
         
+    const { reviewId }= useParams();
+
+    useEffect(() => {
+      async function getReviewById() {
+        try {
+          const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
+          console.log('API Response:', response); // Log the full response
+    
+          //if (!response.ok) {
+            //throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
+          //}
+    
+          const data = await response.json();
+          console.log('Review data:', data.reviewid.id);
+          setReview(data);
+        } catch (error) {
+          console.error('Error occurred:', error);
+          setError(error.message);
+        }
+      }
+    
+      getReviewById();
+    }, []);
     // why is 'isAuthor' not being read?
     
    /* isAuthor = (review) => {
