@@ -296,6 +296,41 @@ async function createInitialReviews() {
         content:"They have the best ice in town! If you know, you know.",
         comments:["Ashley our server was great!"]
       },
+      {
+        authorId: users[1].id,
+        restaurantId: 2,
+        title:"Best Pasta in Town!",
+        content:"I had the best pasta dish at the pizzeria. It was rich, flavorful, and served with a smile. I'll be back for more!",
+        comments:["We're glad you had a good experience and value your review. -Pizzeria Staff"]
+      },
+      {
+        authorId: users[0].id,
+        restaurantId: 3,
+        title:"So many flavors!",
+        content:"They have the best ice in town! If you know, you know.",
+        comments:["Ashley our server was great!"]
+      },
+      {
+        authorId: users[3].id,
+        restaurantId: 1,
+        title:"So many flavors!",
+        content:"This place is a seafood lover's dream. The freshness and flavors of the dishes are unmatched. I'll be back for the lobster!",
+        comments:["Great place for a family dinner or datenight"]
+      },
+      {
+        authorId: users[2].id,
+        restaurantId: 5,
+        title: "Hats off to the chef",
+        content:"I have a sweet tooth, and cozy coffee always satisfies my cravings. Their pastries are like a slice of heaven.",
+        comments:["Love their decor!"]
+      },
+      {
+        authorId: users[3].id,
+        restaurantId:9,
+        title: "Hats off to the chef",
+        content:"This place really knows how to bring the heat. The spicy dishes here are not for the faint of heart. I loved every bite!",
+        comments:[ "You have to try their happy hour, they have drinks for cheap"]
+      },
     ];
     
     for (const reviewData of reviewDataArray) {
