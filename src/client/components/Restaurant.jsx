@@ -14,6 +14,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
@@ -28,7 +29,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-
+import faker from 'faker';
 
 
 const tokenString = sessionStorage.getItem("authToken");
@@ -122,16 +123,7 @@ useEffect(() => {
   
   
   
- function SimpleContainer() {
-    return (
-      <React.Fragment>
-        <CssBaseline />
-        <Container maxWidth="sm">
-          <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
-        </Container>
-      </React.Fragment>
-    );
-  }
+
   
 
 
@@ -277,27 +269,36 @@ useEffect(() => {
           reviews.reviews
           .filter((review) => review.restaurant_id === restaurant.id)
           .map((review) => (
-<List sx={ {width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+<List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
 
   <ListItem alignItems="flex-start">
   <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> 
+       <Avatar alt={faker.name.findName()} src={faker.image.avatar()} /> 
+      {/* <Avatar src="/broken-image.jpg" /> */}
   </ListItemAvatar>
-            <ListItemText 
+            <ListItemText key={review.id}
               primary={review.title}
+              sx={{fontWeight:'bolder',background: 'rgba(120,81,169,.15)',borderRadius:'10px', padding: '20px', width: '100%' }}
               secondary={
-              <Typography sx={{ display: 'inline' }}
+              <Typography sx={{ display: 'block' }}
               component="span"
               variant="body2"
               color="text.primary">{review.content}</Typography> 
               }
             />
-
-    </ListItem>
+            <Divider variant="middle" />
+            <Typography sx={{ display:"block" }}
+              component="span"
+              variant="body2"
+              color="text.primary">{review.comment_text}</Typography>
             
+    </ListItem>        
   </List>
 ))}
 {/* end of reviews */}
+
+
+
 </div>   
    ) };
   
