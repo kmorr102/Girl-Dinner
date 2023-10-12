@@ -101,8 +101,8 @@
           const response = await fetch('http://localhost:3000/api/users');
           if (response.ok) {
             const data = await response.json();
-            console.log('Users:', data.users); // Log user data to the console
-            setUsers(data.users); // Assuming the user data is stored in data.users
+            console.log('Users:', data.users); 
+            setUsers(data.users); 
           } else {
             setError(response);
           }
@@ -115,13 +115,7 @@
       getAllUsers();
     }, []);
     // console.log("UserId:", users)
-    useEffect(() => {
-      if (users.length > 0) {
-        const ids = users.map((user) => user.id);
-        setUserIds(ids);
-        console.log('User IDs:', ids);
-      }
-    }, [users]);
+    
 
     
     //  let reviewId= window.location.href.split("/").pop()
@@ -154,9 +148,6 @@
     
 
     
-
-
-  
     
     return (
   <div className="restaurant" key={restaurant.name}>
@@ -313,17 +304,15 @@
   Array.isArray(users) && 
   reviews.reviews
     .filter((review) => {
-      //console.log('Review:', review);
-      //console.log('Author ID:', review.author_id);
-      //console.log('Filtered:', review.restaurant_id === restaurant.id);http://localhost:3000/CreateReview
       return review.restaurant_id === restaurant.id;
     })
     .map((review) => {
-      if (Array.isArray(users) && users.length > 0) {
+      if (Array.isArray(users)) {
         const user = users.find((user) => user.id === review.author_id);
-        console.log("UserId:", user)
+        
         if (user) {
-      
+          console.log("User ID:", user.id);
+          console.log("User Name:", user.name);
           return (
 
   <List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
@@ -332,8 +321,9 @@
     <ListItemAvatar>
         {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
         {/* <Avatar src="/broken-image.jpg" /> */}
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-        <Rating name="read-only" value={5} readOnly style={{ marginLeft: '8px', fontSize: '24px' }} />
+        <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
+        {user.username}
+        <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
     </ListItemAvatar>
               <ListItemText key={review.id} sx={{
                 background: 'rgba(120,81,169,.15)',
@@ -352,7 +342,7 @@
                 <br />
                 <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
                 <ListItemAvatar>
-                  <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" /> 
+                  <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
                   {review.comment_text}
                 </ListItemAvatar>
                 
