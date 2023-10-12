@@ -4,7 +4,6 @@ import { IoApertureSharp } from 'react-icons/io5';
 import { useNavigate, Link } from 'react-router-dom';
 
 
-
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
@@ -19,6 +18,7 @@ export default function Profile({token, currentUser, setCurrentUser}) {
   const [searchParams,setSearchParams]= useState('');
   const auth = sessionStorage.getItem('authToken');
   const [isOpen, setIsOpen] = useState(false);
+  const [apiResult, setApiResult] = useState(null);
 
 
  // why is 'isAuthor' not being read?
@@ -79,12 +79,17 @@ async function toggle(authorId) {
       }
     });
     const result = await response.json();
+    setApiResult(result);
     console.log(result)
   } catch (error) {
     console.error(error);
   }
 }
 console.log(currentUser, "here")
+
+const reviewToDisplay= searchParams
+? reviews.filter(review=>review.title.toLowerCase().includes(searchParams.toLowerCase()))
+: reviews;
 
 return(
 <div className="profile">
@@ -111,7 +116,15 @@ return(
           {/* Add more profile actions here */}
         </ul>
       </div>
-
+      {isOpen ? (
+      <div>
+        {apiResult && (<div>
+          <h2>{apiResult.title}</h2>
+          <p>{apiResult.content}</p>
+        </div>
+        )}
+      </div>
+    ) : null}
 
       
     </div>
