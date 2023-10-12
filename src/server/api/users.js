@@ -20,7 +20,18 @@ usersRouter.get("/",async (req, res, next) => {
     next({ name, message });
   }
 });
-
+usersRouter.get("/:id"), async (req, res, next) =>{
+  try {
+    const userId= req.params.userId
+    const user = await getUserById(userId);
+    res.send({
+      user,
+    });
+  } catch ({name,message}) {
+    next({name,message})
+    
+  }
+}
 
 
 

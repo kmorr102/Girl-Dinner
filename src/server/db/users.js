@@ -117,32 +117,31 @@ const getUserByEmail = async(email) => {
         throw err;
     }
 }
-async function getUserById(userId) {
-    try {
-      const { rows: [ user ] } = await client.query(`
-        SELECT id, name,username, email, password
-        FROM users
-        WHERE id=${ userId }
-      `);
+// async function getUserById(Id) {
+//     try {
+//       const { rows:  [user]  } = db.query(`
+//         SELECT *
+//         FROM users
+//         WHERE id = $1`, [Id]);
   
-      if (!user) {
-        throw {
-          name: "UserNotFoundError",
-          message: "A user with that id does not exist"
-        }
-      }
+//       if (!user) {
+//         throw {
+//           name: "UserNotFoundError",
+//           message: "A user with that id does not exist"
+//         }
+//       }
   
-      user.posts = await getReviewByUser(userId);
+//       user.posts = await getReviewByUser(Id);
   
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
+//       return user;
+//     } catch (error) {
+//       throw error;
+//     }
+//   }
 async function getAllUsers() {
     try{
         const {rows}= await db.query(`
-        SELECT id,name,username,email,password,isAdmin FROM users`);
+        SELECT * FROM users`);
 
         return rows;
     }catch(error){
@@ -155,7 +154,7 @@ module.exports = {
     getUser,
     getUserByEmail,
     getAllUsers,
-    getUserById,
+    //getUserById,
     getUserByUsername,
     getUserIdByUsername
     

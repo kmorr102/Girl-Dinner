@@ -1,7 +1,8 @@
 const db = require('./client');
 const { 
   createUser,
-  getAllUsers
+  getAllUsers,
+  //getUserById
 } = require('./users');
 const { 
   getAllReviews, 
@@ -424,6 +425,10 @@ const seedDatabase = async () => {
         const _users = await getAllUsers();
         console.log("Result:", _users);
     
+
+        // console.log ('Calling User by Id')
+        // const user= await getUserById();
+        // console.log("Result:", user)
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();
         console.log("Result:", reviews);
