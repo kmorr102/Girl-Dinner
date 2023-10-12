@@ -31,7 +31,7 @@ const location = useLocation();
     setIsLoggedIn(false);
   }
  })
-console.log(currentUser)
+//console.log(currentUser)
 
   return (
     

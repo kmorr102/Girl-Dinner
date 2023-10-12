@@ -26,11 +26,15 @@ export default function Profile({token, currentUser, setCurrentUser}) {
  const isAuthor = (review) => {
     return review.authorId === authUserId && !authUserId;
 };
+let reviewId= window.location.href.split("/").pop()
+//console.log('id:', window.location.href.split("/").pop())
+
 
 
 // delete review by id function 
 async function deleteReview (reviewId) {
   
+
   try {
     const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
       method: "DELETE",
