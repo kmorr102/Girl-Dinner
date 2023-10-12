@@ -194,6 +194,7 @@ useEffect(() => {
 </Grid> 
 </Paper>
 {/* {Restaurnt Image Header End} */}
+
 {/* Button Nav Bar */}
 <Button
      sx={{
@@ -250,34 +251,53 @@ useEffect(() => {
      Share
 </Button>
 {/* end of button Nav Bar */}
+
+{/* Start of restaurant discription */}
 <CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
 <Grid container spacing={2}></Grid>
   <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}>About The Business</Typography>
   <Typography sx={{color:'#fff' ,fontSize: "18px"}}>{restaurant.content}</Typography>
 </CardContent>
+{/* End of restaurant discription */}
 
 
-{restaurant && (
+
+{/* {restaurant && (
   <div key={restaurant.id} className="displayedRestaurant">
-    <p>{restaurant.address}</p>
-    <p>{restaurant.number}</p>
-  
-    {Array.isArray(reviews.reviews) &&
-      reviews.reviews
-        .filter((review) => review.restaurant_id === restaurant.id)
-        .map((review) => (
-          <div key={review.id}>
-            <p> {review.title}</p>
-            <p>{review.content}</p>
-            <p>Comments: {review.comment_text}</p>
-          </div>
-        ))}
-        
-  </div>
-)}
+     <p>{restaurant.address}</p>
+     <p>{restaurant.number}</p>
+} */}
 
+{/* Start of restaurant reviews */}
+<Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
+      Top Reviews
+    </Typography>
 
-  
+{Array.isArray(reviews.reviews) &&
+          reviews.reviews
+          .filter((review) => review.restaurant_id === restaurant.id)
+          .map((review) => (
+<List sx={ {width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+
+  <ListItem alignItems="flex-start">
+  <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> 
+  </ListItemAvatar>
+            <ListItemText 
+              primary={review.title}
+              secondary={
+              <Typography sx={{ display: 'inline' }}
+              component="span"
+              variant="body2"
+              color="text.primary">{review.content}</Typography> 
+              }
+            />
+
+    </ListItem>
+            
+  </List>
+))}
+{/* end of reviews */}
 </div>   
    ) };
   
