@@ -87,6 +87,9 @@ async function toggle(authorId) {
 }
 console.log(currentUser, "here")
 
+const reviewToDisplay= searchParams
+  ? apiResult.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
+  : apiResult;
 
 return(
 <div className="profile">
@@ -115,9 +118,12 @@ return(
       </div>
       {isOpen ? (
       <div>
-        {apiResult && (<div>
+        {apiResult && (
+        <div>
           <h2>{apiResult.title}</h2>
           <p>{apiResult.content}</p>
+          <button onClick={() => editReview()}>Edit Review</button>
+          <button onClick={() => deleteReview()}>Delete</button>
         </div>
         )}
       </div>
