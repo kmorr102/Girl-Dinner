@@ -1,6 +1,4 @@
 import { useParams,Link,useNavigate } from "react-router-dom";
-
-// Importing MUI components
 import React, { useEffect, useState } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -8,7 +6,6 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Typography from '@mui/material/Typography';
 import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-import { Card, CardMedia } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -20,6 +17,10 @@ export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+
+
   const Navigate= useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function Home() {
       .then((response) => response.json())
       .then((data) => {
         setRestaurants(data.restaurants);
+        setFilteredRestaurants(data.restaurants);
         setLoading(false);
       })
       .catch((error) => console.error('Error fetching data:', error));
@@ -37,21 +39,33 @@ export default function Home() {
     setDialogOpen(true);
   };
 
+  // search bar 
+  const filterRestaurants = () => {
+    if (!searchQuery) {
+      setFilteredRestaurants(restaurants);
+    } else {
+      const filtered = restaurants.filter((restaurant) => {
+        return restaurant.name.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+      setFilteredRestaurants(filtered);
+    }
+  };
+  
 
   return (
-
    <div className='home'>
 
 <Box
     sx={{
-      width: '100%',
-      height: '40vh', // Set the height to 100vh for viewport height
+      width: '100vw',
+      height: '40vh', 
       textAlign: 'center',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      position: 'relative'
+      position: 'relative',
+      objectFit: 'cover'
     }}
   >
     <img
@@ -65,9 +79,13 @@ export default function Home() {
       left: '50%',
       transform: 'translate(-50%, -50%)',
       color: 'white',
+      fontFamily: 'DM Serif Display',
+      fontSize: '70px',
+      letterSpacing: '10px'
     }}>
       Girl Dinner
     </Typography>
+
     <TextField
     variant="outlined"
     color="secondary"
@@ -80,7 +98,16 @@ export default function Home() {
       borderRadius: '10px',
       backgroundColor: 'white',
     }}
-    onChange={(e) => setSearchParams(e.target.value)}
+    // search bar for restaurants
+          onChange={(e) => {
+            const query = e.target.value.toLowerCase();
+            setSearchQuery(query);
+            const filtered = restaurants.filter((restaurant) => {
+              return restaurant.name.toLowerCase().includes(query);
+            });
+            setFilteredRestaurants(filtered); 
+          }}
+
     placeholder="Search Restaurants"
     InputProps={{
       startAdornment: (
@@ -92,16 +119,16 @@ export default function Home() {
   />
   </Box>
 
-      <ImageList sx={{ width: '100%', height: '100vh' }} rowHeight={290}>
-        <ImageListItem key="Subheader" cols={3}>
-          <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
-            Restaurants
-          </Typography>
-        </ImageListItem>
+      <Typography variant="h1" component="div" style={{ margin: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center', fontFamily: 'Merriweather' }}>
+        Restaurants
+      </Typography>
+
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <ImageList sx={{ width: '80%', height: '100vh' }} rowHeight={290} cols={3}>
         {loading ? (
           <Typography>Loading...</Typography>
         ) : (
-          restaurants.map((restaurant) => (
+            filteredRestaurants.map((restaurant) => (
             <ImageListItem key={restaurant.id}>
              <img
                 src={restaurant.img}
@@ -151,6 +178,7 @@ export default function Home() {
           ))
         )}
       </ImageList>
+    </div>
     </div>
   );
 }
