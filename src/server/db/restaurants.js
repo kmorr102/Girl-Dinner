@@ -1,15 +1,15 @@
 const db = require('./client');
 
 
-const createRestaurant = async (name, address, img, number, content) => {
+const createRestaurant = async (name, address, img, number, content, type) => {
     try {
       const query = {
         text: `
-          INSERT INTO restaurants (name, address, img, number, content)
-          VALUES ($1, $2, $3, $4, $5)
+          INSERT INTO restaurants (name, address, img, number, content, type)
+          VALUES ($1, $2, $3, $4, $5, $6)
           RETURNING *
         `,
-        values: [name, address, img, number, content],
+        values: [name, address, img, number, content, type],
       };
   
       const result = await db.query(query);
@@ -29,6 +29,7 @@ SELECT
     restaurants.img AS img,
     restaurants.number AS number,
     restaurants.content AS content,
+    restaurants.type AS type,
     reviews.id AS reviewId,
     reviews.content AS review_text
 FROM

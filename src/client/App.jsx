@@ -9,11 +9,48 @@ import CreateReviewForm from './components/CreateReviewForm'
 import Logout from './components/Logout';
 import Restaurant from './components/Restaurant';
 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
-import Avatar from '@mui/material/Avatar';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+function AccountMenu() {
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <AccountCircleIcon
+        className="account-icon"
+        aria-controls="account-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        style={{ cursor: 'pointer', fontSize: '2.5rem', color: '#7851A9' }} 
+      >
+      </AccountCircleIcon>
+      <Menu
+        id="account-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem component={Link} to="/Profile" onClick={handleClose}>
+          Profile
+        </MenuItem>
+        <MenuItem component={Link} to="/Logout" onClick={handleClose}>
+          Log Out
+        </MenuItem>
+      </Menu>
+    </div>
+  );
+}
 
 function App() {
 const[token,setToken]=useState(sessionStorage.getItem('authToken'));
@@ -40,16 +77,16 @@ const location = useLocation();
           <Link to="/">Home</Link>
           <Link to="/Reviews">Reviews</Link>
           <Link to="/CreateReview">Create Review</Link>
-          <Link to="/Profile">Profile</Link>
+          <AccountMenu />
           {location.pathname !== '/Login' && (
           <Link to="/Login" className="navbar-button">Log in</Link>
           )}
           {location.pathname !== '/Register' && (
           <Link to="/Register" className="navbar-button">Sign Up</Link>
           )}
-          {location.pathname !== '/Logout' && (
+          {/* {location.pathname !== '/Logout' && (
         <Link to="/Logout" className="navbar-button">Log Out</Link>
-          )}
+          )} */}
     </div>
       
       <div id="main-section">
