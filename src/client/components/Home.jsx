@@ -45,7 +45,8 @@ export default function Home() {
       setFilteredRestaurants(restaurants);
     } else {
       const filtered = restaurants.filter((restaurant) => {
-        return restaurant.name.toLowerCase().includes(searchQuery.toLowerCase());
+        return restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        restaurant.type.toLowerCase().includes(searchQuery.toLowerCase())
       });
       setFilteredRestaurants(filtered);
     }
@@ -103,7 +104,8 @@ export default function Home() {
             const query = e.target.value.toLowerCase();
             setSearchQuery(query);
             const filtered = restaurants.filter((restaurant) => {
-              return restaurant.name.toLowerCase().includes(query);
+              return restaurant.name.toLowerCase().includes(query) ||
+              restaurant.type.toLowerCase().includes(query)
             });
             setFilteredRestaurants(filtered); 
           }}

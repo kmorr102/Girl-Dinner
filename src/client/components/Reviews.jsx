@@ -110,7 +110,7 @@ export default function Reviews({token}){
           <div key={review.id} className='displayedReviews'>
             <h3 style={{textDecoration:"underline"}}>{review.title}</h3>
             <h4>{review.content}</h4>
-            <p>Comments:{review.comment_text}</p>
+            <p>Comments: {review.comment_text}</p>
 
             <div className = "Star">
             {/* <p> Rating: {rating} </p> */}
@@ -133,14 +133,12 @@ export default function Reviews({token}){
             </div>
 
 
-            <button   onClick={() => deleteReview(review._id, /*userId*/)}>
-                  Delete
-            </button>
             <button>
                   Comment
             </button>{" "}
-            <button>
-                  Place Holder Button
+
+            <button   onClick={() => deleteReview(review._id, /*userId*/)}>
+                  Delete
             </button>
            </div>
         ))}
