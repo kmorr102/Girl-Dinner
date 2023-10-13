@@ -11,7 +11,7 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 
 export default function Profile({token, currentUser, setCurrentUser}) {
   const tokenString = sessionStorage.getItem("authToken");
-  console.log(tokenString)
+  // console.log(tokenString)
 
   const [reviews, setReviews] = useState([]);
   /* const [error, setError] = useState(''); */
@@ -88,7 +88,7 @@ async function toggle() {
 
 //filter by authorId
 if (Array.isArray(result.reviews)) {
-    const filteredResults = result.reviews.filter(reviews => reviews.author_id === currentUser)
+    const filteredResults = result.reviews.filter(reviews => reviews.author_id === currentUser.userId)
     setApiResult(filteredResults);
     console.log(filteredResults, "this is the result",)
 
@@ -100,15 +100,14 @@ if (Array.isArray(result.reviews)) {
     console.error(error);
   }
 }
-console.log("This is the currentUser ID: ", currentUser)
+console.log(currentUser.userId, currentUser.name)
 
 return(
 <div className="profile">
 
   <div className="profile-info">
 
-        <img src={currentUser?.profilePicture} alt={currentUser?.name} />
-        <h2>Welcome {currentUser?.name}</h2>
+        <h2>Welcome {currentUser.name}</h2>
        
   </div>
       <Stack direction="column" spacing={2}>
@@ -119,7 +118,6 @@ return(
         <ul>
           <li>
             <button onClick={() => toggle(currentUser)}>View Reviews</button>
-            <Link to="/Reviews"></Link>
           </li>
           <li>
             <Link to="/profile/edit">Edit Profile</Link>

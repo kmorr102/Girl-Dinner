@@ -73,7 +73,7 @@ export default function Login(props) {
           console.log('authToken:', result.token);
           setIsLoggedIn(true);
           console.log(result)
-          props.setCurrentUser(result.userId);
+          props.setCurrentUser(result);
           setPassword('');
           // Navigate only if login is successful
           Navigate('/');
