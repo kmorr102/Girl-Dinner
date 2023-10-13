@@ -68,10 +68,9 @@ export default function Reviews({token}){
    
   
   // delete review by id function 
-  async function deleteReview (reviewId, isAdmin) {
+  async function deleteReview (reviewId) {
   
     try {
-      if ( isAdmin === 'true'){
       const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
         method: "DELETE",
         headers: {
@@ -82,11 +81,12 @@ export default function Reviews({token}){
     const resultDelete = await response.json();
     if (resultDelete) {window.location.reload()}
     alert("Review successfully deleted.");
-      } else {
-    alert("Permission denied. You are not authorized to delete this review."); 
-   }} catch (error) {
+      /* else {
+    alert("Permission denied. You are not authorized to delete this review."); */
+   } catch (error) {
     console.error(error);
-  }} 
+}} 
+
 
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
@@ -133,7 +133,7 @@ export default function Reviews({token}){
             </div>
 
 
-            <button   onClick={() => handleDelete(review._id, review.author.username)}>
+            <button   onClick={() => deleteReview(review._id, /*userId*/)}>
                   Delete
             </button>
             <button>
