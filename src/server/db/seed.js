@@ -309,7 +309,7 @@ async function createInitialReviews() {
         restaurantId: 2,
         title:"So many flavors!",
         content:"They have the best ice in town! If you know, you know.",
-        comments:["Ashley our server was great!"]
+        comments:["Great family place"]
       },
       {
         authorId: users[3].id,

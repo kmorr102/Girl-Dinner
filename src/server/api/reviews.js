@@ -132,10 +132,13 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   
   try {
     const newComment = await createComment({reviewId,comment});
+    console.log("reviewId:", reviewId)
+    console.log("commentId:", comment)
 
   if (newComment) {
       // If the comment is created successfully, send it as the response
       res.send(newComment);
+      console.log('newComment:', newComment)
     } else {
       // If there's an error during comment creation, send an error response
       next({
@@ -145,6 +148,7 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
     }
   } catch ({ name, message }) {
     // Handle any errors that might occur during the process
+    console.log('error from api side:')
     next({ name, message });
   }
 });  
