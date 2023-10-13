@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import { fetchNewUser } from "../API/index.js";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CreateIcon from '@mui/icons-material/Create';
-import Link from '@mui/material/Link';
 
 function Copyright(props) {
   return (
@@ -231,8 +230,8 @@ export default function Register({ inputType, onSetInputType,setToken}) {
       )}
         <Grid container>
               <Grid item>
-                <Link href="/Login" variant="body2">
-                  { "Already have an account? Login "}
+                <Link href="#" variant="body2">
+                  { "Already have an account? "}
                 </Link>
               </Grid>
             </Grid>
