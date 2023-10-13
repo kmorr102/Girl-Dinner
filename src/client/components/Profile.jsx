@@ -11,7 +11,7 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 
 export default function Profile({token, currentUser, setCurrentUser}) {
   const tokenString = sessionStorage.getItem("authToken");
-  console.log('token from login(storage):', tokenString)
+  console.log(tokenString)
 
   const [reviews, setReviews] = useState([]);
   /* const [error, setError] = useState(''); */
@@ -88,9 +88,9 @@ async function toggle() {
 
 //filter by authorId
 if (Array.isArray(result.reviews)) {
-    const filteredResults = result.reviews.filter(reviews => reviews.author_id === 1)
+    const filteredResults = result.reviews.filter(reviews => reviews.author_id === currentUser)
     setApiResult(filteredResults);
-    console.log(filteredResults, "this is the result")
+    console.log(filteredResults, "this is the result",)
 
   //map through filteredResults
   } else {
@@ -100,7 +100,7 @@ if (Array.isArray(result.reviews)) {
     console.error(error);
   }
 }
-console.log(currentUser, "here")
+console.log("This is the currentUser ID: ", currentUser)
 
 return(
 <div className="profile">
