@@ -6,6 +6,10 @@
   height: 100vh; 
 }
 
+body {
+  margin: 0;
+}
+
 .App-header {
   margin-bottom: 20px;
   font-size: 24px;
@@ -20,8 +24,19 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  font-size: 20px;
-  margin: 20px;
+  font-size: 25px;
+  background-color: #6f4b9c;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#navbar a {
+  text-decoration: none;
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  transition: color 0.3s;
 }
 
 
@@ -102,13 +117,17 @@ input[type=radio]{
 .navbar-button {
   display: inline-block;
   padding: 8px 16px; 
-  background-color: #7851A9;
+  background-color: #8d6ab8;
   color: #fff; 
   text-decoration: none; 
   border-radius: 4px; 
   margin-right: 10px; 
 }
 
+#navbar .navbar-button {
+  color: #fff; 
+}
+
 .navbar-button:hover {
-  background-color: #9677be; /* Change background color on hover */
+  background-color: #a185c4; 
 }
