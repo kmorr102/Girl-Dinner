@@ -331,10 +331,10 @@
          // console.log("User Name:", user.name);
           return (
 
-  <List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
+  <List sx={ {display: 'flex', flexDirection:'column',width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
 
-    <ListItem alignItems="flex-start">
-    <ListItemAvatar>
+    <ListItem sx={{display:'flex',flexDirection: 'column'}} alignItems="flex-start">
+    <ListItemAvatar sx={{marginTop: '15px', marginLeft: '-126px'}}>
         {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
         {/* <Avatar src="/broken-image.jpg" /> */}
         <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
@@ -365,18 +365,35 @@
               //   }
                 
                />
-                 <ListItemText key={review.id} sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                background: 'rgba(120,81,169,.15)',
-                borderRadius:'10px',
-                padding: '20px', 
-                width: '100%'
+         </ListItem>  
+          {Array.isArray(comments) && comments
+            .filter((comment) => {comment.reviewId === reviewId
+            })
+            .map((comment)=>(
+          <div key={comment.id}>
+           <p>{comment.comment}</p>
+  
+          </div>
+        ))
+     }
+         <ListItem>  
+               <ListItemAvatar sx={{display:'flex',flexDirection: 'rows'}}>
+                 <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
+                </ListItemAvatar>
+            <ListItemText key={review.id} sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              background: 'rgba(120,81,169,.15)',
+              borderRadius:'10px',
+              padding: '20px', 
+              width: '100%'
                }}
+               
                 
                 secondary={review.comment_text}
+                
                 />
-
+      
       </ListItem>        
     </List>
             
