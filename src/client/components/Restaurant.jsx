@@ -37,12 +37,15 @@
 
   const tokenString = sessionStorage.getItem("authToken");
   const defaultTheme = createTheme();
+  
   export default function Restaurant() {
     const [restaurant, setRestaurant] = useState([]);
     //const [review, setReview]=useState([]);
     const [reviews, setReviews] = useState([]);
     const [users, setUsers] =useState([]);
-    const [comment, setComment]= useState("")
+    const [comments, setComments]= useState("");
+    const [comment, setComment]= useState("");
+    const [reviewid, setReviewid]=useState("");
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -64,7 +67,6 @@
         console.log('error:', error)
       }
     }
-
   getRestaurantById();
   }, [restaurantid])
 
@@ -112,36 +114,56 @@
       getAllUsers();
     }, []);
   
-    const Navigate= useNavigate();
+    //const Navigate= useNavigate();  
+    //Navigate(`/restaurants/${restaurant.id}`)
     const { reviewId }= useParams();
     
-    async function handleSubmit(event){
-      event.preventDefault()
-      Navigate(`/restaurants/${restaurant.id}`)
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
       try {
-      const response= await fetch (`/api/reviews/${reviewId}/comments`,
-      {
-        method: 'POST',
-        headers: {
-                  'Content-Type': 'application/json',
-                  //'Authorization': `Bearer ${tokenString}`
-                },
-        body: JSON.stringify({
-                comment,
-                
-      })
-    });
-        const result = await response.json();
-        console.log('result of comment:', result)
-        return result;
-        
-            
-        }catch (error) {
-          console.error('error creating comment')
-          return{success: false, error: error.message};  
-        }}
-        
-       
+        // Use fetch to post the comment with the reviewId.
+        const response = await fetch(`/api/reviews/${reviewId}/comments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            reviewId, 
+            comments,
+          }),
+        });
+  
+        if (response.ok) {
+          // Comment posted successfully, refresh the page or update comments.
+          // Optionally, you can add logic to refresh comments.
+        } else {
+          // Handle errors when the comment posting fails.
+          console.error('Error creating comment');
+        }
+      } catch (error) {
+        console.error('Error creating comment', error);
+      }
+    };
+
+
+    useEffect(()=>{   
+      async function getAllComments(){
+        try {
+          const APIResponse = await fetch (`http://localhost:3000/api/reviews/${reviewId}/comments`)
+          if(APIResponse){
+            const data = await APIResponse.json();
+            console.log('comments:', data.comments)
+            setComments(data.comments);
+          }else{
+            setError(error);
+          }
+        } catch (error) {
+          console.log('error at end of get all comments:', error)
+        }
+      }
+    getAllComments();
+  },[])
     
     
   return (
@@ -289,16 +311,10 @@
     <Typography variant="body2"></Typography>
   </CardContent>
 
-  {/* {restaurant && (
-    <div key={restaurant.id} className="displayedRestaurant">
-      <p>{restaurant.address}</p>
-      <p>{restaurant.number}</p>
-  } */}
-
   {/* Start of restaurant reviews */}
   <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
         Top Reviews
-      </Typography>
+  </Typography>
 
 {Array.isArray(reviews.reviews) &&
   Array.isArray(users) && 
@@ -311,8 +327,8 @@
         const user = users.find((user) => user.id === review.author_id);
         
         if (user) {
-          console.log("User ID:", user.id);
-          console.log("User Name:", user.name);
+         // console.log("User ID:", user.id);
+         // console.log("User Name:", user.name);
           return (
 
   <List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
@@ -333,34 +349,34 @@
                 
                 primary={review.title}
 
-                secondary={
-                <Typography sx={{ display: 'block' }}
-                component="span"
-                variant="body2"
-                color="text.primary"> 
-                {review.content}
-                <br />
-                <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
-                <ListItemAvatar>
-                  <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                  {review.comment_text}
-                </ListItemAvatar>
-              </Typography>
-                }
-              />
-      {/* <div className='comment-form'>
-        <form onSubmit={handleSubmit}>
-        <label> Comment your thoughts
-              <input type="text"
-              value={title}
-              onChange={(e)=>setTitle(e.target.value)}
-              />
-            </label>
-          
-            <br />
-            <button>Post</button>
-          </form>
-         </div> */}        
+              //   secondary={
+              //   <Typography sx={{ display: 'block' }}
+              //   component="span"
+              //   variant="body2"
+              //   color="text.primary"> 
+              //   {review.content}
+              //   <br />
+              //   <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
+              //   <ListItemAvatar>
+              //     <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
+              //     {review.comment_text}
+              //   </ListItemAvatar>
+              // </Typography>
+              //   }
+                
+               />
+                 <ListItemText key={review.id} sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: 'rgba(120,81,169,.15)',
+                borderRadius:'10px',
+                padding: '20px', 
+                width: '100%'
+               }}
+                
+                secondary={review.comment_text}
+                />
+
       </ListItem>        
     </List>
             
@@ -385,7 +401,10 @@
       Comment whats on your mind
     </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
+   
+      <input type="hidden" name="reviewId" value={reviewId} />
+
+      <TextField 
         margin="normal"
         required
         fullWidth
@@ -406,6 +425,21 @@
       </Box>
   </Container>
   </ThemeProvider>
+   {/* Comments for this review */}
+      {/* Loop through comments and display them */}
+      {Array.isArray(comments) && comments
+      .filter((comment) => {comment.reviewId === reviewId
+      })
+        .map((comment)=>(
+          <div key={comment.id}>
+            <p>{comment.comment}</p>
+  
+          </div>
+        ))
+     }
+    
+<List></List>
+       
   </div>       
   </div>   
     )};

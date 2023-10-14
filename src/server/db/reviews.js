@@ -175,11 +175,12 @@ async function deleteCommentById(commentId){
 async function createComment(commentData){  
   try {
     const {comment,reviewId}= commentData
- 
+    console.log('commentData:',commentData)
     const{ rows: [existingComment]}= await db.query(`
     SELECT * FROM comments
     WHERE  comment= $1 AND "reviewId"= $2
     `,[comment,reviewId])
+    
     if(existingComment){
       console.log("Comment already submitted, Updating...");
       return existingComment;
