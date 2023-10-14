@@ -77,6 +77,7 @@ CREATE TABLE restaurant_reviews (
 
 CREATE TABLE comments (
   id SERIAL PRIMARY KEY,
+  "reviewId" INTEGER REFERENCES reviews(id),
   comment VARCHAR(255) UNIQUE NOT NULL
 );
 

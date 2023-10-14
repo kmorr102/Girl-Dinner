@@ -10,8 +10,8 @@ const {
    getAllComments,
    deleteReview,
    updateReview,
-   deleteCommentsById,
    getCommentById,
+   deleteCommentById,
    createComment,
 } = require('../db/reviews');
 
@@ -115,7 +115,7 @@ reviewsRouter.get("/:reviewId/comments", async (req,res,next) => {
   try{
   const reviewId=req.params.reviewId;
   const comments= await getAllComments(reviewId);
-
+console.log('comments:', comments)
   res.send({
       comments
     });
@@ -128,7 +128,6 @@ reviewsRouter.get("/:reviewId/comments", async (req,res,next) => {
 reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   const { comment }= req.body;
   reviewId=req.params.reviewId;
-
   
   try {
     const newComment = await createComment({reviewId,comment});
@@ -152,12 +151,24 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
 
 //GET comment by Id  api/reviews/reviewId/comments/commentId
 reviewsRouter.get("/:reviewId/comments/:commentId", async (req,res,next)=>{
-  try {
-    const commentId=req.params.commentId
-    const comment= await getCommentById(commentId);
-    res.send(comment);
+    try {
+      const commentId= req.params.commentId
+      // console.log('reqparams:', req.params.commentId)
+      // console.log('reqparams:', req.params.reviewId)
+      // console.log('commentId:', commentId)
+      const comment = await getCommentById(commentId)
+      // console.log('function:', getCommentById(commentId))
+      // console.log('comment:', comment)
+      if(comment){
+      res.send(comment)
+      // console.log('comment:', comment)
+    }else{
+      res.status(404).json({ message: "Comment not found" });
+    }
+    
 } catch (error) {
-  next(error);
+      console.error("Error in getCommentById:", error);
+      throw error;
 }
 });
 
@@ -165,9 +176,13 @@ reviewsRouter.get("/:reviewId/comments/:commentId", async (req,res,next)=>{
 // DELETE comment by Id api/reviews/reviewId/comments/commentId
 reviewsRouter.delete("/:reviewId/comments/:commentId", async (req,res, next)=>{
   try {
-    const comment= await deleteCommentsById(req.params.commentId);
+    const comment= await deleteCommentById(req.params.commentId);
+    console.log('comment:', comment)
+    console.log('commentId:', req.params.commentId)
     res.send(comment)
+    console.log('deleted comment:', comment)
   } catch (error) {
+    console.log('error deleting comment:', error)
     next(error);
   }
 });
