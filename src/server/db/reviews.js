@@ -20,7 +20,6 @@ async function getAllReviews() {
         comments AS comments ON reviewscomments."commentId" = comments.id;
     `);
     
-       
     return reviews;
     } catch (error) {
         throw error; 
@@ -42,12 +41,6 @@ async function getReviewById(reviewId) {
                 message: "Could not find a review with that reviewId"
             };
         } 
-        const { rows: comments }=await db.query(`
-            SELECT comments. *
-            FROM comments
-            JOIN review_comments ON comments.id=review_comments."commentId"
-            WHERE review_comments."reviewId" = $1;
-            `, [reviewId])
     
 
         const { rows: [author] }= await db.query(`
@@ -97,14 +90,11 @@ async function createReview(reviewData) {
       RETURNING *;
       `,
       [authorId, title, content, restaurantId]
-    );
-    const commentList = await createComment(comments);
-    return await addCommentsToReview(review.id, commentList);
-  }
-} catch (error) {
+
+    )};
+}catch(error){
   throw error;
-}
-}
+}}
   
 
 async function getReviewByUser(userId) {
@@ -125,67 +115,94 @@ async function getReviewByUser(userId) {
     }
 }
 
-async function createComment(commentList) {
-    if (commentList.length === 0) {
-      return;
-    }
-  
-    // Create an array of parameterized query placeholders
-    const placeholders = commentList.map((_, index) => `$${index + 1}`).join(',');
-  
-    try {
-      const query = `
-        INSERT INTO comments (comment)
-        VALUES (${placeholders})
-        ON CONFLICT (comment) DO NOTHING
-        RETURNING *;
-      `;
-  
-      const { rows } = await db.query(query, commentList);
-      return rows;
-    } catch (error) {
-      throw error;
-    }
-  }
-  
-
-async function createReviewComment(reviewId, commentId) {
-    try {
-        await db.query(`
-        INSERT INTO review_comments("reviewId", "commentId")
-        VALUES ($1,$2)
-        ON CONFLICT ("reviewId", "commentId") DO NOTHING;
-        `, [reviewId, commentId]);
-    } catch (error) {
-      throw error;
-    }
-}
-
-async function addCommentsToReview(reviewId,commentList) {
-    try {
-        const createReviewCommentPromise= commentList.map(
-            comment => createReviewComment(reviewId,comment.id)
-        );
-
-        await Promise.all(createReviewCommentPromise);
-
-        return await getReviewById(reviewId);
-    } catch (error) {
-      throw error;
-    }
-}
-
 async function getAllComments(){
     try {
-        const  {rows} = await db.query(`
-        SELECT * FROM comments
+        const {rows} = await db.query(`
+        SELECT  *
+        FROM comments
         `);
-
+     
+    
         return { rows }
     } catch (error) {
       throw error;
     }
 }
+
+async function getCommentById(commentId){
+  try {
+    const { rows: [comment] } = await db.query(`
+    SELECT * FROM comments
+    WHERE id= $1`, [commentId])
+    return comment;
+  }catch(error){
+    console.log('Error in getCommentById:', error)
+  } throw (error);
+  }
+
+async function deleteCommentById(commentId){
+  try {
+
+    await db.query(`
+    DELETE FROM review_comments
+    WHERE "commentId"=$1
+    `, [commentId])
+
+    console.log('commentId:', commentId)
+    const {  rowCount } = await db.query(`
+    DELETE FROM comments 
+    WHERE id= $1`, [commentId])
+   
+    if (rowCount === 0) {
+      throw {
+        name: "CommentNotFoundError",
+        message: "No comment with that id exists",
+      };
+    }
+    
+    console.log('Deleted comment with ID:', commentId);
+    return { success: true };
+  } catch (error) {
+    console.error('Error in deleteCommentById:', error);
+    throw error;
+  }
+}
+
+//updated createComment function
+async function createComment(commentData){  
+  try {
+    const {comment,reviewId}= commentData
+    // console.log('comment:', comment);
+    // console.log('reviewId:', reviewId);
+    // console.log('commentData', commentData);
+    const{ rows: [existingComment]}= await db.query(`
+    SELECT * FROM comments
+    WHERE  comment= $1 AND "reviewId"= $2
+    `,[comment,reviewId])
+    if(existingComment){
+      console.log("Comment already submitted, Updating...");
+      return existingComment;
+    }else{
+    const { rows: [comments]} = await db.query(`
+    INSERT INTO comments ("reviewId",comment) 
+    VALUES ($1, $2)
+    RETURNING *
+    `, [reviewId, comment]
+    )};
+    console.log('comment:', comment)
+    // //if (rows.length === 0) {
+    //   throw error ('Comment creation failed')
+    // //}
+    // console.log('reviewId:', reviewId)
+    // console.log('text:', comments)
+    // console.log('rows:', rows)
+    // return rows[0]; // Return the created comment.
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    throw error;
+  }
+}
+
 
 module.exports = {
     getAllReviews,
@@ -196,4 +213,8 @@ module.exports = {
     createComment,
     createReviewComment,
     addCommentsToReview,
+    getCommentById,
+    createComment,
+    deleteCommentById
+
 }

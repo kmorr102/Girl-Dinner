@@ -11,7 +11,7 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 
 export default function Profile({token, currentUser, setCurrentUser}) {
   const tokenString = sessionStorage.getItem("authToken");
-  console.log('token from login(storage):', tokenString)
+  // console.log(tokenString)
 
   const [reviews, setReviews] = useState([]);
   /* const [error, setError] = useState(''); */
@@ -26,6 +26,7 @@ export default function Profile({token, currentUser, setCurrentUser}) {
  const isAuthor = (review) => {
     return review.authorId === authUserId && !authUserId;
 };
+
 let reviewId= window.location.href.split("/").pop()
 //console.log('id:', window.location.href.split("/").pop())
 
@@ -71,11 +72,11 @@ async function editReview (reviewId) {
 
 //show and hide the user's reviews
 
-async function toggle(authorId) {
+async function toggle() {
   setIsOpen((isOpen) => !isOpen);
-  console.log(authorId)
+
   try {
-    const response = await fetch (`http://localhost:3000/api/reviews/${authorId}`, {
+    const response = await fetch ('http://localhost:3000/api/reviews', {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -83,25 +84,30 @@ async function toggle(authorId) {
       }
     });
     const result = await response.json();
-    setApiResult(result);
-    console.log(result)
+    console.log("show me the result ", result);
+
+//filter by authorId
+if (Array.isArray(result.reviews)) {
+    const filteredResults = result.reviews.filter(reviews => reviews.author_id === currentUser.userId)
+    setApiResult(filteredResults);
+    console.log(filteredResults, "this is the result",)
+
+  //map through filteredResults
+  } else {
+    console.log("result is not an array")
+  }
   } catch (error) {
     console.error(error);
   }
 }
-console.log(currentUser, "here")
-
-const reviewToDisplay= searchParams
-  ? apiResult.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
-  : apiResult;
+console.log(currentUser.userId, currentUser.name)
 
 return(
 <div className="profile">
 
   <div className="profile-info">
 
-        <img src={currentUser?.profilePicture} alt={currentUser?.name} />
-        <h2>Welcome {currentUser?.name}</h2>
+        <h2>Welcome {currentUser.name}</h2>
        
   </div>
       <Stack direction="column" spacing={2}>
@@ -112,7 +118,6 @@ return(
         <ul>
           <li>
             <button onClick={() => toggle(currentUser)}>View Reviews</button>
-            <Link to="/Reviews"></Link>
           </li>
           <li>
             <Link to="/profile/edit">Edit Profile</Link>
@@ -120,20 +125,23 @@ return(
           {/* Add more profile actions here */}
         </ul>
       </div>
-      {isOpen ? (
+      {isOpen && (
       <div>
-        {apiResult && (
-        <div>
-          <h2>{apiResult.title}</h2>
-          <p>{apiResult.content}</p>
-          <button onClick={() => editReview()}>Edit Review</button>
-          <button onClick={() => deleteReview()}>Delete</button>
-        </div>
+        {apiResult && apiResult.length > 0 ? (
+          apiResult.map((review) => (
+            <div key={review.id}>
+              <h2>{review.title}</h2>
+              <p>{review.content}</p>
+              <button onClick={() => editReview(review)}>Edit Review</button>
+              <button onClick={() => deleteReview(review)}>Delete</button>
+            </div>
+          ))
+        ) : (
+          <p>No reviews found for author_id 1</p>
         )}
       </div>
-    ) : null}
+    )}
 
-      
     </div>
   );
 }

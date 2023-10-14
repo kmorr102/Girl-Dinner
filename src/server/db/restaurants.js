@@ -22,25 +22,7 @@ const createRestaurant = async (name, address, img, number, content) => {
 async function getAllRestaurants() {
     try {
         const { rows: restaurants } = await db.query(`
-SELECT
-    restaurants.id AS id,
-    restaurants.name AS name,
-    restaurants.address AS address,
-    restaurants.img AS img,
-    restaurants.number AS number,
-    restaurants.content AS content,
-    reviews.id AS reviewId,
-    reviews.content AS review_text
-FROM
-    restaurants
-LEFT JOIN
-    restaurant_reviews AS restaurantsreviews ON restaurants.id = restaurantsreviews."restaurantId"
-LEFT JOIN
-    reviews AS reviews ON restaurantsreviews."reviewId" = reviews.id;
-
-
-
-`);
+        SELECT * FROM restaurants`);
 
         return restaurants;
     } catch (error) {
