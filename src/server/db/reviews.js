@@ -203,8 +203,6 @@ module.exports = {
     getReviewByUser,
     getAllComments,
     createComment,
-    createReviewComment,
-    addCommentsToReview,
     getCommentById,
     createComment,
     deleteCommentById
