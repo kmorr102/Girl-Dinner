@@ -270,7 +270,6 @@
   <Grid container spacing={2}></Grid>
     <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}></Typography>
     <Typography sx={{color:'#fff' ,fontSize: "18px"}}>{restaurant.content}</Typography>
-
   </CardContent>
   </Card>
   {/* End of restaurant discription */}
@@ -281,6 +280,7 @@
   <CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
   <Grid container spacing={2}></Grid>
   <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}>About The Business</Typography>
+
   <Typography sx={{ mb: 1.5 }} color="text.secondary">
 
     </Typography>
@@ -290,6 +290,19 @@
             {restaurant.address}
             <br />
             {restaurant.number}
+
+  
+  <Typography sx={{ mb: 1.5, color: '#fff', fontSize: '18px' }} color="text.secondary">
+            wwww.restaurant.com
+            <br />
+            {restaurant.address}
+            <br />
+            {restaurant.number}
+    </Typography>
+    <Typography variant="body2">
+            
+            
+
     </Typography>
     <Typography variant="body2"></Typography>
   </CardContent>

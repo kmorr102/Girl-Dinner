@@ -90,10 +90,8 @@ async function createReview(reviewData) {
       RETURNING *;
       `,
       [authorId, title, content, restaurantId]
-    )}
-  //   const commentList = await createComments(comments);
-  //   return await addCommentsToReview(review.id, commentList);
-  // }
+
+    )};
 }catch(error){
   throw error;
 }}
@@ -116,7 +114,6 @@ async function getReviewByUser(userId) {
       throw error;
     }
 }
-
 
 async function getAllComments(){
     try {
@@ -205,7 +202,11 @@ module.exports = {
     getReviewById,
     getReviewByUser,
     getAllComments,
+    createComment,
+    createReviewComment,
+    addCommentsToReview,
     getCommentById,
     createComment,
     deleteCommentById
+
 }
