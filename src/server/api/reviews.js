@@ -137,6 +137,7 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   console.log('comment:', _comment)
   } catch ({ name, message }) {
     // Handle any errors that might occur during the process
+    console.log('error from api side:')
     next({ name, message });
   }
 });  
