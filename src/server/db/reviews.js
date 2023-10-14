@@ -175,13 +175,13 @@ async function getReviewByUser(userId) {
 
 async function getAllComments(){
     try {
-        const {rows: comments} = await db.query(`
-        SELECT   id,"reviewId", comment
+        const {rows} = await db.query(`
+        SELECT  *
         FROM comments
         `);
-      console.log('comments/rows:', {rows:comments})
-      console.log('comments:', comments)
-        return comments
+     
+    
+        return { rows }
     } catch (error) {
       throw error;
     }
@@ -227,24 +227,24 @@ async function deleteCommentById(commentId){
 }
 
 //updated createComment function
-async function createComment(reviewId,comment){
-  try {
-    const { rows } = await db.query(`
-    INSERT INTO comments ("reviewId",comment) 
-    VALUES ($1, $2)
-    RETURNING *`, [reviewId, comment]);
-    console.log('reviewId:', reviewId)
-    console.log('text:', comment)
-    if (rows.length === 0) {
-      throw error ('Comment creation failed')
-    }
-    console.log('rows:', rows)
-    return rows[0]; // Return the created comment.
-  } catch (error) {
-    console.error('Error creating comment:', error);
-    throw error;
-  }
-}
+// async function createComment(reviewId,comment){
+//   try {
+//     const { rows } = await db.query(`
+//     INSERT INTO comments ("reviewId",comment) 
+//     VALUES ($1, $2)
+//     RETURNING *`, [reviewId, comment]);
+//     console.log('reviewId:', reviewId)
+//     console.log('text:', comment)
+//     if (rows.length === 0) {
+//       throw error ('Comment creation failed')
+//     }
+//     console.log('rows:', rows)
+//     return rows[0]; // Return the created comment.
+//   } catch (error) {
+//     console.error('Error creating comment:', error);
+//     throw error;
+//   }
+// }
 // const commentList = await createComments(comments);
 // return await addCommentsToReview(review.id, commentList);
 // }
@@ -315,7 +315,7 @@ module.exports = {
     getReviewByUser,
     getAllComments,
     getCommentById,
-    createComment,
+    //createComment,
     //createReviewComment,
     //addCommentsToReview,
     deleteCommentById

@@ -12,7 +12,7 @@ const {
    updateReview,
    getCommentById,
    deleteCommentById,
-   createComment,
+   //createComment,
 } = require('../db/reviews');
 
 // GET - /api/reviews - fetch all reviews
@@ -125,28 +125,28 @@ console.log('comments:', comments)
 });
 
 //POST create a new comment api/reviews/reviewId/comments
-reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
-  const { comment }= req.body;
-  reviewId=req.params.reviewId;
+// reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
+//   const { comment }= req.body;
+//   reviewId=req.params.reviewId;
   
-  try {
-    const newComment = await createComment({reviewId,comment});
+//   try {
+//     const newComment = await createComment({reviewId,comment});
 
-  if (newComment) {
-      // If the comment is created successfully, send it as the response
-      res.send(newComment);
-    } else {
-      // If there's an error during comment creation, send an error response
-      next({
-        name: "CommentCreationError",
-        message: "There was an error creating your comment. Please try again.",
-      });
-    }
-  } catch ({ name, message }) {
-    // Handle any errors that might occur during the process
-    next({ name, message });
-  }
-});  
+//   if (newComment) {
+//       // If the comment is created successfully, send it as the response
+//       res.send(newComment);
+//     } else {
+//       // If there's an error during comment creation, send an error response
+//       next({
+//         name: "CommentCreationError",
+//         message: "There was an error creating your comment. Please try again.",
+//       });
+//     }
+//   } catch ({ name, message }) {
+//     // Handle any errors that might occur during the process
+//     next({ name, message });
+//   }
+// });  
 
 
 //GET comment by Id  api/reviews/reviewId/comments/commentId
