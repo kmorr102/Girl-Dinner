@@ -276,10 +276,21 @@
 
 
   {/* About Section */}
-  <Card sx={{ minWidth: 275 }}>
+
   <CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
   <Grid container spacing={2}></Grid>
   <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}>About The Business</Typography>
+
+  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+
+    </Typography>
+    <Typography sx={{ mb: 1.5, color: '#fff', fontSize: '18px' }} color="text.secondary">
+            wwww.restaurant.com
+            <br />
+            {restaurant.address}
+            <br />
+            {restaurant.number}
+
   
   <Typography sx={{ mb: 1.5, color: '#fff', fontSize: '18px' }} color="text.secondary">
             wwww.restaurant.com
@@ -291,10 +302,11 @@
     <Typography variant="body2">
             
             
-        
+
     </Typography>
+    <Typography variant="body2"></Typography>
   </CardContent>
-  </Card>
+
   {/* {restaurant && (
     <div key={restaurant.id} className="displayedRestaurant">
       <p>{restaurant.address}</p>

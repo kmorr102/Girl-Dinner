@@ -172,9 +172,7 @@ async function deleteCommentById(commentId){
 async function createComment(commentData){  
   try {
     const {comment,reviewId}= commentData
-    // console.log('comment:', comment);
-    // console.log('reviewId:', reviewId);
-    // console.log('commentData', commentData);
+ 
     const{ rows: [existingComment]}= await db.query(`
     SELECT * FROM comments
     WHERE  comment= $1 AND "reviewId"= $2
@@ -190,13 +188,7 @@ async function createComment(commentData){
     `, [reviewId, comment]
     )};
     console.log('comment:', comment)
-    // //if (rows.length === 0) {
-    //   throw error ('Comment creation failed')
-    // //}
-    // console.log('reviewId:', reviewId)
-    // console.log('text:', comments)
-    // console.log('rows:', rows)
-    // return rows[0]; // Return the created comment.
+    return { success: true };
   } catch (error) {
     console.error('Error creating comment:', error);
     throw error;
