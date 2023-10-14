@@ -41,12 +41,6 @@ async function getReviewById(reviewId) {
                 message: "Could not find a review with that reviewId"
             };
         } 
-        // const { rows: comments }=await db.query(`
-        //     SELECT comments. *
-        //     FROM comments
-        //     JOIN review_comments ON comments.id=review_comments."commentId"
-        //     WHERE review_comments."reviewId" = $1;
-        //     `, [reviewId])
     
 
         const { rows: [author] }= await db.query(`
@@ -123,55 +117,6 @@ async function getReviewByUser(userId) {
     }
 }
 
-// async function createComments(commentList) {
-//     if (commentList.length === 0) {
-//       return;
-//     }
-  
-//     // Create an array of parameterized query placeholders
-//     const placeholders = commentList.map((_, index) => `$${index + 1}`).join(',');
-  
-//     try {
-//       const query = `
-//         INSERT INTO comments (comment)
-//         VALUES (${placeholders})
-//         ON CONFLICT (comment) DO NOTHING
-//         RETURNING *;
-//       `;
-  
-//       const { rows } = await db.query(query, commentList);
-//       return rows;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-  
-
-// async function createReviewComment(reviewId, commentId) {
-//     try {
-//         await db.query(`
-//         INSERT INTO review_comments("reviewId", "commentId")
-//         VALUES ($1,$2)
-//         ON CONFLICT ("reviewId", "commentId") DO NOTHING;
-//         `, [reviewId, commentId]);
-//     } catch (error) {
-//       throw error;
-//     }
-// }
-
-// async function addCommentsToReview(reviewId,commentList) {
-//     try {
-//         const createReviewCommentPromise= commentList.map(
-//             comment => createReviewComment(reviewId,comment.id)
-//         );
-
-//         await Promise.all(createReviewCommentPromise);
-
-//         return await getReviewById(reviewId);
-//     } catch (error) {
-//       throw error;
-//     }
-// }
 
 async function getAllComments(){
     try {

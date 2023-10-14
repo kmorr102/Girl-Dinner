@@ -132,21 +132,6 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   const commentData= {}
   try {
     commentData.comment=comment
-  
-
-  //   const newComment = await createComment({reviewId,comment});
-  //   console.log('comment API', reviewId)
-  // if (newComment) {
-  //     // If the comment is created successfully, send it as the response
-  //     console.log('newComment:', newComment)
-  //     res.send(newComment);
-  //   } else {
-  //     // If there's an error during comment creation, send an error response
-  //     next({
-  //       name: "CommentCreationError",
-  //       message: "There was an error creating your comment. Please try again.",
-  //     });
-  //   }
   const _comment= await createComment(commentData);
   res.send(_comment)
   console.log('comment:', _comment)
@@ -161,15 +146,11 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
 reviewsRouter.get("/:reviewId/comments/:commentId", async (req,res,next)=>{
     try {
       const commentId= req.params.commentId
-      // console.log('reqparams:', req.params.commentId)
-      // console.log('reqparams:', req.params.reviewId)
-      // console.log('commentId:', commentId)
       const comment = await getCommentById(commentId)
-      // console.log('function:', getCommentById(commentId))
-      // console.log('comment:', comment)
+
       if(comment){
       res.send(comment)
-      // console.log('comment:', comment)
+      
     }else{
       res.status(404).json({ message: "Comment not found" });
     }
