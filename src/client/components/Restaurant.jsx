@@ -265,30 +265,35 @@
   {/* end of button Nav Bar */}
 
   {/* Start of restaurant discription */}
+  <Card sx={{ maxWidth: '1000px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
   <CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
   <Grid container spacing={2}></Grid>
     <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}></Typography>
     <Typography sx={{color:'#fff' ,fontSize: "18px"}}>{restaurant.content}</Typography>
 
   </CardContent>
+  </Card>
   {/* End of restaurant discription */}
 
 
   {/* About Section */}
-  <Card sx={{ minWidth: 275 }}>
+
   <CardContent sx={{border:'1.5px solid #7851A9', borderRadius: "10px", background: '#7851A9', marginTop: "20px", padding: "30px"}}>
   <Grid container spacing={2}></Grid>
   <Typography sx={{color: '#fff',fontSize: "22px", fontWeight: "bolder"}}>About The Business</Typography>
   <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            adjective
+
     </Typography>
-    <Typography variant="body2">
-            well meaning and kindly.
+    <Typography sx={{ mb: 1.5, color: '#fff', fontSize: '18px' }} color="text.secondary">
+            wwww.restaurant.com
             <br />
-            {'"a benevolent smile"'}
+            {restaurant.address}
+            <br />
+            {restaurant.number}
     </Typography>
+    <Typography variant="body2"></Typography>
   </CardContent>
-  </Card>
+
   {/* {restaurant && (
     <div key={restaurant.id} className="displayedRestaurant">
       <p>{restaurant.address}</p>
