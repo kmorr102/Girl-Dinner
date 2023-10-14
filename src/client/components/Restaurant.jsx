@@ -1,4 +1,5 @@
   import { useState, useEffect } from "react";
+
   import { Link, useNavigate, useParams } from "react-router-dom";
   import { fetchAllRestaurants } from "../API";
   import { fetchAllReviews } from "../API";
@@ -8,7 +9,8 @@
   import CssBaseline from '@mui/material/CssBaseline';
   import Box from '@mui/material/Box';
   import Paper from '@mui/material/Paper';
-  import Grid from '@mui/material/Grid';  
+  import Grid from '@mui/material/Grid';
+  import { createTheme, ThemeProvider } from '@mui/material/styles';  
 
   import List from '@mui/material/List';
   import ListItem from '@mui/material/ListItem';
@@ -22,6 +24,7 @@
   import CardContent from '@mui/material/CardContent';
 
   import Typography from '@mui/material/Typography';
+  import TextField from '@mui/material/TextField';
 
   import RateReviewIcon from '@mui/icons-material/RateReview';
   import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -33,24 +36,18 @@
 
 
   const tokenString = sessionStorage.getItem("authToken");
-
+  const defaultTheme = createTheme();
   export default function Restaurant() {
     const [restaurant, setRestaurant] = useState([]);
     //const [review, setReview]=useState([]);
     const [reviews, setReviews] = useState([]);
     const [users, setUsers] =useState([]);
-    const [userIds, setUserIds] = useState([]);
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [img, setImg] = useState(null);
-    const [number, setNumber] = useState("");
-    const [content, setContent] = useState("");
+    const [comment, setComment]= useState("")
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [isAuthor, setIsAuthor] = useState("");
 
-  
 
     const { restaurantid }= useParams();
 
@@ -59,7 +56,7 @@
       const response= await fetch(`http://localhost:3000/api/restaurants/${restaurantid}`);
       if(response){
         const data= await response.json();
-        console.log('restaurant id:',data.id)
+        //console.log('restaurant id:',data.id)
         setRestaurant(data)
         console.log( 'Restaurant:', data)
       }else{
@@ -101,7 +98,7 @@
           const response = await fetch('http://localhost:3000/api/users');
           if (response.ok) {
             const data = await response.json();
-            console.log('Users:', data.users); 
+            //console.log('Users:', data.users); 
             setUsers(data.users); 
           } else {
             setError(response);
@@ -114,42 +111,40 @@
     
       getAllUsers();
     }, []);
-    // console.log("UserId:", users)
+  
+    const Navigate= useNavigate();
+    const { reviewId }= useParams();
     
-
-    
-    //  let reviewId= window.location.href.split("/").pop()
-    
-    
-    //  useEffect(() => {
-    //    async function getReviewById() {
-    //      try {
-    //        const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
+    async function handleSubmit(event){
+      event.preventDefault()
+      Navigate(`/restaurants/${restaurant.id}`)
+      try {
+      const response= await fetch (`/api/reviews/${reviewId}/comments`,
+      {
+        method: 'POST',
+        headers: {
+                  'Content-Type': 'application/json',
+                  //'Authorization': `Bearer ${tokenString}`
+                },
+        body: JSON.stringify({
+                comment,
+                
+      })
+    });
+        const result = await response.json();
+        console.log('result of comment:', result)
+        return result;
         
-    
-    //        if (!response.ok) {
-    //          throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
-    //      }
-    
-    //        const data = await response.json();
-    //       console.log('ReviewbyId:', data);
-    //       setReview(data);
-    //      } catch (error) {
-    //        console.error('Error occurred:', error);
-    //        setError(error.message);
-    //      }
-    //    }
-    
-    //    getReviewById();
-    //  }, [])
-
+            
+        }catch (error) {
+          console.error('error creating comment')
+          return{success: false, error: error.message};  
+        }}
+        
+       
     
     
-    
-
-    
-    
-    return (
+  return (
   <div className="restaurant" key={restaurant.name}>
   <CssBaseline />
   {/* {Restaurnt Image Header Start} */}
@@ -350,11 +345,22 @@
                   <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
                   {review.comment_text}
                 </ListItemAvatar>
-                
               </Typography>
                 }
               />
-              
+      {/* <div className='comment-form'>
+        <form onSubmit={handleSubmit}>
+        <label> Comment your thoughts
+              <input type="text"
+              value={title}
+              onChange={(e)=>setTitle(e.target.value)}
+              />
+            </label>
+          
+            <br />
+            <button>Post</button>
+          </form>
+         </div> */}        
       </ListItem>        
     </List>
             
@@ -362,10 +368,45 @@
   }  
           
   {/* end of reviews */}
-
-    
     })}
+    <div className='comment-form'>
+    <ThemeProvider theme={defaultTheme}>
+    <Container component="main" maxWidth="xs">
+    <CssBaseline />
+    <Box
+        sx={{
+        marginTop: 8,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        }}
+        >
+    <Typography component="h1" variant="h5">
+      Comment whats on your mind
+    </Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="comment"
+        label="comment"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}/>
 
+        <Button 
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          Post
+        </Button>
+      </Box>
+      </Box>
+  </Container>
+  </ThemeProvider>
+  </div>       
   </div>   
     )};
   
