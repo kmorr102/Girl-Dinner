@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchAllReviews } from '../API';
 // import { Link } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa' 
-
 import { Link , useParams} from 'react-router-dom';
-
-
+import Divider from '@mui/material/Divider';
 
 
 export default function Reviews({token}){
@@ -87,32 +85,38 @@ export default function Reviews({token}){
     console.error(error);
 }} 
 
+const reviewBoxStyle = {
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  padding: '10px',
+  margin: '20px',
+  boxShadow: '0 8px 4px rgba(0, 0, 0, 0.1)',
+  backgroundColor: '#e8e1f1',
+  fontFamily: 'Merriweather'
+};
 
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
   : reviews;
   
       return (
-
-
       <div className='Reviews'>
-    
-      
-        <div className='search-bar'>
+  
+        <div className='search-bar'  style={{ margin: '20px'}}>
           <label>
-            Search:{''}
-            <input type='text' placeholder='Search' onChange={(e)=> setSearchParams(e.target.value)}/>
+            <input type='text' style={{ width: '100%' }} placeholder='Search Reviews' onChange={(e)=> setSearchParams(e.target.value)}/>
           </label>
          </div>
   
       
         {reviews && reviewToDisplay.map((review) => (
-          <div key={review.id} className='displayedReviews'>
-            <h3 style={{textDecoration:"underline"}}>{review.title}</h3>
+          <div key={review.id} className='displayedReviews' style={reviewBoxStyle}>
+            <h3 style={{fontFamily: 'DM Serif Display', fontSize: '22px'}}>{review.title}</h3>
+            <Divider sx={{borderWidth: '1px', borderColor:'black'}}/>
             <h4>{review.content}</h4>
-            <p>Comments:{review.comment_text}</p>
+            <p>Comments: {review.comment_text}</p>
 
-            <div className = "Star">
+            <div className = "Star" style={{ marginBottom: '10px' }}>
             {/* <p> Rating: {rating} </p> */}
               {[...Array(5)].map((star, index) => {
                 const currentRating = index + 1;
@@ -124,7 +128,7 @@ export default function Reviews({token}){
                     value={review?.currentRating}
                     />
                     <FaStar 
-                    size={50}
+                    size={30}
                     color={ "#f0d32e"}
                     />
                   </label>
@@ -132,22 +136,15 @@ export default function Reviews({token}){
               })}
             </div>
 
-
-            <button   onClick={() => deleteReview(review._id, /*userId*/)}>
-                  Delete
-            </button>
-            <button>
+            <button className="review-btn">
                   Comment
             </button>{" "}
-            <button>
-                  Place Holder Button
+            <button className="review-btn" onClick={() => deleteReview(review._id, /*userId*/)}>
+                  Delete
             </button>
            </div>
         ))}
      
-    
-      
-      
         </div>
       );
     }
