@@ -97,7 +97,9 @@ async function createReview(reviewData) {
 }catch(error){
   throw error;
 }}
+async function updateReview(){
   
+}
 
 async function getReviewByUser(userId) {
     try {
@@ -203,6 +205,7 @@ async function createComment(commentData){
 module.exports = {
     getAllReviews,
     createReview,
+    updateReview,
     getReviewById,
     getReviewByUser,
     getAllComments,
