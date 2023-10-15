@@ -167,7 +167,7 @@
     
     
   return (
-  <div className="restaurant" key={restaurant.name}>
+  <div className="restaurant" key={restaurant.id}>
   <CssBaseline />
   {/* {Restaurnt Image Header Start} */}
   <Paper
@@ -312,7 +312,7 @@
   </CardContent>
 
   {/* Start of restaurant reviews */}
-  <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
+  <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontSize: '36px', textAlign: 'center' }}>
         Top Reviews
   </Typography>
 
@@ -348,34 +348,16 @@
                 width: '100%' }}
                 
                 primary={review.title}
-
-              //   secondary={
-              //   <Typography sx={{ display: 'block' }}
-              //   component="span"
-              //   variant="body2"
-              //   color="text.primary"> 
-              //   {review.content}
-              //   <br />
-              //   <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
-              //   <ListItemAvatar>
-              //     <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-              //     {review.comment_text}
-              //   </ListItemAvatar>
-              // </Typography>
-              //   }
                 
                />
          </ListItem>  
+         
           {Array.isArray(comments) && comments
             .filter((comment) => {comment.reviewId === reviewId
             })
             .map((comment)=>(
-          <div key={comment.id}>
-           <p>{comment.comment}</p>
-  
-          </div>
-        ))
-     }
+            
+      
          <ListItem>  
                <ListItemAvatar sx={{display:'flex',flexDirection: 'rows'}}>
                  <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
@@ -390,40 +372,25 @@
                }}
                
                 
-                secondary={review.comment_text}
+                secondary={review.comment_text && comment.comment}
                 
                 />
+             
       
-      </ListItem>        
-    </List>
-            
-    )}
-  }  
-          
-  {/* end of reviews */}
-    })}
-    <div className='comment-form'>
-    <ThemeProvider theme={defaultTheme}>
-    <Container component="main" maxWidth="xs">
+      </ListItem>    
+        ))
+      }    
+        <div className='comment-form' >
     <CssBaseline />
-    <Box
-        sx={{
-        marginTop: 8,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        }}
-        >
-    <Typography component="h1" variant="h5">
-      Comment whats on your mind
+    <Box>
+    <Typography component="div" variant="h6">
+      Comment 
     </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
    
       <input type="hidden" name="reviewId" value={reviewId} />
 
-      <TextField 
-        margin="normal"
-        required
+      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
         fullWidth
         id="comment"
         label="comment"
@@ -433,31 +400,29 @@
         <Button 
           type="submit"
           fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          variant="outlined"
+          sx={{ display:'flex', flexDirection: 'row'}}
         >
           Post
         </Button>
       </Box>
       </Box>
-  </Container>
-  </ThemeProvider>
-   {/* Comments for this review */}
-      {/* Loop through comments and display them */}
-      {Array.isArray(comments) && comments
-      .filter((comment) => {comment.reviewId === reviewId
-      })
-        .map((comment)=>(
-          <div key={comment.id}>
-            <p>{comment.comment}</p>
+
+ 
+  </div>
+    </List>
+            
+    )}
+  }  
+          
+  {/* end of reviews */}
+    })}
   
-          </div>
-        ))
-     }
-    
-<List></List>
+
+   
        
   </div>       
-  </div>   
+  //</div> 
+    
     )};
   
