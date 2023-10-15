@@ -164,7 +164,9 @@
       }
     getAllComments();
   },[])
-    
+  
+  const commentsToDisplay = comments.rows
+  console.log('comments to display:', comments.rows)
     
   return (
   <div className="restaurant" key={restaurant.id}>
@@ -320,8 +322,7 @@
   Array.isArray(users) && 
   reviews.reviews
     .filter((review) => {
-      return review.restaurant_id === restaurant.id;
-    })
+      return review.restaurant_id === restaurant.id})
     .map((review) => {
       if (Array.isArray(users)) {
         const user = users.find((user) => user.id === review.author_id);
@@ -330,7 +331,7 @@
          // console.log("User ID:", user.id);
          // console.log("User Name:", user.name);
           return (
-
+          
   <List sx={ {display: 'flex', flexDirection:'column',width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
 
     <ListItem sx={{display:'flex',flexDirection: 'column'}} alignItems="flex-start">
@@ -345,42 +346,24 @@
                 background: 'rgba(120,81,169,.15)',
                 borderRadius:'10px',
                 padding: '20px', 
-                width: '100%' }}
+                width: '100%',
+                fontWeight: 'bolder'}}
                 
                 primary={review.title}
-                
-               />
-         </ListItem>  
-         
-          {Array.isArray(comments) && comments
-            .filter((comment) => {comment.reviewId === reviewId
-            })
-            .map((comment)=>(
-            
-      
-         <ListItem>  
-               <ListItemAvatar sx={{display:'flex',flexDirection: 'rows'}}>
-                 <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                </ListItemAvatar>
-            <ListItemText key={review.id} sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              background: 'rgba(120,81,169,.15)',
-              borderRadius:'10px',
-              padding: '20px', 
-              width: '100%'
-               }}
                
                 
-                secondary={review.comment_text && comment.comment}
+               />
+               <ListItemText sx={{
+                background: 'rgba(120,81,169,.15)',
+                borderRadius:'10px',
+                padding: '20px', 
+                width: '100%' }}
                 
-                />
-             
-      
-      </ListItem>    
-        ))
-      }    
-        <div className='comment-form' >
+                primary={review.content}
+               />
+
+         </ListItem>  
+         <div className='comment-form' >
     <CssBaseline />
     <Box>
     <Typography component="div" variant="h6">
@@ -408,21 +391,45 @@
       </Box>
       </Box>
 
- 
-  </div>
-    </List>
-            
-    )}
-  }  
-          
-  {/* end of reviews */}
-    })}
-  
 
-   
-       
-  </div>       
-  //</div> 
+  </div>
+         </List>
+    )}}},
     
+      <List>
+  {comments.rows && commentsToDisplay.map(()=>
+      {Array.isArray(comments) && comments
+            .filter((comment) => {comment.reviewId === reviewId
+            })
+            .map((comment)=>(
+              
+          <ListItem>
+              <ListItemText key={comment.id} sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: 'rgba(120,81,169,.15)',
+                borderRadius:'10px',
+                padding: '20px', 
+                width: '100%'
+                 }}
+              
+                 secondary={comment.comment}
+                 
+              />
+
+    </ListItem>
+    
+    ))},
+     
+  
+    )}
+      </List>       
+          
+    )}
+                
+           
+    
+    </div>
+
     )};
   
