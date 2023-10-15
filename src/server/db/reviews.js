@@ -96,6 +96,25 @@ async function createReview(reviewData) {
   throw error;
 }}
   
+async function deleteReviewById(reviewId) {
+try {
+
+  const { rowCount } = await db.query(`
+  DELETE FROM reviews
+  WHERE "id" = $1`, [reviewId])
+
+  if (rowCount === 0) {
+    throw {
+      name: "ReviewError",
+      message: "No review with that id exists",
+    }
+  }
+  return{success:true};
+} catch(error){
+  console.error('Error deleting review', error);
+  throw error;
+ }
+};
 
 async function getReviewByUser(userId) {
     try {
@@ -200,6 +219,7 @@ module.exports = {
     getAllReviews,
     createReview,
     getReviewById,
+    deleteReviewById,
     getReviewByUser,
     getAllComments,
     createComment,
