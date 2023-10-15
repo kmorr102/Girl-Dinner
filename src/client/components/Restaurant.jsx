@@ -319,117 +319,73 @@
   </Typography>
 
 {Array.isArray(reviews.reviews) &&
-  Array.isArray(users) && 
-  reviews.reviews
-    .filter((review) => {
+  Array.isArray(users) && reviews.reviews.filter((review) => {
       return review.restaurant_id === restaurant.id})
     .map((review) => {
       if (Array.isArray(users)) {
         const user = users.find((user) => user.id === review.author_id);
         
-        if (user) {
+      if (user) {
          // console.log("User ID:", user.id);
          // console.log("User Name:", user.name);
           return (
-          
-  <List sx={ {display: 'flex', flexDirection:'column',width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
-
-    <ListItem sx={{display:'flex',flexDirection: 'column'}} alignItems="flex-start">
-    <ListItemAvatar sx={{marginTop: '15px', marginLeft: '-126px'}}>
-        {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
-        {/* <Avatar src="/broken-image.jpg" /> */}
-        <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
-        {user.username}
-        <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
-    </ListItemAvatar>
-              <ListItemText key={review.id} sx={{
-                background: 'rgba(120,81,169,.15)',
-                borderRadius:'10px',
-                padding: '20px', 
-                width: '100%',
-                fontWeight: 'bolder'}}
-                
-                primary={review.title}
-               
-                
-               />
-               <ListItemText sx={{
-                background: 'rgba(120,81,169,.15)',
-                borderRadius:'10px',
-                padding: '20px', 
-                width: '100%' }}
-                
-                primary={review.content}
-               />
-
-         </ListItem>  
-         <div className='comment-form' >
-    <CssBaseline />
-    <Box>
-    <Typography component="div" variant="h6">
-      Comment 
-    </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
-   
-      <input type="hidden" name="reviewId" value={reviewId} />
-
-      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
-        fullWidth
-        id="comment"
-        label="comment"
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}/>
-
-        <Button 
-          type="submit"
-          fullWidth
-          variant="outlined"
-          sx={{ display:'flex', flexDirection: 'row'}}
-        >
-          Post
-        </Button>
-      </Box>
-      </Box>
-
-
-  </div>
-         </List>
-    )}}},
-    
-      <List>
-  {comments.rows && commentsToDisplay.map(()=>
-      {Array.isArray(comments) && comments
-            .filter((comment) => {comment.reviewId === reviewId
-            })
-            .map((comment)=>(
-              
-          <ListItem>
-              <ListItemText key={comment.id} sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                background: 'rgba(120,81,169,.15)',
-                borderRadius:'10px',
-                padding: '20px', 
-                width: '100%'
-                 }}
-              
-                 secondary={comment.comment}
-                 
-              />
-
-    </ListItem>
-    
-    ))},
-     
+            <List key= {review.id} sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
+            
+            <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+                {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
+                {/* <Avatar src="/broken-image.jpg" /> */}
+                <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
+                {user.username}
+                <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
+            </ListItemAvatar>
+                      <ListItemText key={review.id} 
+                      sx={{
+                        background: 'rgba(120,81,169,.15)',
+                        borderRadius:'10px',
+                        padding: '20px', 
+                        width: '100%' }}
+                        
+                        primary={review.title}
+                        secondary={
+                        <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary"> 
+                        {review.content}
+                        <br />
+                        <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
+                        </Typography>
+                        }
+                        />
+                        {/* <ListItemAvatar>
+                          <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
+                          {review.comment_text}
+                        </ListItemAvatar> */}
+                        
+        
+                        {Array.isArray(comments)&&
+                        review.comments
+                        .map((comment)=>{
+                        <ListItemText key={comment.id}>
+                          <Typography sx={{ display: 'block' }}component="span"variant="body2"color="text.primary"> 
+                          <br />
+                          <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
+                          {/* <ListItemAvatar>
+                            <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
+                            </ListItemAvatar> */}
+                            {comment.comment}
+                        </Typography>
+                        </ListItemText>
+      
+                          })}
+                      
+              </ListItem>    
   
-    )}
-      </List>       
+            </List>    
+  )}}
+})
+  }
+          </div>   
+      )       
+    };
           
-    )}
-                
-           
-    
-    </div>
 
-    )};
   
