@@ -12,6 +12,7 @@ export default function Reviews({token}){
     
 
     const [reviews, setReviews]= useState('');
+    const [review, setReview] = useState('');
     const [title, setTitle]= useState('');
     const [content, setContent]= useState('');
     const [error, setError]= useState(null);
