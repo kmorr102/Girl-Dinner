@@ -44,7 +44,7 @@
     const [reviews, setReviews] = useState([]);
     const [users, setUsers] =useState([]);
     const [comments, setComments]= useState("");
-   // const [comment, setComment]= useState("");
+    const [comment, setComment]= useState("");
     const [reviewid, setReviewid]=useState("");
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState("");
@@ -390,14 +390,14 @@
               fullWidth
               id="comment"
               label="comment"
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}/>
-              <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}/>
+              {/* <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
               fullWidth
               id="comment"
               label="comment"
               value={reviewId}
-              onChange={(e) => setReviewid(e.target.value)}/>
+              onChange={(e) => setReviewid(e.target.value)}/> */}
 
              <Button 
              type="submit"
