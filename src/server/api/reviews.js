@@ -40,14 +40,14 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
 
 reviewsRouter.post("/", async (req, res, next) => {
     // Destructure the expected properties from the request body
-    const { title, content = "" } = req.body;
+    const { authorId, title, content = "" } = req.body;
   
-    const reviewData = {};
+    var reviewData = {};
   
     try {
       // Populate the reviewData object with the properties from the request body
      
-      //reviewData.authorId = authorId;
+      reviewData.authorId = authorId;
       reviewData.title = title;
       reviewData.content = content;
       //reviewData.comments = comments;
@@ -139,6 +139,7 @@ reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
   console.log('comment:', _comment)
   } catch ({ name, message }) {
     // Handle any errors that might occur during the process
+    console.log('error from api side:')
     next({ name, message });
   }
 });  

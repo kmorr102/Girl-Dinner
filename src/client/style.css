@@ -131,3 +131,18 @@ input[type=radio]{
 .navbar-button:hover {
   background-color: #a185c4; 
 }
+
+.review-btn {
+  display: inline-block;
+  padding: 8px 12px; 
+  background-color: #8d6ab8;
+  color: #fff; 
+  text-decoration: none; 
+  border-radius: 4px; 
+  border: none;
+  font-family: 'Merriweather';
+}
+
+.review-btn:hover {
+  background-color: #a185c4; 
+}
