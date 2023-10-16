@@ -16,6 +16,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CreateIcon from '@mui/icons-material/Create';
 import { NineKPlusOutlined } from "@mui/icons-material";
 
+import FormControl from 'react-bootstrap/FormControl'
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
 
 function Copyright(props) {
   return (
@@ -50,8 +53,25 @@ export default function CreateReview({currentUser}){
     const [isAuthor, setIsAuthor]= useState('')
     const [rating, setRating] = useState(null);
     const [hover, setHover] = useState(null);
+    const [restaurantId, setRestaurantId] = useState(null);
+
 
     const Navigate= useNavigate();
+    
+    useEffect(() => {
+      // Fetch the list of restaurants from your API endpoint and store it in state.
+      // Example:
+      fetch('http://localhost:3000/api/restaurants')
+        .then((response) => response.json())
+        .then((data) => {
+          // Set the restaurants data in state.
+          setSearchParams(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching restaurants', error);
+        });
+    }, []);
+    
     
     async function handleSubmit(e){
         e.preventDefault();
@@ -76,7 +96,8 @@ export default function CreateReview({currentUser}){
             body: JSON.stringify({
                       title,
                       content,
-                      authorId
+                      authorId, 
+                      restaurantId
           })
         });
           const result = await response.json();
@@ -108,6 +129,28 @@ export default function CreateReview({currentUser}){
           <Typography component="h1" variant="h5">
             Write Review
           </Typography>
+          
+          <FormControl fullWidth>
+          <FloatingLabel htmlFor="restaurant-select">Select a restaurant</FloatingLabel>
+          <Form.Select
+            value={restaurantId}
+            onChange={(e) => setRestaurantId(e.target.value)}
+            inputProps={{
+              name: 'restaurant',
+              id: 'restaurant-select',
+            }}
+          >
+            <MenuItem value="" disabled>
+              Select a restaurant
+            </MenuItem>
+            {searchParams.map((restaurant) => (
+              <MenuItem key={restaurant.id} value={restaurant.id}>
+                {restaurant.name}
+              </MenuItem>
+            ))}
+          </Form.Select>
+        </FormControl>
+
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
