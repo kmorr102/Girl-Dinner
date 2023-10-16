@@ -211,15 +211,16 @@ export default function CreateReview({currentUser}){
                 open={open}
                 onClose={handleClose}
               >
-                {searchParams &&
+                {restaurantId &&
                   searchParams.map((restaurant) => (
                     <MenuItem
-                      key={restaurant.id}
-                      value={restaurant.id}
-                      onClick={() => handleSelectRestaurant(restaurant.id)}
-                    >
-                      {restaurant.name}
-                    </MenuItem>
+                    key={restaurant.id}
+                    value={restaurant.id}
+                    onClick={() => handleSelectRestaurant(restaurant.id)}
+                  >
+                    {restaurant.name}
+                  </MenuItem>
+                  
                   ))}
               </StyledMenu>
 
