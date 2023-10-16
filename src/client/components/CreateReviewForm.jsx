@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom'
 import { FaStar } from 'react-icons/fa' 
 
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -35,14 +34,16 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function CreateReview(props){
+export default function CreateReview({currentUser}){
     const tokenString = sessionStorage.getItem("authToken");
-    //console.log('token from login(storage):', tokenString)
-    
+    console.log('token from login(storage):', tokenString)
+    console.log(currentUser.name)
 
     const [reviews, setReviews]= useState('');
+    const auth = sessionStorage.getItem('authToken');
     const [title, setTitle]= useState('');
     const [content, setContent]= useState('');
+    const [authorId, setAuthorId]= useState('');
     const [error, setError]= useState(null);
     const [searchParams, setSearchParams]= useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -63,23 +64,26 @@ export default function CreateReview(props){
       
         try {
           //console.log('at the start of try block')
+          const authorId = currentUser.userId
+          console.log(JSON.stringify({title, content, authorId}))
           const response= await fetch('http://localhost:3000/api/reviews',
           {
             method: 'POST',
             headers: {
-                      'Content-Type': 'application/json',
-                      //'Authorization': `Bearer ${tokenString}`
+                      'Content-Type': 'application/json'
+                      // 'Authorization': `Bearer ${tokenString}`
                     },
             body: JSON.stringify({
                       title,
-                      content
+                      content,
+                      authorId
           })
         });
           const result = await response.json();
-          console.log('result:', result)
+          console.log('result:', JSON.stringify(result))
           return result;
         } catch (error) {
-          console.error('error creating post')
+          console.error('error creating post', error)
           return{success: false, error: error.message};
           
         }

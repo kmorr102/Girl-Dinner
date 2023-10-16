@@ -90,11 +90,13 @@ async function createReview(reviewData) {
       RETURNING *;
       `,
       [authorId, title, content, restaurantId]
-
-    )};
-}catch(error){
+    );
+    return review;
+  }
+} catch (error) {
   throw error;
-}}
+}
+}
   
 async function deleteReviewById(reviewId) {
 try {

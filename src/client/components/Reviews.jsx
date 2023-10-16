@@ -8,7 +8,7 @@ import Divider from '@mui/material/Divider';
 
 export default function Reviews({token}){
     const tokenString = sessionStorage.getItem("authToken");
-    //console.log('token from login(storage):', tokenString)
+    console.log('token from login(storage):', tokenString)
     
 
     const [reviews, setReviews]= useState('');
@@ -26,7 +26,7 @@ export default function Reviews({token}){
       async function getAllReviews() {
           const response = await fetchAllReviews('http://localhost:3000/api/reviews'); 
           if(response) {
-            console.log("response:",response)
+            console.log("response:", response)
             setReviews(response);
           }else{
             setError(response);
@@ -37,27 +37,27 @@ export default function Reviews({token}){
         
     const { reviewId }= useParams();
 
-    useEffect(() => {
-      async function getReviewById() {
-        try {
-          const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
-          console.log('API Response:', response); // Log the full response
+    // useEffect(() => {
+    //   async function getReviewById() {
+    //     try {
+    //       const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
+    //       console.log('API Response:', response); // Log the full response
     
-          //if (!response.ok) {
-            //throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
-          //}
+    //       //if (!response.ok) {
+    //         //throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
+    //       //}
     
-          const data = await response.json();
-          console.log('Review data:', data.reviewid.id);
-          setReview(data);
-        } catch (error) {
-          console.error('Error occurred:', error);
-          setError(error.message);
-        }
-      }
+    //       const data = await response.json();
+    //       console.log('Review data:', data.reviewid.id);
+    //       setReview(data);
+    //     } catch (error) {
+    //       console.error('Error occurred:', error);
+    //       setError(error.message);
+    //     }
+    //   }
     
-      getReviewById();
-    }, []);
+    //   getReviewById();
+    // }, []);
     // why is 'isAuthor' not being read?
     
    /* isAuthor = (review) => {

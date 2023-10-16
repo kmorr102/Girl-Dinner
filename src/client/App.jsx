@@ -99,8 +99,8 @@ const location = useLocation();
           <Route path="/Profile" element={<Profile currentUser={currentUser} setCurrentUser={setCurrentUser}/>} />
           <Route path="/Login" element={<Login currentUser={currentUser} setCurrentUser={setCurrentUser} setToken={setToken} token={token}/>} />
           <Route path="/Register" element={<Register setToken={setToken} token={token} />} />
-          <Route path="/Reviews" element={<Reviews token={token}/>}/>
-          <Route path="/CreateReview" element={<CreateReviewForm />} />
+          <Route path="/Reviews" element={<Reviews currentUser={currentUser} token={token}/>}/>
+          <Route path="/CreateReview" element={<CreateReviewForm currentUser={currentUser} setCurrentUser={setCurrentUser} token={token}/>} />
           <Route path="/Logout" element={<Logout />} />
           <Route path="/Restaurants/:restaurantid" element={<Restaurant />} />
         </Routes>
