@@ -101,8 +101,6 @@ async function updateReview(){
   
 }
 
-}
-}
   
 async function deleteReviewById(reviewId) {
 try {
