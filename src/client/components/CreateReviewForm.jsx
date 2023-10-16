@@ -124,7 +124,8 @@ export default function CreateReview({currentUser}){
         .then((response) => response.json())
         .then((data) => {
           // Set the restaurants data in state.
-          setSearchParams(data);
+          console.log('search params', data.restaurants)
+          setSearchParams(data.restaurants);
         })
         .catch((error) => {
           console.error('Error fetching restaurants', error);
@@ -211,19 +212,23 @@ export default function CreateReview({currentUser}){
                 open={open}
                 onClose={handleClose}
               >
-                {restaurantId &&
+                 
+                {Array.isArray(searchParams)&&
                   searchParams.map((restaurant) => (
                     <MenuItem
                     key={restaurant.id}
                     value={restaurant.id}
+                    
                     onClick={() => handleSelectRestaurant(restaurant.id)}
+                    
                   >
                     {restaurant.name}
                   </MenuItem>
                   
                   ))}
+                {/* {console.log('restaurant.name', restaurant.name)} */}
               </StyledMenu>
-
+              
 
           {/* <FormControl fullWidth>
           <FloatingLabel htmlFor="restaurant-select">Select a restaurant</FloatingLabel>
