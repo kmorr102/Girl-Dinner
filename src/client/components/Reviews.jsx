@@ -180,7 +180,7 @@ export default function Reviews({token}){
                       borderRadius: '4px'
                         }}
                       variant = "text"
-                      onClick={() => deleteReview(review._id, /*userId*/)}>
+                      onClick={() => deleteReview(review.id, /*userId*/)}>
  
                       Delete
               </Button>
