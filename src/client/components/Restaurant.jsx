@@ -331,12 +331,10 @@
          // console.log("User ID:", user.id);
          // console.log("User Name:", user.name);
           return (
-            <List key= {review.id} sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
+            <List key= {review.id} sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper', display: 'flex' , flexDirection: 'column'}}>
             
-            <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-                {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
-                {/* <Avatar src="/broken-image.jpg" /> */}
+            <ListItem sx={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
+            <ListItemAvatar sx={{display:'flex', alignItems:'flex-end', padding:'5px'}}>
                 <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
                 {user.username}
                 <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
@@ -351,84 +349,68 @@
                         primary ={
                           <Typography>
                             {review.title}
-                            <br />
+                            <Divider ></Divider>
+                           
                             <br />
                             {review.content}
                           </Typography>
                         }
                         secondary={
                         <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary"> 
-                        
-                       
                         <br />
-                        
                         </Typography>
                         }
                         />
                       
-                        <Card>
-        
-               
-                        
-                      
-                         
-                        {Array.isArray(comments)&& commentsToDisplay
-                        .map((comments)=>{
-                          <CardContent key={comments.id}>
-                           <ListItemAvatar>
-                           <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                           </ListItemAvatar> 
-                            <Typography sx={{ display: 'block' }}component="span"variant="body2"color="text.primary"> 
+                 
+                  {Array.isArray(comments) && commentsToDisplay
+                  .filter((comment) => comment.reviewId === review.id)
+                  .map((comment) => (
+                  <CardContent key={comment.id}>
+                  <ListItemAvatar>
+                  <Avatar  src="/broken-image.jpg" />
+                  </ListItemAvatar>
+                  <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
+                  <br />
+                  {comment.comment}
+                 </Typography>
+                 </CardContent>
+                  ))}
                             
-                            <br />
-                            
-                            {comments.comment}
-                         
-                              
-                          </Typography>
-                          </CardContent>
-                          
-                          console.log('comments.comments:',comments.comments )//undefined
-                          console.log('review.comments:',review.comments )
-                          console.log('comment.reviewId', comments.reviewId)//works 
-                          //console.log('review.id', review.id)//working
-                            })}
                         
                
-<div className='comment-form' >
-    <CssBaseline />
-    <Box>
-      <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
+            <div className='comment-form' >
+              <CssBaseline />
+               <Box>
+                <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
    
-      <input type="hidden" name="reviewId" value={reviewId} />
+              <input type="hidden" name="reviewId" value={reviewId} />
 
-      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
-        fullWidth
-        id="comment"
-        label="comment"
-        value={comments}
-        onChange={(e) => setComments(e.target.value)}/>
-      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
-        fullWidth
-        id="comment"
-        label="comment"
-        value={reviewId}
-        onChange={(e) => setReviewid(e.target.value)}/>
+              <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+              fullWidth
+              id="comment"
+              label="comment"
+              value={comments}
+              onChange={(e) => setComments(e.target.value)}/>
+              <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+              fullWidth
+              id="comment"
+              label="comment"
+              value={reviewId}
+              onChange={(e) => setReviewid(e.target.value)}/>
 
-        <Button 
-          type="submit"
-          fullWidth
-          variant="outlined"
-          sx={{ display:'flex', flexDirection: 'row'}}
-        >
-          Post
-        </Button>
-      </Box>
-      </Box>
-
-
-  </div>
-  </Card>
+             <Button 
+             type="submit"
+             fullWidth
+             variant="outlined"
+             sx={{ display:'flex', flexDirection: 'row'}}
+             >
+              Post
+             </Button>
+           </Box>
+           </Box>
+           </div>
+         
               </ListItem>    
   
             </List>    

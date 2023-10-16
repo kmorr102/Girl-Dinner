@@ -254,7 +254,10 @@ async function createInitialReviews() {
         restaurantId: 8,
         title: "Best food ever",
         content: "I would recommend to others!",
-        comments: ["I definitely agree!"]
+        reviewId:1,
+        comments:["I definitely agree!"]
+         
+      
       },
       {
         authorId: users[2].id,
@@ -310,7 +313,7 @@ async function createInitialReviews() {
         restaurantId: 2,
         title:"So many flavors!",
         content:"They have the best ice in town! If you know, you know.",
-        comments:["Ashley our server was great!"]
+        comments:["Great family place"]
       },
       {
         authorId: users[3].id,
@@ -322,16 +325,37 @@ async function createInitialReviews() {
       {
         authorId: users[2].id,
         restaurantId: 2,
-        title: "Hats off to the chef",
-        content:"I have a sweet tooth, and cozy coffee always satisfies my cravings. Their pastries are like a slice of heaven.",
-        comments:["Love their decor!"]
+        title: "Best Pizza Evaaaa!",
+        content:"If you're looking for good pizza look no further.",
+        comments:["Love their sports theme decor!"]
       },
       {
         authorId: users[3].id,
-        restaurantId:2,
+        restaurantId:7,
         title: "Hats off to the chef",
         content:"This place really knows how to bring the heat. The spicy dishes here are not for the faint of heart. I loved every bite!",
         comments:[ "You have to try their happy hour, they have drinks for cheap"]
+      },
+      {
+        authorId: users[1].id,
+        restaurantId: 9,
+        title: "Literally the best!!",
+        content:"This place is a hidden gem. The tropical cocktails and island vibes make you feel like you're on vacation. Highly recommended!!",
+        comments:[ "Also happy hour food is cheap but delicous"]
+      },
+      {
+        authorId: users[3].id,
+        restaurantId:7,
+        title: "Thia spice puts the spice in spice",
+        content:"If food with flavor is your thing, check them out!",
+        comments:[ "Love the appetizers!"]
+      },
+      {
+        authorId: users[2].id,
+        restaurantId:5,
+        title: "A coffee lovers dream",
+        content:"I have a sweet tooth and going here always satisfies my cravings. Their pastries are like a slice of heaven.",
+        comments:[ "Try the espresso!"]
       },
     ];
     
@@ -425,11 +449,6 @@ const seedDatabase = async () => {
         console.log("Calling getAllUsers");
         const _users = await getAllUsers();
         console.log("Result:", _users);
-    
-
-        // console.log ('Calling User by Id')
-        // const user= await getUserById();
-        // console.log("Result:", user)
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();
         console.log("Result:", reviews);
