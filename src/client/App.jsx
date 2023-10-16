@@ -47,7 +47,7 @@ function AccountMenu() {
         <MenuItem component={Link} to="/Profile" onClick={handleClose}>
           Profile
         </MenuItem>
-        <MenuItem component={Link} to="/Logout" onClick={handleClose}>
+        <MenuItem component={Link} to="/Logout" onClick={() => {handleLogout(); handleClose(); }} >
           Log Out
         </MenuItem>
       </Menu>

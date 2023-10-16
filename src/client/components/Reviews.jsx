@@ -41,7 +41,7 @@ export default function Reviews({token}){
       getAllReviews();
     }, []);
         
-    const { reviewId }= useParams();
+    // const { reviewId }= useParams();
 
     // useEffect(() => {
     //   async function getReviewById() {
@@ -64,6 +64,7 @@ export default function Reviews({token}){
     
     //   getReviewById();
     // }, []);
+
     // why is 'isAuthor' not being read?
     
    /* isAuthor = (review) => {
@@ -80,17 +81,15 @@ export default function Reviews({token}){
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tokenString}`
+          // 'Authorization': `Bearer ${tokenString}`
         }
-       });
+    });
     const resultDelete = await response.json();
-    if (resultDelete) {window.location.reload()}
+    // if (resultDelete) {window.location.reload()}
     alert("Review successfully deleted.");
-      /* else {
-    alert("Permission denied. You are not authorized to delete this review."); */
-   } catch (error) {
+  } catch (error) {
     console.error(error);
-}} 
+  }}; 
 
 // const reviewBoxStyle = {
 //   border: '1px solid #ccc',
@@ -187,6 +186,7 @@ export default function Reviews({token}){
               </Button>
           
               </List>
+
            </div>
           
         ))}

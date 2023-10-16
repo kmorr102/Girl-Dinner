@@ -1,11 +1,12 @@
 import { useState,useEffect } from "react";
 import {Link, useNavigate} from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 
 export default function Logout(){
   const[token,setToken]=useState(sessionStorage.getItem('authToken'));
   const[isLoggedIn,setIsLoggedIn]=useState(false);
   const[username,setUsername]=useState('');
-  console.log('token:',token)
+  console.log('token:',token);
   
   const navigate=useNavigate();
   
@@ -16,7 +17,12 @@ export default function Logout(){
     }else{
       setIsLoggedIn(false);
     }
-   })
+   }, []);
+
+    // Add a timeout to navigate back to the home component after a delay
+    setTimeout(() => {
+      navigate('/');
+    }, 1000); // timeout duration before navigation
   
    const handleLogout = () => {
     // Log out logic here (e.g., clear tokens, user data, etc.)
@@ -24,32 +30,24 @@ export default function Logout(){
     setIsLoggedIn(false);
     sessionStorage.removeItem('authToken');
   
-    // Navigate to the logout component
-    navigate('/Logout');
+  };
   
-    // Add a timeout to navigate back to the home component after a delay
-    setTimeout(() => {
-      navigate('/');
-    }, 1000); // Adjust the timeout duration as needed
-  
-  
-  {isLoggedIn ? (
-    //<Link to={"/Logout"} onClick={handleLogout}> </Link>
-   <button onClick={handleLogout} className='logout-button'>Logout</button>
-    ) : (
-      <Link to="/Login" className="Login">
-        Logout
-      </Link>
-    )}
-    };
+  const logoutContainer = {
+    height: "90vh", 
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
 
-    setTimeout(()=>{
-        navigate("/");
-      }, 1000)
-    
-      return(
-    
-    <h1>You've been logged out</h1>
+  const alertStyle = {
+    width: "100%",  
+    margin: "0 auto",  
+    fontSize: "20px"
+  };
 
-    )
+return (
+  <div style={logoutContainer}>
+    <Alert style={alertStyle} severity="success">You have successfully logged out!</Alert>
+    </div>
+    );
 }

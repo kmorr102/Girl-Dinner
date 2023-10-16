@@ -49,10 +49,10 @@ async function getReviewById(reviewId) {
             WHERE id=$1;
         `, [review.authorId])
 
-        review.comments= comments;
-        review.author=author;
+        // review.comments= comments;
+        // review.author=author;
 
-        delete review.authorId;
+        // delete review.authorId;
         
         return review;
     } catch (error) {

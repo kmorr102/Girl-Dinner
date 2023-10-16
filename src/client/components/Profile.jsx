@@ -41,11 +41,11 @@ async function deleteReview (reviewId) {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${tokenString}`
+        // 'Authorization': `Bearer ${tokenString}`
       }
   });
   const resultDelete = await response.json();
-  if (resultDelete) {window.location.reload()}
+  // if (resultDelete) {window.location.reload()}
   alert("Review successfully deleted.");
 } catch (error) {
   console.error(error);
@@ -133,7 +133,7 @@ return(
               <h2>{review.title}</h2>
               <p>{review.content}</p>
               <button onClick={() => editReview(review)}>Edit Review</button>
-              <button onClick={() => deleteReview(review)}>Delete</button>
+              <button onClick={() => deleteReview(review.id)}>Delete</button>
             </div>
           ))
         ) : (
