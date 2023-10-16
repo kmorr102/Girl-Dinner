@@ -46,7 +46,7 @@ async function deleteReview (reviewId) {
   });
   const resultDelete = await response.json();
   // if (resultDelete) {window.location.reload()}
-  // alert("Review successfully deleted.");
+  alert("Review successfully deleted.");
 } catch (error) {
   console.error(error);
 }}; 
