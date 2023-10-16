@@ -254,7 +254,10 @@ async function createInitialReviews() {
         restaurantId: 8,
         title: "Best food ever",
         content: "I would recommend to others!",
-        comments: ["I definitely agree!"]
+        reviewId:1,
+        comments:["I definitely agree!"]
+         
+      
       },
       {
         authorId: users[2].id,
@@ -446,11 +449,6 @@ const seedDatabase = async () => {
         console.log("Calling getAllUsers");
         const _users = await getAllUsers();
         console.log("Result:", _users);
-    
-
-        // console.log ('Calling User by Id')
-        // const user= await getUserById();
-        // console.log("Result:", user)
         console.log("Calling getAllReviews");
         const reviews = await getAllReviews();
         console.log("Result:", reviews);

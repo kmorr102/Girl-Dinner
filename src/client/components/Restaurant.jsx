@@ -1,4 +1,5 @@
   import { useState, useEffect } from "react";
+
   import { Link, useNavigate, useParams } from "react-router-dom";
   import { fetchAllRestaurants } from "../API";
   import { fetchAllReviews } from "../API";
@@ -8,7 +9,8 @@
   import CssBaseline from '@mui/material/CssBaseline';
   import Box from '@mui/material/Box';
   import Paper from '@mui/material/Paper';
-  import Grid from '@mui/material/Grid';  
+  import Grid from '@mui/material/Grid';
+  import { createTheme, ThemeProvider } from '@mui/material/styles';  
 
   import List from '@mui/material/List';
   import ListItem from '@mui/material/ListItem';
@@ -22,6 +24,7 @@
   import CardContent from '@mui/material/CardContent';
 
   import Typography from '@mui/material/Typography';
+  import TextField from '@mui/material/TextField';
 
   import RateReviewIcon from '@mui/icons-material/RateReview';
   import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
@@ -33,24 +36,21 @@
 
 
   const tokenString = sessionStorage.getItem("authToken");
-
+  const defaultTheme = createTheme();
+  
   export default function Restaurant() {
     const [restaurant, setRestaurant] = useState([]);
     //const [review, setReview]=useState([]);
     const [reviews, setReviews] = useState([]);
     const [users, setUsers] =useState([]);
-    const [userIds, setUserIds] = useState([]);
-    const [name, setName] = useState("");
-    const [address, setAddress] = useState("");
-    const [img, setImg] = useState(null);
-    const [number, setNumber] = useState("");
-    const [content, setContent] = useState("");
+    const [comments, setComments]= useState("");
+    const [comment, setComment]= useState("");
+    const [reviewid, setReviewid]=useState("");
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [isAuthor, setIsAuthor] = useState("");
 
-  
 
     const { restaurantid }= useParams();
 
@@ -59,15 +59,14 @@
       const response= await fetch(`http://localhost:3000/api/restaurants/${restaurantid}`);
       if(response){
         const data= await response.json();
-        console.log('restaurant id:',data.id)
+        //console.log('restaurant id:',data.id)
         setRestaurant(data)
-        console.log( 'Restaurant:', data)
+       // console.log( 'Restaurant:', data)
       }else{
         setError(response)
         console.log('error:', error)
       }
     }
-
   getRestaurantById();
   }, [restaurantid])
 
@@ -101,7 +100,7 @@
           const response = await fetch('http://localhost:3000/api/users');
           if (response.ok) {
             const data = await response.json();
-            console.log('Users:', data.users); 
+            //console.log('Users:', data.users); 
             setUsers(data.users); 
           } else {
             setError(response);
@@ -114,43 +113,65 @@
     
       getAllUsers();
     }, []);
-    // console.log("UserId:", users)
+  
+    //const Navigate= useNavigate();  
+    //Navigate(`/restaurants/${restaurant.id}`)
+    const { reviewId }= useParams();
+    
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
+      try {
+        // Use fetch to post the comment with the reviewId.
+        const response = await fetch(`/api/reviews/${reviewId}/comments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            reviewId, 
+            comments,
+          }),
+        });
+  
+        if (response.ok) {
+          // Comment posted successfully, refresh the page or update comments.
+          // Optionally, you can add logic to refresh comments.
+        } else {
+          // Handle errors when the comment posting fails.
+          console.error('Error creating comment');
+        }
+      } catch (error) {
+        console.error('Error creating comment', error);
+      }
+    };
+
+
+    useEffect(()=>{   
+      async function getAllComments(){
+        try {
+          const APIResponse = await fetch (`http://localhost:3000/api/reviews/${reviewId}/comments`)
+          if(APIResponse){
+            const data = await APIResponse.json();
+            //console.log('comments:', data.comments.rows)
+            setComments(data.comments.rows);
+          }else{
+            setError(error);
+          }
+        } catch (error) {
+          console.log('error at end of get all comments:', error)
+        }
+      }
+    getAllComments();
+  },[])
+  
+  const commentsToDisplay = comments
+  //console.log('comments to display:', comments)
     
 
-    
-    //  let reviewId= window.location.href.split("/").pop()
-    
-    
-    //  useEffect(() => {
-    //    async function getReviewById() {
-    //      try {
-    //        const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`);
-        
-    
-    //        if (!response.ok) {
-    //          throw new Error(`API response not OK: ${response.status} ${response.statusText}`);
-    //      }
-    
-    //        const data = await response.json();
-    //       console.log('ReviewbyId:', data);
-    //       setReview(data);
-    //      } catch (error) {
-    //        console.error('Error occurred:', error);
-    //        setError(error.message);
-    //      }
-    //    }
-    
-    //    getReviewById();
-    //  }, [])
 
-    
-    
-    
-
-    
-    
-    return (
-  <div className="restaurant" key={restaurant.name}>
+  return (
+  <div className="restaurant" key={restaurant.id}>
   <CssBaseline />
   {/* {Restaurnt Image Header Start} */}
   <Paper
@@ -288,79 +309,113 @@
             {'"a benevolent smile"'}
     </Typography>
   </CardContent>
-  </Card>
-  {/* {restaurant && (
-    <div key={restaurant.id} className="displayedRestaurant">
-      <p>{restaurant.address}</p>
-      <p>{restaurant.number}</p>
-  } */}
+
 
   {/* Start of restaurant reviews */}
-  <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontWeight: 'bold', fontSize: '36px', textAlign: 'center' }}>
+  <Typography variant="h1" component="div" style={{ marginBottom: '20px', fontSize: '36px', textAlign: 'center' }}>
         Top Reviews
-      </Typography>
+  </Typography>
 
 {Array.isArray(reviews.reviews) &&
-  Array.isArray(users) && 
-  reviews.reviews
-    .filter((review) => {
-      return review.restaurant_id === restaurant.id;
-    })
+  Array.isArray(users) && reviews.reviews.filter((review) => {
+      return review.restaurant_id === restaurant.id})
     .map((review) => {
       if (Array.isArray(users)) {
         const user = users.find((user) => user.id === review.author_id);
-        
-        if (user) {
-          console.log("User ID:", user.id);
-          console.log("User Name:", user.name);
+        console.log('reviews.id:',review.id)
+      if (user) {
+         // console.log("User ID:", user.id);
+         // console.log("User Name:", user.name);
           return (
-
-  <List sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper' }}>
-
-    <ListItem alignItems="flex-start">
-    <ListItemAvatar>
-        {/* <Avatar alt={faker.name.findName()} src={faker.image.avatar()} />  */}
-        {/* <Avatar src="/broken-image.jpg" /> */}
-        <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
-        {user.username}
-        <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
-    </ListItemAvatar>
-              <ListItemText key={review.id} sx={{
-                background: 'rgba(120,81,169,.15)',
-                borderRadius:'10px',
-                padding: '20px', 
-                width: '100%' }}
-                
-                primary={review.title}
-
-                secondary={
-                <Typography sx={{ display: 'block' }}
-                component="span"
-                variant="body2"
-                color="text.primary"> 
-                {review.content}
-                <br />
-                <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
-                <ListItemAvatar>
-                  <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                  {review.comment_text}
-                </ListItemAvatar>
-                
-              </Typography>
-                }
-              />
-              
-      </ListItem>        
-    </List>
+            <List key= {review.id} sx={ {width: '100%', maxWidth: 'auto', bgcolor: 'background.paper', display: 'flex' , flexDirection: 'column'}}>
             
-    )}
-  }  
+            <ListItem sx={{display:'flex', flexDirection:'column', alignItems:'flex-start'}}>
+            <ListItemAvatar sx={{display:'flex', alignItems:'flex-end', padding:'5px'}}>
+                <Avatar alt={user.name} src="/static/images/avatar/1.jpg" />
+                {user.username}
+                <Rating name="read-only" value={5} readOnly style={{ display: 'flex', marginRight: '20px', fontSize: '24px' }} />
+            </ListItemAvatar>
+                      <ListItemText key={review.id} 
+                      sx={{
+                        background: 'rgba(120,81,169,.15)',
+                        borderRadius:'10px',
+                        padding: '20px', 
+                        width: '100%' }}
+                        
+                        primary ={
+                          <Typography>
+                            {review.title}
+                            <Divider ></Divider>
+                           
+                            <br />
+                            {review.content}
+                          </Typography>
+                        }
+                        secondary={
+                        <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary"> 
+                        <br />
+                        </Typography>
+                        }
+                        />
+                      
+                 
+                  {Array.isArray(comments) && commentsToDisplay
+                  .filter((comment) => comment.reviewId === review.id)
+                  .map((comment) => (
+                  <CardContent key={comment.id}>
+                  <ListItemAvatar>
+                  <Avatar  src="/broken-image.jpg" />
+                  </ListItemAvatar>
+                  <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
+                  <br />
+                  {comment.comment}
+                 </Typography>
+                 </CardContent>
+                  ))}
+                            
+                        
+               
+            <div className='comment-form' >
+              <CssBaseline />
+               <Box>
+                <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
+   
+              <input type="hidden" name="reviewId" value={reviewId} />
+
+              <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+              fullWidth
+              id="comment"
+              label="comment"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}/>
+              {/* <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+              fullWidth
+              id="comment"
+              label="comment"
+              value={reviewId}
+              onChange={(e) => setReviewid(e.target.value)}/> */}
+
+             <Button 
+             type="submit"
+             fullWidth
+             variant="outlined"
+             sx={{ display:'flex', flexDirection: 'row'}}
+             >
+              Post
+             </Button>
+           </Box>
+           </Box>
+           </div>
+         
+              </ListItem>    
+  
+            </List>    
+  )}}
+})
+  }
+          </div>   
+      )       
+    };
           
-  {/* end of reviews */}
 
-    
-    })}
-
-  </div>   
-    )};
   

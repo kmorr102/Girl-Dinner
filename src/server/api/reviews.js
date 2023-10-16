@@ -126,12 +126,14 @@ console.log('comments:', comments)
 
 //POST create a new comment api/reviews/reviewId/comments
 reviewsRouter.post("/:reviewId/comments", async (req,res,next) =>{
-  const {comment}= req.body;
+  const {comment, reviewId}= req.body;
   // reviewId=req.params.reviewId;
   console.log('comment API', comment)
+  console.log('reviewId:', reviewId)
   const commentData= {}
   try {
     commentData.comment=comment
+    commentData.reviewId=reviewId
   const _comment= await createComment(commentData);
   res.send(_comment)
   console.log('comment:', _comment)

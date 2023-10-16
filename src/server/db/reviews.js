@@ -95,6 +95,12 @@ async function createReview(reviewData) {
   }
 } catch (error) {
   throw error;
+
+}}
+async function updateReview(){
+  
+}
+
 }
 }
   
@@ -117,6 +123,7 @@ try {
   throw error;
  }
 };
+
 
 async function getReviewByUser(userId) {
     try {
@@ -193,11 +200,12 @@ async function deleteCommentById(commentId){
 async function createComment(commentData){  
   try {
     const {comment,reviewId}= commentData
- 
+    console.log('commentData:',commentData)
     const{ rows: [existingComment]}= await db.query(`
     SELECT * FROM comments
     WHERE  comment= $1 AND "reviewId"= $2
     `,[comment,reviewId])
+    
     if(existingComment){
       console.log("Comment already submitted, Updating...");
       return existingComment;
@@ -220,6 +228,7 @@ async function createComment(commentData){
 module.exports = {
     getAllReviews,
     createReview,
+    updateReview,
     getReviewById,
     deleteReviewById,
     getReviewByUser,
@@ -230,3 +239,4 @@ module.exports = {
     deleteCommentById
 
 }
+
