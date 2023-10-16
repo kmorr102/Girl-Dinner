@@ -264,7 +264,7 @@ async function createInitialReviews() {
         restaurantId: 6,
         title: "Decent food",
         content: "Reasonable prices and pretty good food",
-        comments: ["I agree with the review, food is decent but nothing you can't make at home."]
+        comments: ["I agree with the review, good comfort food!"]
       },
       {
         authorId: users[3].id,
@@ -274,11 +274,18 @@ async function createInitialReviews() {
         comments: ["I also attended a party here and it was a great space for pictures"]
       },
       {
+        authorId: users[3].id,
+        restaurantId: 9,
+        title: "This place is AMAZING",
+        content:  "After a long day of shopping the family wanted a nice sit down dinner! The place is brand new, but I know its going to be a local favorite!",
+        comments: ["Kind of dark inside but fits the restaurnts aesthetic"]
+      },
+      {
         authorId: users[1].id,
-        restaurantId: 7,
-        title: "Would not go here again",
-        content:  "I have had better'",
-        comments:["Rude staff:("]
+        restaurantId: 1,
+        title: "Would go back!",
+        content:  "Shrimp cocktail was great. Apps during happy hour are also super good.",
+        comments:["Waited almost an hour for food, it was delicious though once we got it."]
       },
       {
         authorId: users[0].id,
@@ -290,9 +297,16 @@ async function createInitialReviews() {
       {
         authorId: users[2].id,
         restaurantId: 4,
-        title:"Wasn't great:(",
-        content:"I've heard such great things, but I personally won't be going back",
-        comments:["Waste of a datenight."]
+        title:"Was great",
+        content:"I've heard such great things! It was great!",
+        comments:["Perfect place for datenight."]
+      },
+      {
+        authorId: users[0].id,
+        restaurantId: 4,
+        title:"For all your sandwhich needs!",
+        content:" They literally make you what ever you want! From pb&J to tuna melts!",
+        comments:["There bread is incredible"]
       },
       {
         authorId: users[1].id,
@@ -310,14 +324,14 @@ async function createInitialReviews() {
       },
       {
         authorId: users[0].id,
-        restaurantId: 2,
+        restaurantId: 3,
         title:"So many flavors!",
         content:"They have the best ice in town! If you know, you know.",
         comments:["Great family place"]
       },
       {
         authorId: users[3].id,
-        restaurantId: 2,
+        restaurantId: 1,
         title:"So many flavors!",
         content:"This place is a seafood lover's dream. The freshness and flavors of the dishes are unmatched. I'll be back for the lobster!",
         comments:["Great place for a family dinner or datenight"]
@@ -338,7 +352,7 @@ async function createInitialReviews() {
       },
       {
         authorId: users[1].id,
-        restaurantId: 9,
+        restaurantId: 8,
         title: "Literally the best!!",
         content:"This place is a hidden gem. The tropical cocktails and island vibes make you feel like you're on vacation. Highly recommended!!",
         comments:[ "Also happy hour food is cheap but delicous"]
@@ -357,6 +371,21 @@ async function createInitialReviews() {
         content:"I have a sweet tooth and going here always satisfies my cravings. Their pastries are like a slice of heaven.",
         comments:[ "Try the espresso!"]
       },
+      {
+        authorId: users[0].id,
+        restaurantId: 2,
+        title: "Best food ever",
+        content: "I would recommend to others!",
+        reviewId:1,
+        comments:["I definitely agree!"]
+      },
+      {
+        authorId: users[3].id,
+        restaurantId:5,
+        title: "Love the coffee smell",
+        content:"Best place to get a cup of joe and read a book.",
+        comments:[ "Our barista was great! I think her name was Candice!"]
+      },
     ];
     
     for (const reviewData of reviewDataArray) {
@@ -371,56 +400,51 @@ async function createInitialReviews() {
   }
 }
 
-
-
-/*async function createInitialComments() {
-  try {
-const reviews = await getAllReviews();
-
 const commentList = [
   {
-    id: reviews[1],
+   
+    reviewId:1,
     content: "I definitely agree!"
   },
   {
-    id: reviews[1],
+    reviewId:2,
     content: "I agree with the review, food is decent but nothing you can't make at home."
   },
   {
-    id: reviews[1],
+    reviewId:3,
     content: "I also attended a party here and it was a great space for pictures"
   },
   {
-    id:reviews[1],
+    reviewId:4,
     content:"Rude staff:("
   },
   {
-    id: reviews[1],
+    reviewId:5,
     content:"Cheesecake is 10/10"
   },
   {
-    id: reviews[1],
+    reviewId:6,
     content:"Waste of a datenight."
   },
   {
-    id: reviews[1],
+    reviewId: 7,
     content:"Ashley our server was great!"
   },
 ];
 
-
-const commentContent = commentList.map((comment) => comment.content);
-
-    console.log('Creating Comments:', commentContent);
-    await createComment(commentList);
-
-    console.log('Comments created successfully');
-  } catch (err) {
-    console.log('Error creating comments');
-    throw err;
+const createInitialComments = async () => {
+  try {
+    console.log("Starting to create comments...")
+    for (comment of commentList) {
+      await createComment({reviewId: comment.reviewId, comment: comment.content});
+    }
+   
+    console.log('Finished creating comments!');
+  } catch (error) {
+    console.error('Error creating comments!', error);
   }
-}
-*/
+};
+
 
 
 const seedDatabase = async () => {
@@ -433,7 +457,7 @@ const seedDatabase = async () => {
         await createInitialRestaurants();
         await createInitialReviews();
      
-       // await createInitialComments();
+       await createInitialComments();
      
         
     }catch (err) {
