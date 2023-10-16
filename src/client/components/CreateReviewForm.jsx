@@ -133,7 +133,8 @@ export default function CreateReview({currentUser}){
     }, []);
     
     const handleSelectRestaurant=(selectedRestaurant)=>{
-      setRestaurantId(selectedRestaurant)
+      setRestaurantId(selectedRestaurant);
+      setAnchorEl(null);
     };
     
     async function handleSubmit(e){
@@ -228,12 +229,13 @@ export default function CreateReview({currentUser}){
                     {console.log('restaurant.id', restaurant.id)}
                     {restaurant.name}
                     {console.log('restaurant.name', restaurant.name)}
+                    
                   </MenuItem>
                   
                   ))}
                
               </StyledMenu>
-            
+         
 
           
             <TextField

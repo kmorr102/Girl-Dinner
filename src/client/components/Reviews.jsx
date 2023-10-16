@@ -4,7 +4,13 @@ import { fetchAllReviews } from '../API';
 import { FaStar } from 'react-icons/fa' 
 import { Link , useParams} from 'react-router-dom';
 import Divider from '@mui/material/Divider';
-
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 export default function Reviews({token}){
     const tokenString = sessionStorage.getItem("authToken");
@@ -86,15 +92,15 @@ export default function Reviews({token}){
     console.error(error);
 }} 
 
-const reviewBoxStyle = {
-  border: '1px solid #ccc',
-  borderRadius: '8px',
-  padding: '10px',
-  margin: '20px',
-  boxShadow: '0 8px 4px rgba(0, 0, 0, 0.1)',
-  backgroundColor: '#e8e1f1',
-  fontFamily: 'Merriweather'
-};
+// const reviewBoxStyle = {
+//   border: '1px solid #ccc',
+//   borderRadius: '8px',
+//   padding: '10px',
+//   margin: '20px',
+//   boxShadow: '0 8px 4px rgba(0, 0, 0, 0.1)',
+//   background: 'rgba(120,81,169,.15)',
+//   fontFamily: 'Merriweather'
+// };
 
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
@@ -111,41 +117,80 @@ const reviewBoxStyle = {
   
       
         {reviews && reviewToDisplay.map((review) => (
-          <div key={review.id} className='displayedReviews' style={reviewBoxStyle}>
-            <h3 style={{fontFamily: 'DM Serif Display', fontSize: '22px'}}>{review.title}</h3>
-            <Divider sx={{borderWidth: '1px', borderColor:'black'}}/>
-            <h4>{review.content}</h4>
-            <p>Comments: {review.comment_text}</p>
-
-            <div className = "Star" style={{ marginBottom: '10px' }}>
-            {/* <p> Rating: {rating} </p> */}
-              {[...Array(5)].map((star, index) => {
-                const currentRating = index + 1;
-                return(
-                  <label>
-                    <input 
-                    type="radio" 
-                    name="rating" 
-                    value={review?.currentRating}
+          <div key={review.id} className='displayedReviews' >
+            <List>
+              
+            <ListItemText key={review.id} 
+                    sx={{
+                      background: 'rgba(120,81,169,.15)',
+                      borderRadius:'10px',
+                      padding: '20px', 
+                      width: '100%' }}
+                      
+                      primary ={<Typography>
+                        {review.title}
+                        <Divider ></Divider>
+                       
+                        <br />
+                        
+                      </Typography>
+                    }
+                    secondary={
+                    <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary"> 
+                    <br />
+                    {review.content}
+                      <div className = "Star" style={{ marginBottom: '10px' }}>
+                      {/* <p> Rating: {rating} </p> */}
+                        {[...Array(5)].map((star, index) => {
+                          const currentRating = index + 1;
+                          return(
+                            <label>
+                              <input 
+                              type="radio" 
+                              name="rating" 
+                              value={review?.currentRating}
+                              />
+                              <FaStar 
+                              size={25}
+                              color={ "#f0d32e"}
+                              />
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </Typography>
+                    }
+                    
                     />
-                    <FaStar 
-                    size={30}
-                    color={ "#f0d32e"}
-                    />
-                  </label>
-                )
-              })}
-            </div>
+       
+            
+           
 
-            <button className="review-btn">
-                  Comment
-            </button>{" "}
-            <button className="review-btn" onClick={() => deleteReview(review._id, /*userId*/)}>
-                  Delete
-            </button>
+          
+            <Button className='review-btn'
+                      sx={{
+                      maxWidth: '100%',
+                      maxHeight: '100%',
+                      marginRight: '14px',
+                      width: 'auto',
+                      height: 'auto',
+                      objectFit: 'cover',
+                      color: '#7851A9',
+                      background:' #fff',
+                      border: '1.5px solid #7851A9',
+                      borderRadius: '4px'
+                        }}
+                      variant = "text"
+                      onClick={() => deleteReview(review._id, /*userId*/)}>
+ 
+                      Delete
+              </Button>
+          
+              </List>
            </div>
+          
         ))}
-     
+      
         </div>
       );
     }
