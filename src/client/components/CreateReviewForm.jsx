@@ -132,6 +132,9 @@ export default function CreateReview({currentUser}){
         });
     }, []);
     
+    const handleSelectRestaurant=(selectedRestaurant)=>{
+      setRestaurantId(selectedRestaurant)
+    };
     
     async function handleSubmit(e){
         e.preventDefault();
@@ -222,37 +225,15 @@ export default function CreateReview({currentUser}){
                     onClick={() => handleSelectRestaurant(restaurant.id)}
                     
                   >
+                    {console.log('restaurant.id', restaurant.id)}
                     {restaurant.name}
+                    {console.log('restaurant.name', restaurant.name)}
                   </MenuItem>
                   
                   ))}
-                {/* {console.log('restaurant.name', restaurant.name)} */}
+               
               </StyledMenu>
-              
-
-          {/* <FormControl fullWidth>
-          <FloatingLabel htmlFor="restaurant-select">Select a restaurant</FloatingLabel>
-          <Form.Select
-            value={restaurantId}
-            onChange={(e) => setRestaurantId(e.target.value)}
-            inputProps={{
-              name: 'restaurant',
-              id: 'restaurant-select',
-            }}
-          >
-            <Dropdown>
-            <Dropdown.Menu value="" disabled>
-              Select a restaurant
-            </Dropdown.Menu>
-            {searchParams && searchParams.map((restaurant) => (
-              <Dropdown.Item key={restaurant.id} value={restaurant.id}>
-                {restaurant.name}
-              </Dropdown.Item>
-             
-            ))}
-            </Dropdown>
-          </Form.Select>
-        </FormControl> */}
+            
 
           
             <TextField
