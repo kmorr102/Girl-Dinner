@@ -16,6 +16,60 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CreateIcon from '@mui/icons-material/Create';
 import { NineKPlusOutlined } from "@mui/icons-material";
 
+import { styled, alpha } from '@mui/material/styles';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Divider from '@mui/material/Divider';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import * as React from 'react';
+
+
+import FormControl from 'react-bootstrap/FormControl'
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
+
 
 function Copyright(props) {
   return (
@@ -50,8 +104,38 @@ export default function CreateReview({currentUser}){
     const [isAuthor, setIsAuthor]= useState('')
     const [rating, setRating] = useState(null);
     const [hover, setHover] = useState(null);
+    const [restaurantId, setRestaurantId] = useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+    const handleClose = () => {
+    setAnchorEl(null);
+  };
+
 
     const Navigate= useNavigate();
+    
+    useEffect(() => {
+      // Fetch the list of restaurants from your API endpoint and store it in state.
+      // Example:
+      fetch('http://localhost:3000/api/restaurants')
+        .then((response) => response.json())
+        .then((data) => {
+          // Set the restaurants data in state.
+          console.log('search params', data.restaurants)
+          setSearchParams(data.restaurants);
+        })
+        .catch((error) => {
+          console.error('Error fetching restaurants', error);
+        });
+    }, []);
+    
+    const handleSelectRestaurant=(selectedRestaurant)=>{
+      setRestaurantId(selectedRestaurant);
+      setAnchorEl(null);
+    };
     
     async function handleSubmit(e){
         e.preventDefault();
@@ -76,7 +160,8 @@ export default function CreateReview({currentUser}){
             body: JSON.stringify({
                       title,
                       content,
-                      authorId
+                      authorId, 
+                      restaurantId
           })
         });
           const result = await response.json();
@@ -108,7 +193,51 @@ export default function CreateReview({currentUser}){
           <Typography component="h1" variant="h5">
             Write Review
           </Typography>
+          
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <Button
+                id="demo-customized-button"
+                aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                variant="contained"
+                disableElevation
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                Select a restaurant
+              </Button>
+              <StyledMenu
+                id="demo-customized-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'demo-customized-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              >
+                 
+                {Array.isArray(searchParams)&&
+                  searchParams.map((restaurant) => (
+                    <MenuItem
+                    key={restaurant.id}
+                    value={restaurant.id}
+                    
+                    onClick={() => handleSelectRestaurant(restaurant.id)}
+                    
+                  >
+                    {console.log('restaurant.id', restaurant.id)}
+                    {restaurant.name}
+                    {console.log('restaurant.name', restaurant.name)}
+                    
+                  </MenuItem>
+                  
+                  ))}
+               
+              </StyledMenu>
+         
+
+          
             <TextField
               margin="normal"
               required

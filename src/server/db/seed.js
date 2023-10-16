@@ -254,7 +254,6 @@ async function createInitialReviews() {
         restaurantId: 8,
         title: "Best food ever",
         content: "I would recommend to others!",
-        reviewId:1,
         comments:["I definitely agree!"]
          
       
@@ -401,34 +400,89 @@ async function createInitialReviews() {
 }
 
 const commentList = [
+  // {
+  //   reviewId:3,
+  //   content: "I also attended a party here and it was a great space for pictures"
+  // },
+  // {
+  //   reviewId:4,
+  //   content:"Kind of dark inside but fits the restaurants aesthetic"
+  // },
+  // {
+  //   reviewId:5,
+  //   content:"Waited almost an hour for food, it was delicious though once we got it"
+  // },
   {
-   
-    reviewId:1,
-    content: "I definitely agree!"
-  },
-  {
-    reviewId:2,
-    content: "I agree with the review, food is decent but nothing you can't make at home."
-  },
-  {
-    reviewId:3,
-    content: "I also attended a party here and it was a great space for pictures"
-  },
-  {
-    reviewId:4,
-    content:"Rude staff:("
-  },
-  {
-    reviewId:5,
+    reviewId:6,
     content:"Cheesecake is 10/10"
   },
   {
-    reviewId:6,
-    content:"Waste of a datenight."
+    reviewId: 7,
+    content:"Perfect place for datenight!"
   },
   {
-    reviewId: 7,
+    reviewId:7,
+    content: "I also attended a party here and it was a great space for pictures"
+  },
+  {
+    reviewId: 8,
+    content:"Their bread is incredible"
+  },
+  {
+    reviewId: 9,
     content:"Ashley our server was great!"
+  },
+  {
+    reviewId: 10,
+    content:"We're glad you had a good experience and value your review. -Pizzeria Staff!"
+  },
+  {
+    reviewId: 11,
+    content:"Great family place!!"
+  },
+  {
+    reviewId: 12,
+    content:"Great place for a family dinner or datenight"
+  },
+  {
+    reviewId: 13,
+    content:"Love their sports theme decor!!"
+  },
+  {
+    reviewId: 14,
+    content:"You have to try their happy hour, they have drinks for cheap!"
+  },
+  {
+    reviewId: 14,
+    content:"Also happy hour food is cheap but delicous"
+  },
+  {
+    reviewId: 14,
+    content:"Love the appetizers!!"
+  },
+  {
+    reviewId: 15,
+    content:"Their coffee cake is incredible"
+  },
+  {
+    reviewId: 15,
+    content:"Try the espresso! I definitely agree!"
+  },
+  {
+    reviewId: 16,
+    content:"I definitely agree!"
+  },
+  {
+    reviewId: 16,
+    content:"Our barista was great! I think her name was Candice!"
+  },
+   {
+    reviewId:1,
+    content: "I definitely agree!"
+  },
+   {
+    reviewId:2,
+    content: "I agree with the review, good comfort food!"
   },
 ];
 

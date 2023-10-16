@@ -373,6 +373,10 @@ Array.isArray(users) && reviews.reviews.filter((review) => {
                 <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
                 <br />
                 {comment.comment}
+                <br />
+                <br />
+
+                <Divider sx={{display: 'flex', alignContent:'stretch'}} ></Divider>
                </Typography>
                </CardContent>
                 ))}
