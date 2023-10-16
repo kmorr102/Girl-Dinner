@@ -8,7 +8,7 @@ const {
    getReviewById,
    createReview,
    getAllComments,
-   deleteReview,
+   deleteReviewById,
    updateReview,
    getCommentById,
    deleteCommentById,
@@ -40,7 +40,7 @@ reviewsRouter.get("/:reviewId", async (req,res, next)=>{
 
 reviewsRouter.post("/", async (req, res, next) => {
     // Destructure the expected properties from the request body
-    const { authorId, title, content = "" } = req.body;
+    const { reviewId, authorId, title, content = "" } = req.body;
   
     var reviewData = {};
   
@@ -51,7 +51,7 @@ reviewsRouter.post("/", async (req, res, next) => {
       reviewData.title = title;
       reviewData.content = content;
       //reviewData.comments = comments;
-   
+      reviewData.id = reviewId;
      
       // Call the createReview function with the populated reviewData
       const review = await createReview(reviewData);
@@ -67,7 +67,7 @@ reviewsRouter.post("/", async (req, res, next) => {
   // DELETE - /api/reviews/:id - delete a review by id
   reviewsRouter.delete('/:reviewId', async (req, res, next) => {
     try {
-        const review = await deleteReview(req.params.reviewId);
+        const review = await deleteReviewById(req.params.reviewId);
         res.send(review);
     } catch (error) {
         next(error);
