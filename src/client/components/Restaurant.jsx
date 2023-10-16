@@ -44,7 +44,7 @@
     const [reviews, setReviews] = useState([]);
     const [users, setUsers] =useState([]);
     const [comments, setComments]= useState("");
-    const [comment, setComment]= useState("");
+   // const [comment, setComment]= useState("");
     const [reviewid, setReviewid]=useState("");
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState("");
@@ -61,7 +61,7 @@
         const data= await response.json();
         //console.log('restaurant id:',data.id)
         setRestaurant(data)
-        console.log( 'Restaurant:', data)
+       // console.log( 'Restaurant:', data)
       }else{
         setError(response)
         console.log('error:', error)
@@ -153,8 +153,8 @@
           const APIResponse = await fetch (`http://localhost:3000/api/reviews/${reviewId}/comments`)
           if(APIResponse){
             const data = await APIResponse.json();
-            console.log('comments:', data.comments)
-            setComments(data.comments);
+            //console.log('comments:', data.comments.rows)
+            setComments(data.comments.rows);
           }else{
             setError(error);
           }
@@ -165,9 +165,11 @@
     getAllComments();
   },[])
   
-  const commentsToDisplay = comments.rows
-  console.log('comments to display:', comments.rows)
+  const commentsToDisplay = comments
+  //console.log('comments to display:', comments)
     
+
+
   return (
   <div className="restaurant" key={restaurant.id}>
   <CssBaseline />
@@ -324,7 +326,7 @@
     .map((review) => {
       if (Array.isArray(users)) {
         const user = users.find((user) => user.id === review.author_id);
-        
+        console.log('reviews.id:',review.id)
       if (user) {
          // console.log("User ID:", user.id);
          // console.log("User Name:", user.name);
@@ -346,37 +348,87 @@
                         padding: '20px', 
                         width: '100%' }}
                         
-                        primary={review.title}
+                        primary ={
+                          <Typography>
+                            {review.title}
+                            <br />
+                            <br />
+                            {review.content}
+                          </Typography>
+                        }
                         secondary={
                         <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary"> 
-                        {review.content}
+                        
+                       
                         <br />
-                        <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
+                        
                         </Typography>
                         }
                         />
-                        {/* <ListItemAvatar>
-                          <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                          {review.comment_text}
-                        </ListItemAvatar> */}
-                        
-        
-                        {Array.isArray(comments)&&
-                        review.comments
-                        .map((comment)=>{
-                        <ListItemText key={comment.id}>
-                          <Typography sx={{ display: 'block' }}component="span"variant="body2"color="text.primary"> 
-                          <br />
-                          <Divider sx={{borderWidth: '1px', borderColor:'black'}} />
-                          {/* <ListItemAvatar>
-                            <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
-                            </ListItemAvatar> */}
-                            {comment.comment}
-                        </Typography>
-                        </ListItemText>
-      
-                          })}
                       
+                        <Card>
+        
+               
+                        
+                      
+                         
+                        {Array.isArray(comments)&& commentsToDisplay
+                        .map((comments)=>{
+                          <CardContent key={comments.id}>
+                           <ListItemAvatar>
+                           <Avatar alt={user.name} src="/static/images/avatar/2.jpg" /> 
+                           </ListItemAvatar> 
+                            <Typography sx={{ display: 'block' }}component="span"variant="body2"color="text.primary"> 
+                            
+                            <br />
+                            
+                            {comments.comment}
+                         
+                              
+                          </Typography>
+                          </CardContent>
+                          
+                          console.log('comments.comments:',comments.comments )//undefined
+                          console.log('review.comments:',review.comments )
+                          console.log('comment.reviewId', comments.reviewId)//works 
+                          //console.log('review.id', review.id)//working
+                            })}
+                        
+               
+<div className='comment-form' >
+    <CssBaseline />
+    <Box>
+      <Box component="form" onSubmit={handleSubmit} sx={{display: "flex", flexDirection: "rows", maxHeight:'auto'}}>
+   
+      <input type="hidden" name="reviewId" value={reviewId} />
+
+      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+        fullWidth
+        id="comment"
+        label="comment"
+        value={comments}
+        onChange={(e) => setComments(e.target.value)}/>
+      <TextField sx={{maxHeight:'auto', minHeight:'auto',marginRight: '10px',fontSize: '1rem', display:'flex', alignItems:"flex-start"}}
+        fullWidth
+        id="comment"
+        label="comment"
+        value={reviewId}
+        onChange={(e) => setReviewid(e.target.value)}/>
+
+        <Button 
+          type="submit"
+          fullWidth
+          variant="outlined"
+          sx={{ display:'flex', flexDirection: 'row'}}
+        >
+          Post
+        </Button>
+      </Box>
+      </Box>
+
+
+  </div>
+  </Card>
               </ListItem>    
   
             </List>    
