@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 //import { fetchNewUser } from "../API/index.js";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -106,7 +105,7 @@ export default function Register({ inputType, onSetInputType,setToken}) {
             alignItems: 'center',
           }}
         >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar sx={{ m: 1, bgcolor: '#8d6ab8' }}>
           <CreateIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -206,12 +205,9 @@ export default function Register({ inputType, onSetInputType,setToken}) {
             </Button>
        
         {!successfulSignup ? (
-        <h4>
-          Already have an account?{" "}
           <Link to="/Login" className="form-link">
-            Log in
+             Already have an account? Log in
           </Link>
-        </h4>
       ) : (
         ""
       )}
@@ -226,21 +222,10 @@ export default function Register({ inputType, onSetInputType,setToken}) {
           </Link>
         </h4>
       )}
-        <Grid container>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  { "Already have an account? "}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-       
-  
-          
-      
   );
 }

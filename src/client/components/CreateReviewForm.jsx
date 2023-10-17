@@ -18,7 +18,6 @@ import { NineKPlusOutlined } from "@mui/icons-material";
 
 import { styled, alpha } from '@mui/material/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
@@ -187,11 +186,11 @@ export default function CreateReview({currentUser}){
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#6f4b9c' }}>
             <CreateIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Write Review
+            Create Review
           </Typography>
           
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>

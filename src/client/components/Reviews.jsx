@@ -99,16 +99,6 @@ export default function Reviews({token}){
        }
  }
 
-// const reviewBoxStyle = {
-//   border: '1px solid #ccc',
-//   borderRadius: '8px',
-//   padding: '10px',
-//   margin: '20px',
-//   boxShadow: '0 8px 4px rgba(0, 0, 0, 0.1)',
-//   background: 'rgba(120,81,169,.15)',
-//   fontFamily: 'Merriweather'
-// };
-
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
   : reviews;
@@ -118,7 +108,7 @@ export default function Reviews({token}){
   
         <div className='search-bar'  style={{ margin: '20px'}}>
           <label>
-            <input type='text' style={{ width: '100%' }} placeholder='Search Reviews' onChange={(e)=> setSearchParams(e.target.value)}/>
+            <input type='text' style={{ width: '100%', border: '1px solid #bcbcbc', borderRadius: '5px' }} placeholder='Search Reviews' onChange={(e)=> setSearchParams(e.target.value)}/>
           </label>
          </div>
   
@@ -169,10 +159,6 @@ export default function Reviews({token}){
                     }
                     
                     />
-       
-            
-           
-
           
             <Button className='review-btn'
                       sx={{
@@ -185,8 +171,11 @@ export default function Reviews({token}){
                       color: '#7851A9',
                       background:' #fff',
                       border: '1.5px solid #7851A9',
-                      borderRadius: '4px'
-                        }}
+                      borderRadius: '4px',
+                      '&:hover': {
+                        background: '#7851A9', color: '#fff',
+                        },
+                      }}
                       variant = "text"
                       onClick={() => deleteReview(review.id, /*userId*/)}>
  
