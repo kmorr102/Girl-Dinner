@@ -142,7 +142,7 @@ return(
 
     <div className="profile-info" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '20px', padding: '30px' }}>
 
-      <Avatar sx={{ bgcolor: deepPurple[500], margin: '20px' }}></Avatar>
+      <Avatar sx={{ bgcolor: '#8d6ab8', margin: '20px' }}></Avatar>
 
       <div className="profile-navigation">
             <button className='my-profile-btn' onClick={() => toggle(currentUser)}>My Reviews</button>
