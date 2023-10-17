@@ -47,6 +47,8 @@ const getUser = async({username, password}) => {
         const user = await getUserByUsername(username);
         //console.log('obtain user db from get user db:',user)
         if (!user) return;
+        // check admin status
+        user.isAdmin = user.isAdmin
         const hashedPassword = user.password;
         //console.log('Plaintext Password (length:', password.length, '):', password.split('').map(char => char.charCodeAt(0)));
         //console.log('Hashed Password from DB (length:', hashedPassword.length, '):', hashedPassword.split('').map(char => char.charCodeAt(0)));
