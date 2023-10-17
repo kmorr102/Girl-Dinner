@@ -73,8 +73,8 @@ export default function Reviews({token}){
   
    
   
-  // delete review by id function 
- async function deleteReview(reviewId, isAdmin) {
+  // delete review by id function with admin check
+ /*async function deleteReview(reviewId, isAdmin) {
       try{
         if (isAdmin === 'true') {
           const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
@@ -97,7 +97,25 @@ export default function Reviews({token}){
        } catch (error){
         console.error(error);
        }
- }
+ }*/
+
+   // delete review by id function 
+ async function deleteReview(reviewId) {
+  try {
+      const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `Bearer ${tokenString}`
+        }
+    });
+
+  const resultDelete = await response.json();
+    alert("Review successfully deleted!")
+   } catch (error){
+    console.error(error);
+   }
+}
 
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
