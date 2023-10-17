@@ -7,7 +7,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
 
 export default function Profile({token, currentUser, setCurrentUser}) {
   const tokenString = sessionStorage.getItem("authToken");
@@ -104,36 +107,76 @@ console.log(currentUser.userId, currentUser.name)
 
 return(
 <div className="profile">
+<Box
+        sx={{
+          width: '100vw',
+          height: '20vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
+        <img
+          src="https://images.unsplash.com/photo-1592488238515-6fe7e4469d4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3087&q=80"
+          alt="Profile Header Image"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <Typography
+          variant="h3"
+          component="div"
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            color: 'white',
+            fontFamily: 'DM Serif Display',
+            fontSize: '30px',
+            letterSpacing: '10px',
+          }}
+        >
+          Welcome, {currentUser.name}
+        </Typography>
+      </Box>
 
-  <div className="profile-info">
+    <div className="profile-info" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', margin: '20px', padding: '30px' }}>
 
-        <h2>Welcome {currentUser.name}</h2>
-       
-  </div>
-      <Stack direction="column" spacing={2}>
-      <Avatar sx={{ bgcolor: deepPurple[500] }}></Avatar>
-      <Avatar sx={{ bgcolor: deepOrange[500] }}>Me</Avatar>
-    </Stack>
+      <Avatar sx={{ bgcolor: deepPurple[500], margin: '20px' }}></Avatar>
+
       <div className="profile-navigation">
-        <ul>
-          <li>
-            <button onClick={() => toggle(currentUser)}>View Reviews</button>
-          </li>
-          <li>
-            <Link to="/profile/edit">Edit Profile</Link>
-          </li>
-          {/* Add more profile actions here */}
-        </ul>
+            <button className='my-profile-btn' onClick={() => toggle(currentUser)}>My Reviews</button>
+            {/* <Link to="/profile/edit">Edit Profile</Link> */}
       </div>
       {isOpen && (
       <div>
         {apiResult && apiResult.length > 0 ? (
           apiResult.map((review) => (
-            <div key={review.id}>
-              <h2>{review.title}</h2>
-              <p>{review.content}</p>
-              <button onClick={() => editReview(review)}>Edit Review</button>
-              <button onClick={() => deleteReview(review.id)}>Delete</button>
+            <div key={review.id} className='myReviews'>
+              
+              <ListItemText
+                sx={{
+                  background: 'rgba(120,81,169,.15)',
+                  borderRadius: '10px',
+                  padding: '30px',
+                  width: '100%'
+                }}
+                primary={<Typography>
+                  {review.title}
+                  <Divider ></Divider>
+                  <br />
+                </Typography>
+                } 
+                secondary={
+                  <Typography sx={{ display: 'block' }} component="span" variant="body2" color="text.primary">
+                    
+                    {review.content}
+                  </Typography>
+                }
+                />
+
+              <button className='my-profile-btn' onClick={() => editReview(review)}>Edit Review</button>
+              <button className='my-profile-btn' onClick={() => deleteReview(review.id)}>Delete</button>
             </div>
           ))
         ) : (
@@ -141,9 +184,7 @@ return(
         )}
       </div>
     )}
-
+    </div>
     </div>
   );
 }
-
-
