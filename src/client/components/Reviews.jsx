@@ -12,7 +12,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
-export default function Reviews({token}){
+export default function Reviews({token, currentUser}){
     const tokenString = sessionStorage.getItem("authToken");
     console.log('token from login(storage):', tokenString)
     
@@ -74,9 +74,9 @@ export default function Reviews({token}){
    
   
   // delete review by id function with admin check
- /*async function deleteReview(reviewId, isAdmin) {
-      try{
-        if (isAdmin === 'true') {
+ async function deleteReview(reviewId, isAdmin) {
+      try {
+        if (currentUser.isAdmin === true) {
           const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
             method: "DELETE",
             headers: {
@@ -97,10 +97,10 @@ export default function Reviews({token}){
        } catch (error){
         console.error(error);
        }
- }*/
+ }
 
    // delete review by id function 
- async function deleteReview(reviewId) {
+ /*async function deleteReview(reviewId) {
   try {
       const response = await fetch(`http://localhost:3000/api/reviews/${reviewId}`, {
         method: "DELETE",
@@ -115,7 +115,7 @@ export default function Reviews({token}){
    } catch (error){
     console.error(error);
    }
-}
+}*/
 
   const reviewToDisplay= searchParams
   ? reviews.filter(reviews=>reviews.title.toLowerCase().includes(searchParams.toLowerCase()))
@@ -195,7 +195,7 @@ export default function Reviews({token}){
                         },
                       }}
                       variant = "text"
-                      onClick={() => deleteReview(review.id, /*userId*/)}>
+                      onClick={() => deleteReview(review.id,)}>
  
                       Delete
               </Button>

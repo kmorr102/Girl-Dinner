@@ -63,13 +63,13 @@ usersRouter.post("/login", async (req, res, next) => {
     if (user) {
       console.log('user', user)
 
-      const isAdmin = user.isAdmin;
+      const isAdmin = user.isadmin;
 
       const token = jwt.sign(
         { 
           username,
           userId: user.id,
-          isAdmin: user.isAdmin,
+          isAdmin: user.isadmin,
           
           
         },
@@ -84,7 +84,7 @@ usersRouter.post("/login", async (req, res, next) => {
         token,
         userId: user.id ,
         name: user.name,
-        isAdmin,
+        isAdmin: user.isadmin,
       });
     } else {
       next({
